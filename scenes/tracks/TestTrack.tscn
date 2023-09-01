@@ -1,0 +1,61 @@
+[gd_scene load_steps=10 format=3 uid="uid://c4stwda84g74t"]
+
+[ext_resource type="Texture2D" uid="uid://bxlayqus8a8x1" path="res://assets/textures/asphalt_road.png" id="1_362ka"]
+[ext_resource type="PackedScene" uid="uid://bhbrcowyfb7cq" path="res://scenes/vehicles/TestCar.tscn" id="2_o4uws"]
+[ext_resource type="Script" path="res://src/control/CameraPivot.cs" id="3_mlved"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_0o4ra"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_mmn53"]
+sky_material = SubResource("ProceduralSkyMaterial_0o4ra")
+
+[sub_resource type="Environment" id="Environment_d1wym"]
+background_mode = 2
+sky = SubResource("Sky_mmn53")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hlvub"]
+albedo_texture = ExtResource("1_362ka")
+roughness = 0.92
+uv1_scale = Vector3(60, 60, 60)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_wa4ls"]
+material = SubResource("StandardMaterial3D_hlvub")
+size = Vector2(300, 300)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_kgurl"]
+size = Vector3(300, 0.1, 300)
+
+[node name="TestTrack" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_d1wym")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
+shadow_enabled = true
+
+[node name="Ground" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+
+[node name="GroundMesh" type="MeshInstance3D" parent="Ground"]
+mesh = SubResource("PlaneMesh_wa4ls")
+skeleton = NodePath("../..")
+
+[node name="GroundCollider" type="CollisionShape3D" parent="Ground"]
+shape = SubResource("BoxShape3D_kgurl")
+
+[node name="TestCar" parent="." instance=ExtResource("2_o4uws")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0.0967216, 3.36958, 0.668154)
+
+[node name="CameraPivot" type="Node3D" parent="TestCar"]
+transform = Transform3D(1, 0, 7.10543e-15, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+script = ExtResource("3_mlved")
+horizontalSensitivity = 2.0
+verticalSensitivity = 2.0
+
+[node name="Camera3D" type="Camera3D" parent="TestCar/CameraPivot"]
+transform = Transform3D(1, 1.77636e-15, -4.9738e-14, 0, 0.999273, 0.0381262, 4.9738e-14, -0.0381262, 0.999273, -5.21541e-08, 1.81796, 9.63117)
