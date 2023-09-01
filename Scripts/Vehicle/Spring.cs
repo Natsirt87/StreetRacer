@@ -6,13 +6,13 @@ public partial class Spring : RayCast3D
 {
   [Export]
   private Vehicle vehicle;
-  [Export]
-  private Wheel wheel;
 
   [Export]
   private float springRate;
   [Export]
   private float dampingCoefficient;
+
+  public float normalForce;
 
   private Node3D contactPoint;
   private float lastLength;
@@ -49,5 +49,6 @@ public partial class Spring : RayCast3D
 
     Vector3 suspensionForce = (springForce + dampingForce) * vehicle.up;
     vehicle.ApplyForce(suspensionForce, forceOffset);
+    normalForce = suspensionForce.Length();
 	}
 }

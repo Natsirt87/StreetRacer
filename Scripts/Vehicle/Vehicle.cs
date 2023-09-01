@@ -9,6 +9,9 @@ public partial class Vehicle : RigidBody3D
   private Wheel[] wheels;
 
   [Export]
+  private Drivetrain drivetrain;
+
+  [Export]
   private float steeringSpeed = 0.5f;
 
   [Export]
@@ -46,15 +49,12 @@ public partial class Vehicle : RigidBody3D
     wheelbase = frontAxleDist + rearAxleDist;
     trackWidth = frontLeft.GlobalPosition.DistanceTo(frontRight.GlobalPosition);
 
-    
     Print("Front axle distance: " + frontAxleDist);
     Print("Rear axle distance: " + rearAxleDist);
     Print("Wheelbase: " + wheelbase);
     Print("Track width: " + trackWidth);
     Print("Front weight distribution" + (rearAxleDist / wheelbase * Mass) / Mass);
     Print("Rear weight distribution" + (frontAxleDist / wheelbase * Mass) / Mass);
-
-
 	}
 
 	// Called every physics step. 'delta' is the elapsed time since the previous frame.
@@ -68,4 +68,28 @@ public partial class Vehicle : RigidBody3D
     linearAccel = (LinearVelocity - lastVelocity) / (float)delta;
     lastVelocity = LinearVelocity;
 	}
+
+  public void SetSteeringInput(float input) 
+  {
+    foreach (Wheel wheel in wheels)
+    {
+      wheel.SetSteeringInput(input);
+    }
+  }
+
+  public void SetBrakeInput(float input)
+  {
+    foreach(Wheel wheel in wheels)
+    {
+      wheel.SetBrakeInput(input);
+    }
+  }
+
+  public void SetThrottleInput(float input) { drivetrain.SetThrottle(input); }
+
+  public void SetClutchInput(bool input) { drivetrain.SetClutch(input); }
+
+  public void ShiftUp() { drivetrain.ShiftUp(); }
+
+  public void ShiftDown() { drivetrain.ShiftDown(); }
 }

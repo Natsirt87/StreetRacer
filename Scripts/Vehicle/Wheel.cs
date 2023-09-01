@@ -11,7 +11,17 @@ public partial class Wheel : Node3D
   private Vehicle vehicle;
 
   [Export]
+  private Spring spring;
+
+  [Export]
   private Node3D contactPoint;
+
+  [Export]
+  private float maxSteeringAngle;
+
+  private double driveTorque;
+  private float steeringInput;
+  private float brakeInput;
 
   public Vector3 forward;
   public Vector3 right;
@@ -30,32 +40,44 @@ public partial class Wheel : Node3D
     right = GlobalTransform.Basis.X;
     up = GlobalTransform.Basis.Y;
     
+    double tireLoad = GetLoad();
+
+    Print(Name + " load: " + tireLoad + ", steering: " + steeringInput);
 	}
 
-  public float computeStaticLoad()
+  public double GetLoad()
   {
-    float load = 0;
+    double longAccel = vehicle.linearAccel.Dot(vehicle.forward);
+    double latAccel = vehicle.linearAccel.Dot(vehicle.right);
 
-    float oppAxleDistance = index < 2 ? vehicle.rearAxleDist : vehicle.frontAxleDist;
-    float longAccel = vehicle.linearAccel.Dot(vehicle.forward);
-    float latAccel = vehicle.linearAccel.Dot(vehicle.right);
+    double stationaryLoad = spring.normalForce;
 
-    float stationaryLoad = ((oppAxleDistance / vehicle.wheelbase) / 2) * vehicle.Mass * 9.81f;
-
-    float longLoad = (vehicle.cgHeight / vehicle.wheelbase) * vehicle.Mass * longAccel;
-    float latLoad = (vehicle.cgHeight / vehicle.trackWidth) * vehicle.Mass * latAccel;
+    double longLoad = vehicle.cgHeight / vehicle.wheelbase * vehicle.Mass * longAccel;
+    double latLoad = vehicle.cgHeight / vehicle.trackWidth * vehicle.Mass * latAccel;
 
     if (index < 2)
-    {
       longLoad *= -1;
-    }
-    if (index % 2 != 0)
-    {
-      latLoad *= -1;
-    }
 
-    load = stationaryLoad + longLoad + latLoad;
+    if (index % 2 != 0)
+      latLoad *= -1;
+
+    double load = stationaryLoad + longLoad + latLoad;
 
     return load;
+  }
+
+  public void SetDriveTorque(double torque)
+  {
+    driveTorque = torque;
+  }
+
+  public void SetSteeringInput(float input)
+  {
+    steeringInput = input;
+  }
+
+  public void SetBrakeInput(float input)
+  {
+    brakeInput = input;
   }
 }

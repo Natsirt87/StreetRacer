@@ -34,5 +34,5 @@ shape = SubResource("BoxShape3D_kgurl")
 transform = Transform3D(-0.013026, -0.13499, 0.990761, 0.00351174, 0.990833, 0.135046, -0.999909, 0.0052384, -0.0124325, 8.87908, 1.9246, 1.37877)
 
 [node name="PlayerController" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.934161, -0.356852, 0, 0.356852, 0.934161, 1.60086, 7.92709, 1.53453)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.60086, 3.6921, -2.97642)
 script = ExtResource("3_2hb21")
