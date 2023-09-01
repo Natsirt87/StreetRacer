@@ -1,0 +1,38 @@
+[gd_scene load_steps=6 format=3 uid="uid://c4stwda84g74t"]
+
+[ext_resource type="Texture2D" uid="uid://bxlayqus8a8x1" path="res://Textures/asphalt_road.png" id="1_rn6wu"]
+[ext_resource type="Script" path="res://Scripts/Vehicle/PlayerController.cs" id="3_2hb21"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hlvub"]
+albedo_texture = ExtResource("1_rn6wu")
+roughness = 0.92
+uv1_scale = Vector3(60, 60, 60)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_wa4ls"]
+material = SubResource("StandardMaterial3D_hlvub")
+size = Vector2(300, 300)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_kgurl"]
+size = Vector3(300, 0.1, 300)
+
+[node name="TestTrack" type="Node3D"]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866025, -0.433013, 0.25, -0.179078, 0.735448, 0.653489, -0.466831, 0.521168, -0.71446, 11.8797, 5.68054, -7.05602)
+shadow_enabled = true
+
+[node name="Ground" type="StaticBody3D" parent="."]
+
+[node name="GroundMesh" type="MeshInstance3D" parent="Ground"]
+mesh = SubResource("PlaneMesh_wa4ls")
+skeleton = NodePath("../..")
+
+[node name="GroundCollider" type="CollisionShape3D" parent="Ground"]
+shape = SubResource("BoxShape3D_kgurl")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(-0.013026, -0.13499, 0.990761, 0.00351174, 0.990833, 0.135046, -0.999909, 0.0052384, -0.0124325, 8.87908, 1.9246, 1.37877)
+
+[node name="PlayerController" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.934161, -0.356852, 0, 0.356852, 0.934161, 1.60086, 7.92709, 1.53453)
+script = ExtResource("3_2hb21")
