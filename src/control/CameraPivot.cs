@@ -11,9 +11,9 @@ public partial class CameraPivot : Node3D
   public float SmoothSpeed = 2f;
 
   [Export]
-  public float horizontalSensitivity = 0.001f;
+  public float horizontalSensitivity = 2f;
   [Export]
-  public float verticalSensitivity = 0.001f;
+  public float verticalSensitivity = 2f;
 
 	private Vector3 _direction = Vector3.Forward;
   private RigidBody3D _vehicle;
@@ -60,5 +60,11 @@ public partial class CameraPivot : Node3D
     float cameraUp = Input.GetActionStrength("camera_up");
     float cameraDown = Input.GetActionStrength("camera_down");
     _cameraInputX = cameraUp - cameraDown;
+  }
+
+  public void MakeCurrent()
+  {
+    Camera3D camera = GetChild<Camera3D>(0);
+    camera.MakeCurrent();
   }
 }

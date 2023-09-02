@@ -14,6 +14,8 @@ public partial class Vehicle : RigidBody3D
   [Export]
   public float SteeringSpeed = 0.5f;
   [Export]
+  public double BrakeTorque = 5000;
+  [Export]
   public float CGHeight;
 
   public float FrontAxleDist;

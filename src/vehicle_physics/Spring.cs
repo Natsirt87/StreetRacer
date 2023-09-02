@@ -12,6 +12,8 @@ public partial class Spring : RayCast3D
   public double SpringRate;
   [Export]
   public double DampingCoefficient;
+  [Export]
+  public float WheelMovementRate = 0.5f;
 
   private double _normalForce;
   private Node3D _contactPoint;
@@ -34,7 +36,7 @@ public partial class Spring : RayCast3D
       hitPoint = ToGlobal(TargetPosition);
     }
 
-    _contactPoint.GlobalPosition = hitPoint;
+    _contactPoint.GlobalPosition = _contactPoint.GlobalPosition.Lerp(hitPoint, WheelMovementRate * (float)delta);
     
     Vector3 forceOffset = GlobalPosition - Vehicle.GlobalPosition;
 
@@ -47,10 +49,11 @@ public partial class Spring : RayCast3D
 
     double dampingForce = -velocity * DampingCoefficient;
 
-    Vector3 suspensionForce = (float)(springForce + dampingForce) * Vehicle.Up;
+    Vector3 suspensionForce = IsColliding() ? (float)(springForce + dampingForce) * Vehicle.Up : Vector3.Zero;
+
     Vehicle.ApplyForce(suspensionForce, forceOffset);
     _normalForce = suspensionForce.Length();
-	}
+  }
 
   public double GetNormalForce() { return _normalForce; }
 }

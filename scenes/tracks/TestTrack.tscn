@@ -1,8 +1,9 @@
-[gd_scene load_steps=10 format=3 uid="uid://c4stwda84g74t"]
+[gd_scene load_steps=11 format=3 uid="uid://ddd0c01382wkb"]
 
 [ext_resource type="Texture2D" uid="uid://bxlayqus8a8x1" path="res://assets/textures/asphalt_road.png" id="1_362ka"]
-[ext_resource type="PackedScene" uid="uid://bhbrcowyfb7cq" path="res://scenes/vehicles/TestCar.tscn" id="2_o4uws"]
+[ext_resource type="PackedScene" uid="uid://d38kwmmn0yo0r" path="res://scenes/vehicles/TestCar.tscn" id="2_o4uws"]
 [ext_resource type="Script" path="res://src/control/CameraPivot.cs" id="3_mlved"]
+[ext_resource type="Script" path="res://src/control/PlayerController.cs" id="4_o2y44"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_0o4ra"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -39,7 +40,6 @@ transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -
 shadow_enabled = true
 
 [node name="Ground" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 
 [node name="GroundMesh" type="MeshInstance3D" parent="Ground"]
 mesh = SubResource("PlaneMesh_wa4ls")
@@ -54,8 +54,12 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0.0967
 [node name="CameraPivot" type="Node3D" parent="TestCar"]
 transform = Transform3D(1, 0, 7.10543e-15, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 script = ExtResource("3_mlved")
-horizontalSensitivity = 2.0
-verticalSensitivity = 2.0
 
 [node name="Camera3D" type="Camera3D" parent="TestCar/CameraPivot"]
 transform = Transform3D(1, 1.77636e-15, -4.9738e-14, 0, 0.999273, 0.0381262, 4.9738e-14, -0.0381262, 0.999273, -5.21541e-08, 1.81796, 9.63117)
+
+[node name="PlayerController" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.168, 3.52223, 0)
+script = ExtResource("4_o2y44")
+VehiclePath = "res://scenes/vehicles/TestCar.tscn"
+CameraPath = "res://scenes/VehicleCamera.tscn"

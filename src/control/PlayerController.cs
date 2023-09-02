@@ -9,6 +9,8 @@ public partial class PlayerController : Node
 {
   [Export(PropertyHint.File)]
   public string VehiclePath;
+  [Export(PropertyHint.File)]
+  public string CameraPath;
 
   private Vehicle _vehicle;
 
@@ -17,9 +19,10 @@ public partial class PlayerController : Node
 	{
     CreateVehicle();
 	}
-
+  
+  
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _PhysicsProcess(double delta)
+	public override void _Input(InputEvent @event)
 	{
     if (_vehicle == null)
     {
@@ -31,7 +34,7 @@ public partial class PlayerController : Node
 
     float steerLeft = Input.GetActionStrength("steer_left");
     float steerRight = Input.GetActionStrength("steer_right");
-    _vehicle.SetSteeringInput(steerRight - steerLeft);
+    _vehicle.SetSteeringInput(steerLeft - steerRight);
 
     if (Input.IsActionJustPressed("clutch"))
       _vehicle.SetClutchInput(true);
@@ -47,9 +50,14 @@ public partial class PlayerController : Node
 
   private void CreateVehicle()
   {
-    var scene = (PackedScene)Load(VehiclePath);
+    PackedScene scene = (PackedScene)Load(VehiclePath);
     _vehicle = scene.Instantiate<Vehicle>();
 
+    scene = (PackedScene)Load(CameraPath);
+    CameraPivot camera = scene.Instantiate<CameraPivot>();
+
     AddChild(_vehicle);
+    _vehicle.AddChild(camera);
+    camera.MakeCurrent(); 
   }
 }

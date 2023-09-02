@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://cs3vnd0f4jx5d"]
+
+[ext_resource type="Script" path="res://src/control/CameraPivot.cs" id="1_mvpsl"]
+
+[node name="VehicleCamera" type="Node3D"]
+script = ExtResource("1_mvpsl")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.989384, 0.145323, 0, -0.145323, 0.989384, 0, 3.89839, 10.74)
