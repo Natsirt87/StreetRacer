@@ -54,10 +54,11 @@ public partial class PlayerController : Node
     _vehicle = scene.Instantiate<Vehicle>();
 
     scene = (PackedScene)Load(CameraPath);
-    CameraPivot camera = scene.Instantiate<CameraPivot>();
+    PlayerCamera camera = scene.Instantiate<PlayerCamera>();
 
     AddChild(_vehicle);
-    _vehicle.AddChild(camera);
+    camera.Target = _vehicle;
+    AddChild(camera);
     camera.MakeCurrent(); 
   }
 }

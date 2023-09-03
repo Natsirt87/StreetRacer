@@ -84,7 +84,9 @@ public partial class Wheel : Node3D
 	{
     UpdateProperties(delta);
     
-    TireLoad = GetTireLoad();
+    TireLoad = Spring.GetNormalForce();
+
+    Print(Name + ": " + TireLoad);
 
     if (MaxSteeringAngle > 0)
     {
@@ -119,27 +121,6 @@ public partial class Wheel : Node3D
     double inertia = Mass * Radius * Radius / 2;
     double angularAcceleration = torque / inertia;
     return AngularVelocity + angularAcceleration * delta;
-  }
-
-  private double GetTireLoad()
-  {
-    double longAccel = Vehicle.LinearAccel.Dot(Vehicle.Forward);
-    double latAccel = Vehicle.LinearAccel.Dot(Vehicle.Right);
-
-    double stationaryLoad = Spring.GetNormalForce();
-
-    double longLoad = Vehicle.CGHeight / Vehicle.Wheelbase * Vehicle.Mass * longAccel;
-    double latLoad = Vehicle.CGHeight / Vehicle.TrackWidth * Vehicle.Mass * latAccel;
-
-    if (_isFront)
-      longLoad *= -1;
-
-    if (!_isLeft)
-      latLoad *= -1;
-
-    double load = stationaryLoad > 1 ? stationaryLoad + longLoad + latLoad : 0;
-
-    return load;
   }
 
   private void Steer(double delta)
