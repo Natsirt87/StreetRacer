@@ -9,9 +9,11 @@ public partial class PlayerCamera : Node3D
   public float SmoothSpeed = 2f;
 
   [Export]
-  public float horizontalSensitivity = 2f;
+  public float HorizontalSensitivity = 2f;
   [Export]
-  public float verticalSensitivity = 2f;
+  public float VerticalSensitivity = 2f;
+  [Export]
+  public float FollowSpeed = 20;
 
   public RigidBody3D Target;
 
@@ -25,9 +27,9 @@ public partial class PlayerCamera : Node3D
 
   public override void _Process(double delta)
   {
-    GlobalPosition = Target.GlobalPosition; 
-    float rotationY = _cameraInputY * horizontalSensitivity * (float)delta;
-    float rotationX = _cameraInputX * verticalSensitivity * (float)delta;
+    GlobalPosition = Target.GlobalPosition;
+    float rotationY = _cameraInputY * HorizontalSensitivity * (float)delta;
+    float rotationX = _cameraInputX * VerticalSensitivity * (float)delta;
     Rotation = new Vector3(Rotation.X + rotationX, Rotation.Y + rotationY, 0);
   }
 

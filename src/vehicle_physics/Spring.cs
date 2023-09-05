@@ -4,7 +4,7 @@ using System;
 
 namespace VehiclePhysics;
 
-public partial class Spring : RayCast3D
+public partial class Spring : ShapeCast3D
 {
   [Export]
   public Vehicle Vehicle;
@@ -14,8 +14,6 @@ public partial class Spring : RayCast3D
   public double CompressionDamping = 1;
   [Export(PropertyHint.Range, "0,3")]
   public double ReboundDamping = 1;
-  [Export]
-  public float WheelMovementRate = 0.5f;
 
   public float Mass;
   public Vector3 ContactPoint;
@@ -39,7 +37,7 @@ public partial class Spring : RayCast3D
     }
     else
     {
-      ContactPoint = GetCollisionPoint();
+      ContactPoint = FindWheelCenter();
     }
     
     Vector3 forceOffset = GlobalPosition - Vehicle.GlobalPosition;
@@ -59,6 +57,13 @@ public partial class Spring : RayCast3D
 
     Vehicle.ApplyForce(suspensionForce, forceOffset);
     _normalForce = suspensionForce.Length();
+  }
+
+  private Vector3 FindWheelCenter()
+  {
+    float lengthRatio = GetClosestCollisionUnsafeFraction();
+    Vector3 globalCenter = ToGlobal(TargetPosition * lengthRatio) ;
+    return globalCenter;
   }
 
   public double GetNormalForce() { return _normalForce; }

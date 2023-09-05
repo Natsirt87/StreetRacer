@@ -8,17 +8,18 @@ namespace VehiclePhysics;
 public partial class Wheel : Node3D
 {
   const float LowSpeedThreshold = 2.5f;
-  const float SlipRatioRelaxation = 0.091f;
+  const double SlipRatioRelaxation = 0.091;
   const float MaxSlipRatio = 10f;
+  const double OscillationCorrection = 0;
 
   [Export]
   public int Index;
   [Export]
+  public TireModel Tire;
+  [Export]
   public Node3D VisualWheel;
   [Export]
   public float MaxSteeringAngle;
-  [Export]
-  public TireModel Tire;
   [Export]
   public double Mass = 70;
   [Export]
@@ -119,12 +120,12 @@ public partial class Wheel : Node3D
     AngularVelocity = ComputeAngularVelocity(totalTorque, delta);
     UpdateVisualWheel(delta);
 
-    Vector3 forcePoint = _spring.GlobalPosition + (-Up * (float)_spring.Length);
+    Vector3 forcePoint = _spring.GlobalPosition + -Up * (float)(_spring.Length);
+
     if (_isLeft) 
       forcePoint += -Right * (float)(Width / 2);
     else
       forcePoint += Right * (float)(Width / 2);
-    ForcePoint.GlobalPosition = forcePoint;
 
     Vector3 forceOffset = forcePoint - _vehicle.GlobalPosition;
 
@@ -133,11 +134,12 @@ public partial class Wheel : Node3D
 
   private void UpdateVisualWheel(double delta)
   {
-    Vector3 wheelPos = new(VisualWheel.Position.X, (float)(-_spring.Length + Radius), VisualWheel.Position.Z);
-    VisualWheel.Position = VisualWheel.Position.Lerp(wheelPos, (float)delta * WheelMovementRate);
-
     Vector3 wheelRot = new(VisualWheel.Rotation.X - (float)(AngularVelocity * delta), VisualWheel.Rotation.Y, VisualWheel.Rotation.Z);
     VisualWheel.Rotation = wheelRot;
+
+    Vector3 wheelPos = _spring.GlobalPosition + -Up * (float)_spring.Length;
+    VisualWheel.Position = VisualWheel.Position.Lerp(ToLocal(wheelPos), (float)delta * WheelMovementRate);
+    
   }
 
   private double ComputeAngularVelocity(double torque, double delta)
@@ -188,7 +190,7 @@ public partial class Wheel : Node3D
       double slipDelta = (AngularVelocity * Radius) - vLong - Math.Abs(vLong) * _diffSlipRatio;
       slipDelta /= SlipRatioRelaxation;
       _diffSlipRatio += slipDelta * delta;
-      return _diffSlipRatio;
+      return _diffSlipRatio + OscillationCorrection * delta;
     }
     else
     {
