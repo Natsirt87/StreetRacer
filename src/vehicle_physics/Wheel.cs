@@ -13,10 +13,6 @@ public partial class Wheel : Node3D
   [Export]
   public int Index;
   [Export]
-  public Vehicle Vehicle;
-  [Export]
-  public Spring Spring;
-  [Export]
   public Node3D ContactPoint;
   [Export]
   public Node3D VisualWheel;
@@ -35,6 +31,7 @@ public partial class Wheel : Node3D
   public double SlipAngle;
   public double SlipRatio;
   public double TireLoad;
+  
 
   // Public input variables
   public double DriveTorque;
@@ -47,6 +44,8 @@ public partial class Wheel : Node3D
   public Vector3 Up;
 
   // Private variables
+  private Vehicle _vehicle;
+  private Spring _spring;
   private Vector3 _lastPosition;
   private Vector3 _forceOffset;
   private double _lastSlipAngle;
@@ -55,16 +54,29 @@ public partial class Wheel : Node3D
   private bool _isLeft;
   private float _initialAngle;
 
-	// Called when the node enters the scene tree for the first time.
-	public override void _Ready()
-	{
+  // Called by the vehicle to initialize the wheel data and stuff
+  public void Init(Vehicle vehicle)
+  {
+    _vehicle = vehicle;
     _isFront = Index <= 1;
     _isLeft = Index % 2 == 0;
     _lastPosition = GlobalPosition;
     _initialAngle = RotationDegrees.Y;
+    _spring = GetChild<Spring>(0);
 
-    Print(Name + ": " + Forward.Dot(Vehicle.Forward));
-	}
+    float frontMass = _vehicle.RearAxleDist / _vehicle.Wheelbase * _vehicle.Mass;
+    float rearMass = _vehicle.FrontAxleDist / _vehicle.Wheelbase * _vehicle.Mass;
+    if (_isFront)
+    {
+      _spring.Mass = frontMass / 2;
+      Print(Name + " spring mass: " + frontMass / 2);
+    }
+    else
+    {
+      _spring.Mass = rearMass / 2;
+      Print(Name + " spring mass: " + rearMass / 2);
+    }
+  }
 
   private void UpdateProperties(double delta)
   {
@@ -76,7 +88,7 @@ public partial class Wheel : Node3D
     LinearVelocity = (GlobalPosition - _lastPosition) / (float)delta;
     _lastPosition = GlobalPosition;
 
-    _forceOffset = ContactPoint.GlobalPosition - Vehicle.GlobalPosition;
+    _forceOffset = ContactPoint.GlobalPosition - _vehicle.GlobalPosition;
   }
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -84,9 +96,7 @@ public partial class Wheel : Node3D
 	{
     UpdateProperties(delta);
     
-    TireLoad = Spring.GetNormalForce();
-
-    Print(Name + ": " + TireLoad);
+    TireLoad = _spring.GetNormalForce();
 
     if (MaxSteeringAngle > 0)
     {
@@ -113,7 +123,7 @@ public partial class Wheel : Node3D
     Vector3 wheelRot = VisualWheel.Rotation;
     VisualWheel.Rotation = new Vector3(wheelRot.X - (float)AngularVelocity * (float)delta, wheelRot.Y, wheelRot.Z);
 
-    Vehicle.ApplyForce(tireForce, _forceOffset);
+    _vehicle.ApplyForce(tireForce, _forceOffset);
 	}
 
   private double ComputeAngularVelocity(double torque, double delta)
@@ -127,7 +137,7 @@ public partial class Wheel : Node3D
   {
     float steeringAngle = RotationDegrees.Y;
     float desiredAngle = SteeringInput * MaxSteeringAngle +_initialAngle;
-    steeringAngle = Mathf.Lerp(steeringAngle, desiredAngle, Vehicle.SteeringSpeed * (float)delta);
+    steeringAngle = Mathf.Lerp(steeringAngle, desiredAngle, _vehicle.SteeringSpeed * (float)delta);
 
     RotationDegrees = new Vector3(RotationDegrees.X, steeringAngle, RotationDegrees.Z);
   }
@@ -174,7 +184,7 @@ public partial class Wheel : Node3D
 
   private double ComputeTorque()
   {
-    double brakeTorque = -Vehicle.BrakeTorque * BrakeInput * Math.Sign(AngularVelocity);
+    double brakeTorque = -_vehicle.BrakeTorque * BrakeInput * Math.Sign(AngularVelocity);
     return DriveTorque + brakeTorque;
   }
 }

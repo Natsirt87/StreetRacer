@@ -15,6 +15,8 @@ public partial class Spring : RayCast3D
   [Export]
   public float WheelMovementRate = 0.5f;
 
+  public float Mass;
+
   private double _normalForce;
   private Node3D _contactPoint;
   private double _lastLength;
@@ -46,8 +48,10 @@ public partial class Spring : RayCast3D
 
     double velocity = (length - _lastLength) / delta;
     _lastLength = length;
+    
+    double criticalDampForce = 2 * Math.Sqrt(SpringRate * Mass);
 
-    double dampingForce = -velocity * DampingCoefficient;
+    double dampingForce = -velocity * DampingCoefficient * criticalDampForce;
 
     Vector3 suspensionForce = IsColliding() ? (float)(springForce + dampingForce) * Vehicle.Up : Vector3.Zero;
 
