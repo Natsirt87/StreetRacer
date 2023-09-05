@@ -17,139 +17,130 @@ points = PackedVector3Array(-0.153491, 0.384308, -1.42267, -0.157278, 0.314535, 
 collision_layer = 2
 collision_mask = 15
 mass = 1534.0
-inertia = Vector3(1500, 10000, 5000)
 physics_material_override = SubResource("PhysicsMaterial_8tubw")
 continuous_cd = true
 script = ExtResource("1_x5ll3")
 Wheels = [NodePath("Body/WheelFL"), NodePath("Body/WheelFR"), NodePath("Body/WheelRL"), NodePath("Body/WheelRR")]
-Drivetrain = NodePath("Body/Drivetrain")
+Drivetrain = NodePath("Drivetrain")
 SteeringSpeed = 2.0
 
 [node name="Body" type="CollisionShape3D" parent="."]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, 0)
 shape = SubResource("ConvexPolygonShape3D_u40sf")
 
-[node name="WheelFL" type="Node3D" parent="Body" node_paths=PackedStringArray("ContactPoint", "VisualWheel", "Tire")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -1.907, -0.583, 1.37)
-script = ExtResource("4_2jr6g")
-ContactPoint = NodePath("Spring/ContactPoint")
-VisualWheel = NodePath("Spring/ContactPoint/VisualWheel")
-MaxSteeringAngle = 25.0
-Tire = NodePath("../TireModel")
-
-[node name="Spring" type="RayCast3D" parent="Body/WheelFL" node_paths=PackedStringArray("Vehicle")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.521146, 0)
-target_position = Vector3(0, -1.5, 0)
-collision_mask = 13
-script = ExtResource("5_1k7ka")
-Vehicle = NodePath("../../..")
-SpringRate = 10000.0
-DampingCoefficient = 1.0
-WheelMovementRate = 20.0
-
-[node name="ContactPoint" type="Node3D" parent="Body/WheelFL/Spring"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.055, 0)
-
-[node name="VisualWheel" type="Node3D" parent="Body/WheelFL/Spring/ContactPoint"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, 0.42, 0)
-
-[node name="WheelMesh" parent="Body/WheelFL/Spring/ContactPoint/VisualWheel" instance=ExtResource("6_ox32a")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0.01, 0)
-
-[node name="WheelFR" type="Node3D" parent="Body" node_paths=PackedStringArray("ContactPoint", "VisualWheel", "Tire")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -1.907, -0.583, -1.33)
-script = ExtResource("4_2jr6g")
-Index = 1
-ContactPoint = NodePath("Spring/ContactPoint")
-VisualWheel = NodePath("Spring/ContactPoint/VisualWheel")
-MaxSteeringAngle = 25.0
-Tire = NodePath("../TireModel")
-
-[node name="Spring" type="RayCast3D" parent="Body/WheelFR" node_paths=PackedStringArray("Vehicle")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.521146, 0)
-target_position = Vector3(0, -1.5, 0)
-collision_mask = 13
-script = ExtResource("5_1k7ka")
-Vehicle = NodePath("../../..")
-SpringRate = 10000.0
-DampingCoefficient = 1.0
-WheelMovementRate = 20.0
-
-[node name="ContactPoint" type="Node3D" parent="Body/WheelFR/Spring"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.055, 0)
-
-[node name="VisualWheel" type="Node3D" parent="Body/WheelFR/Spring/ContactPoint"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, 0.42, 0)
-
-[node name="WheelMesh" parent="Body/WheelFR/Spring/ContactPoint/VisualWheel" instance=ExtResource("6_ox32a")]
-transform = Transform3D(4.37114e-08, -3.82137e-15, 1, -8.74228e-08, -1, 0, 1, -8.74228e-08, -4.37114e-08, 0, 0.01, 0)
-
-[node name="WheelRL" type="Node3D" parent="Body" node_paths=PackedStringArray("ContactPoint", "VisualWheel", "Tire")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 1.95, -0.583, 1.37)
-script = ExtResource("4_2jr6g")
-Index = 2
-ContactPoint = NodePath("Spring/ContactPoint")
-VisualWheel = NodePath("Spring/ContactPoint/VisualWheel")
-Tire = NodePath("../TireModel")
-
-[node name="Spring" type="RayCast3D" parent="Body/WheelRL" node_paths=PackedStringArray("Vehicle")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.521146, 0)
-target_position = Vector3(0, -1.5, 0)
-collision_mask = 13
-script = ExtResource("5_1k7ka")
-Vehicle = NodePath("../../..")
-SpringRate = 10000.0
-DampingCoefficient = 1.0
-WheelMovementRate = 20.0
-
-[node name="ContactPoint" type="Node3D" parent="Body/WheelRL/Spring"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.055, 0)
-
-[node name="VisualWheel" type="Node3D" parent="Body/WheelRL/Spring/ContactPoint"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, 0.42, 0)
-
-[node name="WheelMesh" parent="Body/WheelRL/Spring/ContactPoint/VisualWheel" instance=ExtResource("6_ox32a")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0.01, 0)
-
-[node name="WheelRR" type="Node3D" parent="Body" node_paths=PackedStringArray("ContactPoint", "VisualWheel", "Tire")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 1.95, -0.583, -1.33)
-script = ExtResource("4_2jr6g")
-Index = 3
-ContactPoint = NodePath("Spring/ContactPoint")
-VisualWheel = NodePath("Spring/ContactPoint/VisualWheel")
-Tire = NodePath("../TireModel")
-
-[node name="Spring" type="RayCast3D" parent="Body/WheelRR" node_paths=PackedStringArray("Vehicle")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.521146, 0)
-target_position = Vector3(0, -1.5, 0)
-collision_mask = 13
-script = ExtResource("5_1k7ka")
-Vehicle = NodePath("../../..")
-SpringRate = 10000.0
-DampingCoefficient = 1.0
-WheelMovementRate = 20.0
-
-[node name="ContactPoint" type="Node3D" parent="Body/WheelRR/Spring"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.055, 0)
-
-[node name="VisualWheel" type="Node3D" parent="Body/WheelRR/Spring/ContactPoint"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, 0.42, 0)
-
-[node name="WheelMesh" parent="Body/WheelRR/Spring/ContactPoint/VisualWheel" instance=ExtResource("6_ox32a")]
-transform = Transform3D(4.37114e-08, -6.60023e-15, 1, -1.50996e-07, -1, 2.5411e-21, 1, -1.50996e-07, -4.37114e-08, 0, 0.01, 0)
-
 [node name="Mesh" parent="Body" instance=ExtResource("2_2qv5r")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.07, -0.153, 0.02)
 
-[node name="Drivetrain" type="Node3D" parent="Body" node_paths=PackedStringArray("Vehicle")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0.07, -0.153, 0.02)
+[node name="WheelFL" type="Node3D" parent="Body" node_paths=PackedStringArray("VisualWheel", "Tire")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -1.907, -0.583, 1.37)
+script = ExtResource("4_2jr6g")
+VisualWheel = NodePath("Spring/VisualWheel")
+MaxSteeringAngle = 25.0
+Tire = NodePath("../../TireModel")
+Radius = 0.42
+
+[node name="Spring" type="RayCast3D" parent="Body/WheelFL" node_paths=PackedStringArray("Vehicle")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.521146, 0)
+target_position = Vector3(0, -1.2, 0)
+collision_mask = 13
+script = ExtResource("5_1k7ka")
+Vehicle = NodePath("../../..")
+SpringRate = 20000.0
+CompressionDamping = 0.5
+ReboundDamping = 0.5
+WheelMovementRate = 30.0
+
+[node name="VisualWheel" type="Node3D" parent="Body/WheelFL/Spring"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, -0.635, 0)
+
+[node name="WheelMesh" parent="Body/WheelFL/Spring/VisualWheel" instance=ExtResource("6_ox32a")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, 0)
+
+[node name="WheelFR" type="Node3D" parent="Body" node_paths=PackedStringArray("VisualWheel", "Tire")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -1.907, -0.583, -1.33)
+script = ExtResource("4_2jr6g")
+Index = 1
+VisualWheel = NodePath("Spring/VisualWheel")
+MaxSteeringAngle = 25.0
+Tire = NodePath("../../TireModel")
+Radius = 0.42
+
+[node name="Spring" type="RayCast3D" parent="Body/WheelFR" node_paths=PackedStringArray("Vehicle")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.521146, 0)
+target_position = Vector3(0, -1.2, 0)
+collision_mask = 13
+script = ExtResource("5_1k7ka")
+Vehicle = NodePath("../../..")
+SpringRate = 20000.0
+CompressionDamping = 0.5
+ReboundDamping = 0.5
+WheelMovementRate = 30.0
+
+[node name="VisualWheel" type="Node3D" parent="Body/WheelFR/Spring"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, -0.635, 0)
+
+[node name="WheelMesh" parent="Body/WheelFR/Spring/VisualWheel" instance=ExtResource("6_ox32a")]
+transform = Transform3D(4.37114e-08, -3.82137e-15, 1, -8.74228e-08, -1, 0, 1, -8.74228e-08, -4.37114e-08, 0, 0, 0)
+
+[node name="WheelRL" type="Node3D" parent="Body" node_paths=PackedStringArray("VisualWheel", "Tire")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 1.95, -0.583, 1.37)
+script = ExtResource("4_2jr6g")
+Index = 2
+VisualWheel = NodePath("Spring/VisualWheel")
+Tire = NodePath("../../TireModel")
+Radius = 0.42
+
+[node name="Spring" type="RayCast3D" parent="Body/WheelRL" node_paths=PackedStringArray("Vehicle")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.521146, 0)
+target_position = Vector3(0, -1.2, 0)
+collision_mask = 13
+script = ExtResource("5_1k7ka")
+Vehicle = NodePath("../../..")
+SpringRate = 20000.0
+CompressionDamping = 0.5
+ReboundDamping = 0.5
+WheelMovementRate = 30.0
+
+[node name="VisualWheel" type="Node3D" parent="Body/WheelRL/Spring"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, -0.635, 0)
+
+[node name="WheelMesh" parent="Body/WheelRL/Spring/VisualWheel" instance=ExtResource("6_ox32a")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, 0)
+
+[node name="WheelRR" type="Node3D" parent="Body" node_paths=PackedStringArray("VisualWheel", "Tire")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 1.95, -0.583, -1.33)
+script = ExtResource("4_2jr6g")
+Index = 3
+VisualWheel = NodePath("Spring/VisualWheel")
+Tire = NodePath("../../TireModel")
+Radius = 0.42
+
+[node name="Spring" type="RayCast3D" parent="Body/WheelRR" node_paths=PackedStringArray("Vehicle")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.521146, 0)
+target_position = Vector3(0, -1.2, 0)
+collision_mask = 13
+script = ExtResource("5_1k7ka")
+Vehicle = NodePath("../../..")
+SpringRate = 20000.0
+CompressionDamping = 0.5
+ReboundDamping = 0.5
+WheelMovementRate = 30.0
+
+[node name="VisualWheel" type="Node3D" parent="Body/WheelRR/Spring"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, -0.635, 0)
+
+[node name="WheelMesh" parent="Body/WheelRR/Spring/VisualWheel" instance=ExtResource("6_ox32a")]
+transform = Transform3D(4.37114e-08, -6.60023e-15, 1, -1.50996e-07, -1, 2.5411e-21, 1, -1.50996e-07, -4.37114e-08, 0, 0, 0)
+
+[node name="Drivetrain" type="Node3D" parent="." node_paths=PackedStringArray("Vehicle")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.02, -0.153, 0.07)
 script = ExtResource("3_7m0ag")
-Vehicle = NodePath("../..")
+Vehicle = NodePath("..")
 GearRatios = PackedFloat64Array(0, 3)
 FinalDriveRatio = 3.0
 
-[node name="TireModel" type="Node3D" parent="Body"]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0.07, -0.153, 0.02)
+[node name="TireModel" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.02, -0.153, 0.07)
 script = ExtResource("7_l1k7u")
 TireConfigPath = "res://data/tires/StandardTire.ini"
 LongFriction = 1.2

@@ -1,6 +1,7 @@
 using Godot;
 using static Godot.GD;
 using System;
+using System.Runtime.InteropServices;
 
 namespace VehiclePhysics;
 
@@ -13,8 +14,6 @@ public partial class Wheel : Node3D
   [Export]
   public int Index;
   [Export]
-  public Node3D ContactPoint;
-  [Export]
   public Node3D VisualWheel;
   [Export]
   public float MaxSteeringAngle;
@@ -24,6 +23,8 @@ public partial class Wheel : Node3D
   public double Mass = 70;
   [Export]
   public double Radius = 0.4685;
+  [Export]
+  public float WheelMovementRate = 30f;
 
   // General public variables
   public Vector3 LinearVelocity;
@@ -47,8 +48,8 @@ public partial class Wheel : Node3D
   private Vehicle _vehicle;
   private Spring _spring;
   private Vector3 _lastPosition;
-  private Vector3 _forceOffset;
   private double _lastSlipAngle;
+  private double _lastSlipRatio;
   private double _diffSlipRatio;
   private bool _isFront;
   private bool _isLeft;
@@ -78,8 +79,9 @@ public partial class Wheel : Node3D
     }
   }
 
-  private void UpdateProperties(double delta)
-  {
+	// Called every frame. 'delta' is the elapsed time since the previous frame.
+	public override void _PhysicsProcess(double delta)
+	{
     // Update unit vectors
     Forward = -GlobalTransform.Basis.Z;
     Right = GlobalTransform.Basis.X;
@@ -88,21 +90,12 @@ public partial class Wheel : Node3D
     LinearVelocity = (GlobalPosition - _lastPosition) / (float)delta;
     _lastPosition = GlobalPosition;
 
-    _forceOffset = ContactPoint.GlobalPosition - _vehicle.GlobalPosition;
-  }
-
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _PhysicsProcess(double delta)
-	{
-    UpdateProperties(delta);
-    
-    TireLoad = _spring.GetNormalForce();
-
     if (MaxSteeringAngle > 0)
     {
       Steer(delta);
     }
 
+    TireLoad = _spring.GetNormalForce();
     SlipRatio = ComputeSlipRatio(delta);
     if (SlipRatio > MaxSlipRatio)
     {
@@ -110,7 +103,7 @@ public partial class Wheel : Node3D
       DriveTorque = 0;
     }
     SlipAngle = ComputeSlipAngle();
-    double totalTorque = ComputeTorque();
+    double totalTorque = ComputeTorque(delta);
 
     int surface = (int)TireModel.Surface.Dry;
     Vector3 tireForce = Tire.ComputeForce(SlipRatio, SlipAngle, TireLoad, surface, Forward, Right, Index);
@@ -120,11 +113,21 @@ public partial class Wheel : Node3D
     totalTorque -= tractionTorque;
 
     AngularVelocity = ComputeAngularVelocity(totalTorque, delta);
-    Vector3 wheelRot = VisualWheel.Rotation;
-    VisualWheel.Rotation = new Vector3(wheelRot.X - (float)AngularVelocity * (float)delta, wheelRot.Y, wheelRot.Z);
+    UpdateVisualWheel(delta);
 
-    _vehicle.ApplyForce(tireForce, _forceOffset);
+    Vector3 forceOffset = _spring.ContactPoint - _vehicle.GlobalPosition;
+
+    _vehicle.ApplyForce(tireForce, forceOffset);
 	}
+
+  private void UpdateVisualWheel(double delta)
+  {
+    Vector3 wheelPos = new(VisualWheel.Position.X, (float)(-_spring.Length + Radius), VisualWheel.Position.Z);
+    VisualWheel.Position = VisualWheel.Position.Lerp(wheelPos, (float)delta * WheelMovementRate);
+
+    Vector3 wheelRot = new(VisualWheel.Rotation.X - (float)(AngularVelocity * delta), VisualWheel.Rotation.Y, VisualWheel.Rotation.Z);
+    VisualWheel.Rotation = wheelRot;
+  }
 
   private double ComputeAngularVelocity(double torque, double delta)
   {
@@ -142,9 +145,9 @@ public partial class Wheel : Node3D
     RotationDegrees = new Vector3(RotationDegrees.X, steeringAngle, RotationDegrees.Z);
   }
 
-  private double PDController(double pGain, double dGain, double error, double diff)
+  private static double PDController(double pGain, double dGain, double error, double diff)
   {
-    return 0;
+    return pGain * error + dGain * -diff;
   }
 
   private double ComputeSlipAngle()
@@ -182,9 +185,12 @@ public partial class Wheel : Node3D
     }
   }
 
-  private double ComputeTorque()
+  private double ComputeTorque(double delta)
   {
-    double brakeTorque = -_vehicle.BrakeTorque * BrakeInput * Math.Sign(AngularVelocity);
+    double inertia = Mass * Radius * Radius / 2;
+    double brakeMagnitude = Math.Abs(AngularVelocity * inertia) / delta;
+    double brakeTorque = -brakeMagnitude * BrakeInput * Math.Sign(AngularVelocity);
+
     return DriveTorque + brakeTorque;
   }
 }
