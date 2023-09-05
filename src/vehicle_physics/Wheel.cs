@@ -24,7 +24,11 @@ public partial class Wheel : Node3D
   [Export]
   public double Radius = 0.4685;
   [Export]
+  public double Width = 0.5;
+  [Export]
   public float WheelMovementRate = 30f;
+  [Export]
+  public Node3D ForcePoint;
 
   // General public variables
   public Vector3 LinearVelocity;
@@ -97,7 +101,7 @@ public partial class Wheel : Node3D
 
     TireLoad = _spring.GetNormalForce();
     SlipRatio = ComputeSlipRatio(delta);
-    if (SlipRatio > MaxSlipRatio)
+    if (SlipRatio > MaxSlipRatio && TireLoad > 1)
     {
       SlipRatio = MaxSlipRatio;
       DriveTorque = 0;
@@ -115,7 +119,14 @@ public partial class Wheel : Node3D
     AngularVelocity = ComputeAngularVelocity(totalTorque, delta);
     UpdateVisualWheel(delta);
 
-    Vector3 forceOffset = _spring.ContactPoint - _vehicle.GlobalPosition;
+    Vector3 forcePoint = _spring.GlobalPosition + (-Up * (float)_spring.Length);
+    if (_isLeft) 
+      forcePoint += -Right * (float)(Width / 2);
+    else
+      forcePoint += Right * (float)(Width / 2);
+    ForcePoint.GlobalPosition = forcePoint;
+
+    Vector3 forceOffset = forcePoint - _vehicle.GlobalPosition;
 
     _vehicle.ApplyForce(tireForce, forceOffset);
 	}
