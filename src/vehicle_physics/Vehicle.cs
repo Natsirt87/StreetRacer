@@ -13,10 +13,6 @@ public partial class Vehicle : RigidBody3D
   public Drivetrain Drivetrain;
   [Export]
   public float SteeringSpeed = 0.5f;
-  [Export]
-  public double BrakeTorque = 5000;
-  [Export]
-  public float CGHeight;
 
   public float FrontAxleDist;
   public float RearAxleDist;
@@ -56,6 +52,11 @@ public partial class Vehicle : RigidBody3D
     Print("Track width: " + TrackWidth);
     Print("Front weight distribution" + RearAxleDist / Wheelbase * Mass / Mass);
     Print("Rear weight distribution" + FrontAxleDist / Wheelbase * Mass / Mass);
+
+    foreach (Wheel wheel in Wheels)
+    {
+      wheel.Init(this);
+    }
 	}
 
 	// Called every physics step. 'delta' is the elapsed time since the previous frame.
