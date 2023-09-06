@@ -8,7 +8,7 @@ namespace VehiclePhysics;
 public partial class Wheel : Node3D
 {
   const float LowSpeedThreshold = 2.5f;
-  const float MaxSlipRatio = 5f;
+  const float MaxSlipRatio = 10f;
   const double StationarySlipModifier = 0.1;
   const double SlipRatioRelaxation = 0.091;
 
@@ -28,8 +28,6 @@ public partial class Wheel : Node3D
   public double Width = 0.5;
   [Export]
   public float WheelMovementRate = 30f;
-  [Export]
-  public Node3D ForcePoint;
 
   // General public variables
   public Vector3 LinearVelocity;
@@ -106,7 +104,7 @@ public partial class Wheel : Node3D
     
     Torque = ComputeTorque(delta);
     SlipRatio = ComputeSlipRatio(_vehicle.LinearVelocity.Dot(Forward), delta);
-    if (SlipRatio > MaxSlipRatio && TireLoad > 1)
+    if (SlipRatio > MaxSlipRatio && TireLoad > 20)
     {
       SlipRatio = MaxSlipRatio;
       Torque -= DriveTorque;

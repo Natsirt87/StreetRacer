@@ -9,13 +9,11 @@ public partial class Spring : ShapeCast3D
   [Export]
   public Vehicle Vehicle;
   [Export]
-  public double SpringRate = 10000;
+  public double SpringRate = 1;
   [Export(PropertyHint.Range, "0,3")]
   public double CompressionDamping = 1;
   [Export(PropertyHint.Range, "0,3")]
   public double ReboundDamping = 1;
-  [Export]
-  public float MountDistance = 0;
 
   public float Mass;
   public Vector3 ContactPoint;
@@ -44,15 +42,16 @@ public partial class Spring : ShapeCast3D
     
     Vector3 forceOffset = GlobalPosition - Vehicle.GlobalPosition;
 
-    Length = GlobalPosition.DistanceTo(ContactPoint) - MountDistance;
+    Length = GlobalPosition.DistanceTo(ContactPoint);
     double compressionDistance = Mathf.Abs(TargetPosition.Y) - Length;
-    double springForce = SpringRate * compressionDistance;
+    double trueSpringRate = SpringRate * Mass * 10;
+    double springForce = SpringRate * compressionDistance * Mass * 10;
 
     double velocity = (Length - _lastLength) / delta;
     _lastLength = Length;
     
     double dampingCoefficient = velocity < 0 ? CompressionDamping : ReboundDamping;
-    double criticalDampForce = 2 * Math.Sqrt(SpringRate * Mass);
+    double criticalDampForce = 2 * Math.Sqrt(trueSpringRate * Mass);
     double dampingForce = -velocity * dampingCoefficient * criticalDampForce;
 
     Vector3 suspensionForce = IsColliding() ? (float)(springForce + dampingForce) * Vehicle.Up : Vector3.Zero;

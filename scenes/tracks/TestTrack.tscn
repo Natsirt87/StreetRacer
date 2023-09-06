@@ -1,7 +1,7 @@
 [gd_scene load_steps=14 format=3 uid="uid://ddd0c01382wkb"]
 
 [ext_resource type="Texture2D" uid="uid://bxlayqus8a8x1" path="res://assets/textures/asphalt_road.png" id="1_362ka"]
-[ext_resource type="PackedScene" uid="uid://d38kwmmn0yo0r" path="res://scenes/vehicles/TestCar.tscn" id="3_aw10a"]
+[ext_resource type="PackedScene" uid="uid://dihproqlibro6" path="res://scenes/vehicles/Skyline.tscn" id="3_btmhr"]
 [ext_resource type="Script" path="res://src/control/PlayerController.cs" id="4_o2y44"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_0o4ra"]
@@ -20,7 +20,7 @@ glow_enabled = true
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hlvub"]
 albedo_texture = ExtResource("1_362ka")
 roughness = 0.92
-uv1_scale = Vector3(100, 100, 100)
+uv1_scale = Vector3(200, 200, 200)
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_wa4ls"]
 material = SubResource("StandardMaterial3D_hlvub")
@@ -61,16 +61,17 @@ mesh = SubResource("PlaneMesh_wa4ls")
 skeleton = NodePath("../..")
 
 [node name="GroundCollider" type="CollisionShape3D" parent="Ground"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, 0)
 shape = SubResource("BoxShape3D_kgurl")
 
 [node name="PlayerController" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 13.305, 0)
 script = ExtResource("4_o2y44")
-VehiclePath = "res://scenes/vehicles/TestCar.tscn"
+VehiclePath = "res://scenes/vehicles/Skyline.tscn"
 CameraPath = "res://scenes/VehicleCamera.tscn"
 
 [node name="BumpTrack" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -28.4999)
+transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, 0, 0, -28.4999)
 
 [node name="SharpBumps" type="Node3D" parent="BumpTrack"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0, 0)
@@ -1140,5 +1141,5 @@ mesh = SubResource("CylinderMesh_kxigq")
 transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
 shape = SubResource("CylinderShape3D_j7c2l")
 
-[node name="TestCar" parent="." instance=ExtResource("3_aw10a")]
-transform = Transform3D(0.493213, 0, 0.869908, 0, 1, 0, -0.869908, 0, 0.493213, 17.5123, 2.62086, -7.98132)
+[node name="RX-7" parent="." instance=ExtResource("3_btmhr")]
+transform = Transform3D(0.769801, 0, 0.638284, 0, 1, 0, -0.638284, 0, 0.769801, 6.97917, 1.1744, -13.9775)
