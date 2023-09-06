@@ -75,31 +75,7 @@ public partial class Vehicle : RigidBody3D
 
     LinearAccel = (LinearVelocity - _lastVelocity) / (float)delta;
     _lastVelocity = LinearVelocity;
-
-    SolutionVector[] states = new SolutionVector[Wheels.Length];
-
-    for (int i = 0; i < Wheels.Length; i++)
-    {
-      Wheels[i].PhysicsStep(delta);
-      states[i] = Wheels[i].GetSlipState();
-    }
-
-    // Integration goes here
-
-    for (int i = 0; i < Wheels.Length; i++)
-    {
-      Wheels[i].IntegrateSlipState(states[i]);
-      Wheels[i].ApplyTireForce(delta);
-    }
 	}
-
-  private static void AddSolutions(ref SolutionVector[] a, SolutionVector[] b, double factor)
-  {
-    for (int i = 0; i < a.Length; i++)
-    {
-      a[i].Add(factor, b[i]);
-    }
-  }
 
   public void SetSteeringInput(float input) 
   {
@@ -124,32 +100,4 @@ public partial class Vehicle : RigidBody3D
   public void ShiftUp() { Drivetrain.ShiftUp(); }
 
   public void ShiftDown() { Drivetrain.ShiftDown(); }
-}
-
-public class SolutionVector
-{
-  public float LongVelocity;
-  public double AngularVelocity;
-  public double SlipRatio;
-
-  public SolutionVector()
-  {
-    LongVelocity = 0;
-    AngularVelocity = 0;
-    SlipRatio = 0;
-  }
-
-  public SolutionVector(float longVelocity, double angularVelocity, double slipRatio)
-  {
-    LongVelocity = longVelocity;
-    AngularVelocity = angularVelocity;
-    SlipRatio = slipRatio;
-  }
-
-  public void Add(double factor, SolutionVector b)
-  {
-    LongVelocity += (float)factor * b.LongVelocity;
-    AngularVelocity += factor * b.AngularVelocity;
-    SlipRatio += factor * b.SlipRatio;
-  }
 }

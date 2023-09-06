@@ -25,9 +25,9 @@ public partial class PlayerCamera : Node3D
     GlobalRotation = Target.GlobalRotation;
   }
 
-  public override void _Process(double delta)
+  public override void _PhysicsProcess(double delta)
   {
-    GlobalPosition = Target.GlobalPosition;
+    GlobalPosition = GlobalPosition.Lerp(Target.GlobalPosition, FollowSpeed * (float)delta);
     float rotationY = _cameraInputY * HorizontalSensitivity * (float)delta;
     float rotationX = _cameraInputX * VerticalSensitivity * (float)delta;
     Rotation = new Vector3(Rotation.X + rotationX, Rotation.Y + rotationY, 0);
