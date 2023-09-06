@@ -10,6 +10,7 @@ public partial class Wheel : Node3D
   const float LowSpeedThreshold = 2.5f;
   const float MaxSlipRatio = 5f;
   const double StationarySlipModifier = 0.1;
+  const double SlipRatioRelaxation = 0.091;
 
   [Export]
   public int Index;
@@ -191,9 +192,9 @@ public partial class Wheel : Node3D
     else if (vLong < LowSpeedThreshold)
     {
       double slipDelta = (AngularVelocity * Radius) - vLong - Math.Abs(vLong) * _diffSlipRatio;
-      slipDelta /= _vehicle.SlipRatioRelaxation;
+      slipDelta /= SlipRatioRelaxation;
       _diffSlipRatio += slipDelta * delta;
-      slipRatio =  _diffSlipRatio + _vehicle.OscillationCorrection * delta;
+      slipRatio =  _diffSlipRatio;
     }
     else
     {

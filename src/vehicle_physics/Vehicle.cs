@@ -13,12 +13,6 @@ public partial class Vehicle : RigidBody3D
   public Drivetrain Drivetrain;
   [Export]
   public float SteeringSpeed = 0.5f;
-  [Export]
-  public double BrakeTorque = 5000;
-  [Export]
-  public double SlipRatioRelaxation = 0.91;
-  [Export]
-  public double OscillationCorrection = 0.05;
 
   public float FrontAxleDist;
   public float RearAxleDist;
