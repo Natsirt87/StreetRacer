@@ -26,6 +26,8 @@ script = ExtResource("1_x5ll3")
 Wheels = [NodePath("Body/WheelFL"), NodePath("Body/WheelFR"), NodePath("Body/WheelRL"), NodePath("Body/WheelRR")]
 Drivetrain = NodePath("Drivetrain")
 SteeringSpeed = 2.0
+SlipRatioRelaxation = 0.091
+OscillationCorrection = 0.0
 
 [node name="Body" type="CollisionShape3D" parent="."]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, 0)
@@ -150,5 +152,3 @@ FinalDriveRatio = 3.0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.02, -0.153, 0.07)
 script = ExtResource("7_l1k7u")
 TireConfigPath = "res://data/tires/StandardTire.ini"
-LongFriction = 1.2
-LatFriction = 1.2
