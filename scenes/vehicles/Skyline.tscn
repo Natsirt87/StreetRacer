@@ -421,10 +421,11 @@ radius = 0.335
 radius = 0.335
 
 [node name="RX-7" type="RigidBody3D" node_paths=PackedStringArray("Wheels", "Drivetrain")]
+transform = Transform3D(0.99994, -0.00793544, 0.00761686, 0.0077424, 0.999656, 0.0250478, -0.007813, -0.0249873, 0.999657, 0, 0, 0)
 collision_layer = 2
 collision_mask = 15
 mass = 1560.0
-inertia = Vector3(2000, 2300, 1560)
+inertia = Vector3(2000, 3200, 1560)
 physics_material_override = SubResource("PhysicsMaterial_8tubw")
 continuous_cd = true
 script = ExtResource("1_1wswf")
@@ -456,6 +457,7 @@ script = ExtResource("3_khrj6")
 Tire = NodePath("../../TireModel")
 VisualWheel = NodePath("VisualWheel")
 MaxSteeringAngle = 25.0
+Mass = 60.0
 Radius = 0.335
 Width = 0.12
 
@@ -482,6 +484,7 @@ Index = 1
 Tire = NodePath("../../TireModel")
 VisualWheel = NodePath("VisualWheel")
 MaxSteeringAngle = 25.0
+Mass = 60.0
 Radius = 0.335
 Width = 0.12
 
@@ -506,6 +509,7 @@ script = ExtResource("3_khrj6")
 Index = 2
 Tire = NodePath("../../TireModel")
 VisualWheel = NodePath("VisualWheel")
+Mass = 60.0
 Radius = 0.335
 Width = 0.12
 
@@ -531,6 +535,7 @@ script = ExtResource("3_khrj6")
 Index = 3
 Tire = NodePath("../../TireModel")
 VisualWheel = NodePath("VisualWheel")
+Mass = 60.0
 Radius = 0.335
 Width = 0.12
 
@@ -555,7 +560,7 @@ script = ExtResource("6_i8g2p")
 Vehicle = NodePath("..")
 GearRatios = PackedFloat64Array(0, 3)
 FinalDriveRatio = 3.0
-TorqueSplit = -0.3
+TorqueSplit = -0.5
 
 [node name="TireModel" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.02, -0.153, 0.07)
