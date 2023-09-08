@@ -7,10 +7,11 @@ namespace VehiclePhysics;
 
 public partial class Wheel : Node3D
 {
-  const float LowSpeedThreshold = 5f;
-  const float MaxSlipRatio = 2f;
-  const double StationarySlipModifier = 0.05;
-  const double SlipRatioRelaxation = 0.08;
+  const double LowSpeedThreshold = 5;
+  const double StationarySpeedThreshold = 0;
+  const double StationaryWheelSpeed = 5;
+  const double MaxSlipRatio = 3;
+  const double StationarySlipModifier = 0.5;
 
   [Export]
   public int Index;
@@ -70,6 +71,7 @@ public partial class Wheel : Node3D
     _initialAngle = RotationDegrees.Y;
     _spring = GetChild<Spring>(0);
     Surface = 0;
+    AngularVelocity = 0;
 
     float frontMass = _vehicle.RearAxleDist / _vehicle.Wheelbase * _vehicle.Mass;
     float rearMass = _vehicle.FrontAxleDist / _vehicle.Wheelbase * _vehicle.Mass;
@@ -86,7 +88,7 @@ public partial class Wheel : Node3D
   }
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _PhysicsProcess(double delta)
+	public void PhysicsTick(double delta)
 	{
     // Update unit vectors
     Forward = -GlobalTransform.Basis.Z;
@@ -100,19 +102,11 @@ public partial class Wheel : Node3D
     {
       Steer(delta);
     }
-    UpdateVisualWheel(delta);
+    
+    
     
     Torque = ComputeTorque(delta);
-    SlipRatio = ComputeSlipRatio(_vehicle.LinearVelocity.Dot(Forward), delta);
-    if (Index == 3){
-      Print("Slip ratio: " + SlipRatio);
-      Print("Angular: " + AngularVelocity);
-    }
-    if (SlipRatio > MaxSlipRatio && TireLoad > 20)
-    {
-      SlipRatio = MaxSlipRatio;
-      Torque -= DriveTorque;
-    }
+    SlipRatio = ComputeSlipRatio(delta);
     
     TireLoad = _spring.GetNormalForce();
     SlipAngle = ComputeSlipAngle();
@@ -133,16 +127,34 @@ public partial class Wheel : Node3D
 
     Vector3 forceOffset = forcePoint - _vehicle.GlobalPosition;
     _vehicle.ApplyForce(tireForce, forceOffset);
+
+    UpdateVisualWheel(delta);
+
+    if (Index == 3){
+      Print("Slip ratio: " + SlipRatio);
+      Print("Angular: " + AngularVelocity * Radius);
+      Print("Torque: " + Torque);
+      Print("---------------------------------------");
+    }
 	}
 
   private void UpdateVisualWheel(double delta)
   {
-    Vector3 wheelRot = new(VisualWheel.Rotation.X - (float)(AngularVelocity * delta), VisualWheel.Rotation.Y, VisualWheel.Rotation.Z);
+    double visualAngularVelocity;
+    double vehicleSpeed = _vehicle.LinearVelocity.Dot(Forward);
+    if (SlipRatio < Tire.PeakSlipRatio || (vehicleSpeed < LowSpeedThreshold && SlipRatio < Tire.PeakSlipRatio * 4))
+    {
+      visualAngularVelocity = vehicleSpeed / Radius;
+    }
+    else
+    {
+      visualAngularVelocity = AngularVelocity;
+    }
+    Vector3 wheelRot = new(VisualWheel.Rotation.X - (float)(visualAngularVelocity * delta), VisualWheel.Rotation.Y, VisualWheel.Rotation.Z);
     VisualWheel.Rotation = wheelRot;
 
     Vector3 wheelPos = _spring.GlobalPosition + -Up * (float)_spring.Length;
     VisualWheel.Position = VisualWheel.Position.Lerp(ToLocal(wheelPos), (float)delta * WheelMovementRate);
-    
   }
 
   private double ComputeAngularVelocity(double torque, double delta)
@@ -178,39 +190,64 @@ public partial class Wheel : Node3D
     else
     {
       const float maxSlipAngle = 80;
-      float lowSpeedSlip = Mathf.RadToDeg(-Mathf.Atan2(vLat, LowSpeedThreshold));
+      float lowSpeedSlip = Mathf.RadToDeg(-Mathf.Atan2(vLat, (float)LowSpeedThreshold));
       lowSpeedSlip = Mathf.Clamp(lowSpeedSlip, -maxSlipAngle, maxSlipAngle);
       return lowSpeedSlip;
     }
   }
 
-  private double ComputeSlipRatio(float vLong, double delta)
+  private double ComputeSlipRatio(double delta)
   {
     double slipRatio;
-    if (vLong < 0.01 && Torque == 0)
+    double wheelSpeed = AngularVelocity * Radius;
+    double vehicleSpeed = (double)_vehicle.LinearVelocity.Dot(Forward);
+    
+    if (Math.Abs(wheelSpeed) > vehicleSpeed * MaxSlipRatio && Math.Abs(wheelSpeed) > StationaryWheelSpeed)
     {
-      slipRatio = ((AngularVelocity * Radius) - vLong) * StationarySlipModifier;
+      // High slip
+      slipRatio = (wheelSpeed - vehicleSpeed) / Math.Abs(wheelSpeed) * MaxSlipRatio;
+      if (Index == 3)
+      {
+        Print("High Slip");
+      }
     }
-    else if (vLong < LowSpeedThreshold)
+    else if (Math.Abs(vehicleSpeed) > LowSpeedThreshold)
     {
-      if (AngularVelocity * Radius < LowSpeedThreshold)
+      // Standard conditions
+      slipRatio = (wheelSpeed - vehicleSpeed) / Math.Abs(vehicleSpeed);
+      if (Index == 3)
       {
-        double slipDelta = (AngularVelocity * Radius) - vLong - Math.Abs(vLong) * _diffSlipRatio;
-        slipDelta /= SlipRatioRelaxation;
-        _diffSlipRatio += slipDelta * delta;
-        slipRatio =  _diffSlipRatio;
+        Print("Standard");
       }
-      else
-      {
-        slipRatio = ((AngularVelocity * Radius) - vLong) / (AngularVelocity * Radius);
-      }
-      
     }
     else
     {
-      slipRatio = ((AngularVelocity * Radius) - vLong) / Math.Max(Math.Abs(vLong), 0.1);
+      // Low speed integration
+      double slipDelta = (AngularVelocity * Radius) - vehicleSpeed - Math.Abs(vehicleSpeed) * _diffSlipRatio;
+      slipDelta /= _vehicle.SlipRatioRelaxation;
+      _diffSlipRatio += slipDelta * delta;
+      slipRatio =  _diffSlipRatio;
+      if (Index == 3)
+      {
+        Print("Integration");
+      }
     }
+
     return slipRatio;
+
+    // if (Math.Abs(vehicleSpeed) < StationarySpeedThreshold && Math.Abs(wheelSpeed) < StationaryWheelSpeed)
+    // {
+    //   // Stationary
+    //   slipRatio = (wheelSpeed - vehicleSpeed) * StationarySlipModifier;
+    //   if (Index == 3)
+    //   {
+    //     Print("Stationary");
+    //   }
+    // }
+    // else
+    // {
+      
+    // }
   }
 
   private double ComputeTorque(double delta)

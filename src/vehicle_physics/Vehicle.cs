@@ -12,7 +12,11 @@ public partial class Vehicle : RigidBody3D
   [Export]
   public Drivetrain Drivetrain;
   [Export]
+  public bool Controlled = true;
+  [Export]
   public float SteeringSpeed = 0.5f;
+  [Export]
+  public double SlipRatioRelaxation = 0.12;
 
   public float FrontAxleDist;
   public float RearAxleDist;
@@ -60,7 +64,7 @@ public partial class Vehicle : RigidBody3D
 	}
 
 	// Called every physics step. 'delta' is the elapsed time since the previous frame.
-	public override void _PhysicsProcess(double delta)
+	public void PhysicsTick(double delta)
 	{
     // Update unit vectors
     Forward = -GlobalTransform.Basis.Z;
@@ -69,7 +73,21 @@ public partial class Vehicle : RigidBody3D
 
     LinearAccel = (LinearVelocity - _lastVelocity) / (float)delta;
     _lastVelocity = LinearVelocity;
+
+    Drivetrain.PhysicsTick(delta);
+    foreach (Wheel wheel in Wheels)
+    {
+      wheel.PhysicsTick(delta);
+    }
 	}
+
+  public override void _PhysicsProcess(double delta)
+  {
+    if (!Controlled)
+    {
+      PhysicsTick(delta);
+    }
+  }
 
   public void SetSteeringInput(float input) 
   {

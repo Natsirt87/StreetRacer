@@ -22,7 +22,7 @@ public partial class PlayerController : Node
   
   
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Input(InputEvent @event)
+	public override void _PhysicsProcess(double delta)
 	{
     if (_vehicle == null)
     {
@@ -46,6 +46,8 @@ public partial class PlayerController : Node
     
     if (Input.IsActionJustPressed("shift_down"))
       _vehicle.ShiftDown();
+    
+    _vehicle.PhysicsTick(delta);
   }
 
   private void CreateVehicle()
