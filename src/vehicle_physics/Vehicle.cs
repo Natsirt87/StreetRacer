@@ -12,7 +12,15 @@ public partial class Vehicle : RigidBody3D
   [Export]
   public Drivetrain Drivetrain;
   [Export]
+  public bool Controlled = true;
+  [Export]
   public float SteeringSpeed = 0.5f;
+  [Export]
+  public double WheelSpinCoefficient = 0.6;
+  [Export]
+  public double MaxSlipRatio = 2.5;
+  [Export]
+  public double SlipRatioRelaxation = 0.1;
 
   public float FrontAxleDist;
   public float RearAxleDist;
@@ -60,7 +68,7 @@ public partial class Vehicle : RigidBody3D
 	}
 
 	// Called every physics step. 'delta' is the elapsed time since the previous frame.
-	public override void _PhysicsProcess(double delta)
+	public void PhysicsTick(double delta)
 	{
     // Update unit vectors
     Forward = -GlobalTransform.Basis.Z;
@@ -69,7 +77,42 @@ public partial class Vehicle : RigidBody3D
 
     LinearAccel = (LinearVelocity - _lastVelocity) / (float)delta;
     _lastVelocity = LinearVelocity;
-	}
+
+    Drivetrain.PhysicsTick(delta);
+    float stopForce = 0;
+    int wheelsStopped = 0;
+    foreach (Wheel wheel in Wheels)
+    {
+      wheel.PhysicsTick(delta);
+      if (wheel.StationaryBraking)
+      {
+        stopForce += (float)wheel.Tire.LongFriction * (float)wheel.TireLoad;
+        wheelsStopped++;
+      }
+    }
+
+    float curForce = Mass * LinearAccel.Length() + (Mass * LinearVelocity.Length() / 0.5f);
+    stopForce = Math.Min(curForce, stopForce);
+    Print("Force: " + stopForce);
+    ApplyCentralForce(-LinearVelocity.Normalized() * stopForce);
+
+    if (wheelsStopped == 4)
+    {
+      LinearDamp = 30;
+    }
+    else
+    {
+      LinearDamp = 0;
+    }
+  }
+
+  public override void _PhysicsProcess(double delta)
+  {
+    if (!Controlled)
+    {
+      PhysicsTick(delta);
+    }
+  }
 
   public void SetSteeringInput(float input) 
   {

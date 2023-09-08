@@ -1,7 +1,6 @@
-[gd_scene load_steps=14 format=3 uid="uid://ddd0c01382wkb"]
+[gd_scene load_steps=13 format=3 uid="uid://ddd0c01382wkb"]
 
 [ext_resource type="Texture2D" uid="uid://bxlayqus8a8x1" path="res://assets/textures/asphalt_road.png" id="1_362ka"]
-[ext_resource type="PackedScene" uid="uid://d38kwmmn0yo0r" path="res://scenes/vehicles/TestCar.tscn" id="3_aw10a"]
 [ext_resource type="Script" path="res://src/control/PlayerController.cs" id="4_o2y44"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_0o4ra"]
@@ -20,7 +19,7 @@ glow_enabled = true
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hlvub"]
 albedo_texture = ExtResource("1_362ka")
 roughness = 0.92
-uv1_scale = Vector3(100, 100, 100)
+uv1_scale = Vector3(200, 200, 200)
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_wa4ls"]
 material = SubResource("StandardMaterial3D_hlvub")
@@ -61,1084 +60,1082 @@ mesh = SubResource("PlaneMesh_wa4ls")
 skeleton = NodePath("../..")
 
 [node name="GroundCollider" type="CollisionShape3D" parent="Ground"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, 0)
 shape = SubResource("BoxShape3D_kgurl")
+
+[node name="BumpTrack" type="Node3D" parent="Ground"]
+transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, 0, 0, -28.4999)
+
+[node name="SharpBumps" type="Node3D" parent="Ground/BumpTrack"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0, 0)
+
+[node name="Short" type="Node3D" parent="Ground/BumpTrack/SharpBumps"]
+
+[node name="SmoothBump" type="StaticBody3D" parent="Ground/BumpTrack/SharpBumps/Short"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/SharpBumps/Short/SmoothBump"]
+transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0)
+mesh = SubResource("BoxMesh_4wdik")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/SharpBumps/Short/SmoothBump"]
+transform = Transform3D(1, 0.000228796, -0.000110543, -8.36171e-05, 0.707107, 0.707107, 0.000239949, -0.707107, 0.707107, 0, 0.0212806, -1.52588e-05)
+shape = SubResource("BoxShape3D_q13yl")
+
+[node name="SmoothBump2" type="StaticBody3D" parent="Ground/BumpTrack/SharpBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/SharpBumps/Short/SmoothBump2"]
+transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0)
+mesh = SubResource("BoxMesh_4wdik")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/SharpBumps/Short/SmoothBump2"]
+transform = Transform3D(1, 0.000228796, -0.000110543, -8.36171e-05, 0.707107, 0.707107, 0.000239949, -0.707107, 0.707107, 0, 0.0199077, -1.33514e-05)
+shape = SubResource("BoxShape3D_q13yl")
+
+[node name="SmoothBump3" type="StaticBody3D" parent="Ground/BumpTrack/SharpBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/SharpBumps/Short/SmoothBump3"]
+transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0)
+mesh = SubResource("BoxMesh_4wdik")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/SharpBumps/Short/SmoothBump3"]
+transform = Transform3D(1, 0.000228796, -0.000110543, -8.36171e-05, 0.707107, 0.707107, 0.000239949, -0.707107, 0.707107, 0, 0.0185347, -1.33514e-05)
+shape = SubResource("BoxShape3D_q13yl")
+
+[node name="SmoothBump4" type="StaticBody3D" parent="Ground/BumpTrack/SharpBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/SharpBumps/Short/SmoothBump4"]
+transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0)
+mesh = SubResource("BoxMesh_4wdik")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/SharpBumps/Short/SmoothBump4"]
+transform = Transform3D(1, 0.000228796, -0.000110543, -8.36171e-05, 0.707107, 0.707107, 0.000239949, -0.707107, 0.707107, 0, 0.0171618, -1.33514e-05)
+shape = SubResource("BoxShape3D_q13yl")
+
+[node name="SmoothBump5" type="StaticBody3D" parent="Ground/BumpTrack/SharpBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/SharpBumps/Short/SmoothBump5"]
+transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0)
+mesh = SubResource("BoxMesh_4wdik")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/SharpBumps/Short/SmoothBump5"]
+transform = Transform3D(1, 0.000228796, -0.000110543, -8.36171e-05, 0.707107, 0.707107, 0.000239949, -0.707107, 0.707107, 0, 0.0157889, -1.14441e-05)
+shape = SubResource("BoxShape3D_q13yl")
+
+[node name="SmoothBump6" type="StaticBody3D" parent="Ground/BumpTrack/SharpBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/SharpBumps/Short/SmoothBump6"]
+transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0)
+mesh = SubResource("BoxMesh_4wdik")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/SharpBumps/Short/SmoothBump6"]
+transform = Transform3D(1, 0.000228796, -0.000110543, -8.36171e-05, 0.707107, 0.707107, 0.000239949, -0.707107, 0.707107, 0, 0.0144159, -7.62939e-06)
+shape = SubResource("BoxShape3D_q13yl")
+
+[node name="SmoothBump7" type="StaticBody3D" parent="Ground/BumpTrack/SharpBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/SharpBumps/Short/SmoothBump7"]
+transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0)
+mesh = SubResource("BoxMesh_4wdik")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/SharpBumps/Short/SmoothBump7"]
+transform = Transform3D(1, 0.000228796, -0.000110543, -8.36171e-05, 0.707107, 0.707107, 0.000239949, -0.707107, 0.707107, 0, 0.013043, -7.62939e-06)
+shape = SubResource("BoxShape3D_q13yl")
+
+[node name="SmoothBump8" type="StaticBody3D" parent="Ground/BumpTrack/SharpBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/SharpBumps/Short/SmoothBump8"]
+transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0)
+mesh = SubResource("BoxMesh_4wdik")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/SharpBumps/Short/SmoothBump8"]
+transform = Transform3D(1, 0.000228796, -0.000110543, -8.36171e-05, 0.707107, 0.707107, 0.000239949, -0.707107, 0.707107, 0, 0.01167, -7.62939e-06)
+shape = SubResource("BoxShape3D_q13yl")
+
+[node name="SmoothBump9" type="StaticBody3D" parent="Ground/BumpTrack/SharpBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/SharpBumps/Short/SmoothBump9"]
+transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0)
+mesh = SubResource("BoxMesh_4wdik")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/SharpBumps/Short/SmoothBump9"]
+transform = Transform3D(1, 0.000228796, -0.000110543, -8.36171e-05, 0.707107, 0.707107, 0.000239949, -0.707107, 0.707107, 0, 0.0102971, -7.62939e-06)
+shape = SubResource("BoxShape3D_q13yl")
+
+[node name="SmoothBump10" type="StaticBody3D" parent="Ground/BumpTrack/SharpBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/SharpBumps/Short/SmoothBump10"]
+transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0)
+mesh = SubResource("BoxMesh_4wdik")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/SharpBumps/Short/SmoothBump10"]
+transform = Transform3D(1, 0.000228796, -0.000110543, -8.36171e-05, 0.707107, 0.707107, 0.000239949, -0.707107, 0.707107, 0, 0.00892413, -7.62939e-06)
+shape = SubResource("BoxShape3D_q13yl")
+
+[node name="SmoothBump11" type="StaticBody3D" parent="Ground/BumpTrack/SharpBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/SharpBumps/Short/SmoothBump11"]
+transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0)
+mesh = SubResource("BoxMesh_4wdik")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/SharpBumps/Short/SmoothBump11"]
+transform = Transform3D(1, 0.000228796, -0.000110543, -8.36171e-05, 0.707107, 0.707107, 0.000239949, -0.707107, 0.707107, 0, 0.00755119, -3.8147e-06)
+shape = SubResource("BoxShape3D_q13yl")
+
+[node name="SmoothBump12" type="StaticBody3D" parent="Ground/BumpTrack/SharpBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -11)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/SharpBumps/Short/SmoothBump12"]
+transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0)
+mesh = SubResource("BoxMesh_4wdik")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/SharpBumps/Short/SmoothBump12"]
+transform = Transform3D(1, 0.000228796, -0.000110543, -8.36171e-05, 0.707107, 0.707107, 0.000239949, -0.707107, 0.707107, 0, 0.00617825, -3.8147e-06)
+shape = SubResource("BoxShape3D_q13yl")
+
+[node name="SmoothBump13" type="StaticBody3D" parent="Ground/BumpTrack/SharpBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/SharpBumps/Short/SmoothBump13"]
+transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0)
+mesh = SubResource("BoxMesh_4wdik")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/SharpBumps/Short/SmoothBump13"]
+transform = Transform3D(1, 0.000228796, -0.000110543, -8.36171e-05, 0.707107, 0.707107, 0.000239949, -0.707107, 0.707107, 0, 0.0048053, -3.8147e-06)
+shape = SubResource("BoxShape3D_q13yl")
+
+[node name="SmoothBump14" type="StaticBody3D" parent="Ground/BumpTrack/SharpBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -13)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/SharpBumps/Short/SmoothBump14"]
+transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0)
+mesh = SubResource("BoxMesh_4wdik")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/SharpBumps/Short/SmoothBump14"]
+transform = Transform3D(1, 0.000228796, -0.000110543, -8.36171e-05, 0.707107, 0.707107, 0.000239949, -0.707107, 0.707107, 0, 0.00343236, -3.8147e-06)
+shape = SubResource("BoxShape3D_q13yl")
+
+[node name="SmoothBump15" type="StaticBody3D" parent="Ground/BumpTrack/SharpBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/SharpBumps/Short/SmoothBump15"]
+transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0)
+mesh = SubResource("BoxMesh_4wdik")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/SharpBumps/Short/SmoothBump15"]
+transform = Transform3D(1, 0.000228796, -0.000110543, -8.36171e-05, 0.707107, 0.707107, 0.000239949, -0.707107, 0.707107, 0, 0.00205942, 0)
+shape = SubResource("BoxShape3D_q13yl")
+
+[node name="SmoothBump16" type="StaticBody3D" parent="Ground/BumpTrack/SharpBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/SharpBumps/Short/SmoothBump16"]
+transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0)
+mesh = SubResource("BoxMesh_4wdik")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/SharpBumps/Short/SmoothBump16"]
+transform = Transform3D(1, 0.000228796, -0.000110543, -8.36171e-05, 0.707107, 0.707107, 0.000239949, -0.707107, 0.707107, 0, 0.000686472, 0)
+shape = SubResource("BoxShape3D_q13yl")
+
+[node name="SmoothBump17" type="StaticBody3D" parent="Ground/BumpTrack/SharpBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/SharpBumps/Short/SmoothBump17"]
+transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0)
+mesh = SubResource("BoxMesh_4wdik")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/SharpBumps/Short/SmoothBump17"]
+transform = Transform3D(1, 0.000228796, -0.000110543, -8.36171e-05, 0.707107, 0.707107, 0.000239949, -0.707107, 0.707107, 0, -0.000686472, 0)
+shape = SubResource("BoxShape3D_q13yl")
+
+[node name="SmoothBump18" type="StaticBody3D" parent="Ground/BumpTrack/SharpBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -17)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/SharpBumps/Short/SmoothBump18"]
+transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0)
+mesh = SubResource("BoxMesh_4wdik")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/SharpBumps/Short/SmoothBump18"]
+transform = Transform3D(1, 0.000228796, -0.000110543, -8.36171e-05, 0.707107, 0.707107, 0.000239949, -0.707107, 0.707107, 0, -0.00205942, 0)
+shape = SubResource("BoxShape3D_q13yl")
+
+[node name="SmoothBump19" type="StaticBody3D" parent="Ground/BumpTrack/SharpBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -18)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/SharpBumps/Short/SmoothBump19"]
+transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0)
+mesh = SubResource("BoxMesh_4wdik")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/SharpBumps/Short/SmoothBump19"]
+transform = Transform3D(1, 0.000228796, -0.000110543, -8.36171e-05, 0.707107, 0.707107, 0.000239949, -0.707107, 0.707107, 0, -0.00343236, 3.8147e-06)
+shape = SubResource("BoxShape3D_q13yl")
+
+[node name="SmoothBump20" type="StaticBody3D" parent="Ground/BumpTrack/SharpBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -19)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/SharpBumps/Short/SmoothBump20"]
+transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0)
+mesh = SubResource("BoxMesh_4wdik")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/SharpBumps/Short/SmoothBump20"]
+transform = Transform3D(1, 0.000228796, -0.000110543, -8.36171e-05, 0.707107, 0.707107, 0.000239949, -0.707107, 0.707107, 0, -0.0048053, 3.8147e-06)
+shape = SubResource("BoxShape3D_q13yl")
+
+[node name="SmoothBump21" type="StaticBody3D" parent="Ground/BumpTrack/SharpBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/SharpBumps/Short/SmoothBump21"]
+transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0)
+mesh = SubResource("BoxMesh_4wdik")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/SharpBumps/Short/SmoothBump21"]
+transform = Transform3D(1, 0.000228796, -0.000110543, -8.36171e-05, 0.707107, 0.707107, 0.000239949, -0.707107, 0.707107, 0, -0.00617825, 3.8147e-06)
+shape = SubResource("BoxShape3D_q13yl")
+
+[node name="SmoothBump22" type="StaticBody3D" parent="Ground/BumpTrack/SharpBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -21)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/SharpBumps/Short/SmoothBump22"]
+transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0)
+mesh = SubResource("BoxMesh_4wdik")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/SharpBumps/Short/SmoothBump22"]
+transform = Transform3D(1, 0.000228796, -0.000110543, -8.36171e-05, 0.707107, 0.707107, 0.000239949, -0.707107, 0.707107, 0, -0.00755119, 3.8147e-06)
+shape = SubResource("BoxShape3D_q13yl")
+
+[node name="SmoothBump23" type="StaticBody3D" parent="Ground/BumpTrack/SharpBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -22)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/SharpBumps/Short/SmoothBump23"]
+transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0)
+mesh = SubResource("BoxMesh_4wdik")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/SharpBumps/Short/SmoothBump23"]
+transform = Transform3D(1, 0.000228796, -0.000110543, -8.36171e-05, 0.707107, 0.707107, 0.000239949, -0.707107, 0.707107, 0, -0.00892413, 7.62939e-06)
+shape = SubResource("BoxShape3D_q13yl")
+
+[node name="SmoothBump24" type="StaticBody3D" parent="Ground/BumpTrack/SharpBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -23)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/SharpBumps/Short/SmoothBump24"]
+transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0)
+mesh = SubResource("BoxMesh_4wdik")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/SharpBumps/Short/SmoothBump24"]
+transform = Transform3D(1, 0.000228796, -0.000110543, -8.36171e-05, 0.707107, 0.707107, 0.000239949, -0.707107, 0.707107, 0, -0.0102971, 7.62939e-06)
+shape = SubResource("BoxShape3D_q13yl")
+
+[node name="SmoothBump25" type="StaticBody3D" parent="Ground/BumpTrack/SharpBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -24)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/SharpBumps/Short/SmoothBump25"]
+transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0)
+mesh = SubResource("BoxMesh_4wdik")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/SharpBumps/Short/SmoothBump25"]
+transform = Transform3D(1, 0.000228796, -0.000110543, -8.36171e-05, 0.707107, 0.707107, 0.000239949, -0.707107, 0.707107, 0, -0.01167, 7.62939e-06)
+shape = SubResource("BoxShape3D_q13yl")
+
+[node name="SmoothBump26" type="StaticBody3D" parent="Ground/BumpTrack/SharpBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -25)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/SharpBumps/Short/SmoothBump26"]
+transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0)
+mesh = SubResource("BoxMesh_4wdik")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/SharpBumps/Short/SmoothBump26"]
+transform = Transform3D(1, 0.000228796, -0.000110543, -8.36171e-05, 0.707107, 0.707107, 0.000239949, -0.707107, 0.707107, 0, -0.013043, 7.62939e-06)
+shape = SubResource("BoxShape3D_q13yl")
+
+[node name="SmoothBump27" type="StaticBody3D" parent="Ground/BumpTrack/SharpBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -26)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/SharpBumps/Short/SmoothBump27"]
+transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0)
+mesh = SubResource("BoxMesh_4wdik")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/SharpBumps/Short/SmoothBump27"]
+transform = Transform3D(1, 0.000228796, -0.000110543, -8.36171e-05, 0.707107, 0.707107, 0.000239949, -0.707107, 0.707107, 0, -0.0144159, 7.62939e-06)
+shape = SubResource("BoxShape3D_q13yl")
+
+[node name="SmoothBump28" type="StaticBody3D" parent="Ground/BumpTrack/SharpBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -27)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/SharpBumps/Short/SmoothBump28"]
+transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0)
+mesh = SubResource("BoxMesh_4wdik")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/SharpBumps/Short/SmoothBump28"]
+transform = Transform3D(1, 0.000228796, -0.000110543, -8.36171e-05, 0.707107, 0.707107, 0.000239949, -0.707107, 0.707107, 0, -0.0157889, 1.14441e-05)
+shape = SubResource("BoxShape3D_q13yl")
+
+[node name="SmoothBump29" type="StaticBody3D" parent="Ground/BumpTrack/SharpBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -28)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/SharpBumps/Short/SmoothBump29"]
+transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0)
+mesh = SubResource("BoxMesh_4wdik")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/SharpBumps/Short/SmoothBump29"]
+transform = Transform3D(1, 0.000228796, -0.000110543, -8.36171e-05, 0.707107, 0.707107, 0.000239949, -0.707107, 0.707107, 0, -0.0171618, 1.14441e-05)
+shape = SubResource("BoxShape3D_q13yl")
+
+[node name="SmoothBump30" type="StaticBody3D" parent="Ground/BumpTrack/SharpBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -29)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/SharpBumps/Short/SmoothBump30"]
+transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0)
+mesh = SubResource("BoxMesh_4wdik")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/SharpBumps/Short/SmoothBump30"]
+transform = Transform3D(1, 0.000228796, -0.000110543, -8.36171e-05, 0.707107, 0.707107, 0.000239949, -0.707107, 0.707107, 0, -0.0185347, 1.52588e-05)
+shape = SubResource("BoxShape3D_q13yl")
+
+[node name="SmoothBump31" type="StaticBody3D" parent="Ground/BumpTrack/SharpBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -30)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/SharpBumps/Short/SmoothBump31"]
+transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0)
+mesh = SubResource("BoxMesh_4wdik")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/SharpBumps/Short/SmoothBump31"]
+transform = Transform3D(1, 0.000228796, -0.000110543, -8.36171e-05, 0.707107, 0.707107, 0.000239949, -0.707107, 0.707107, 0, -0.0199077, 1.52588e-05)
+shape = SubResource("BoxShape3D_q13yl")
+
+[node name="SmoothBump32" type="StaticBody3D" parent="Ground/BumpTrack/SharpBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -31)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/SharpBumps/Short/SmoothBump32"]
+transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0)
+mesh = SubResource("BoxMesh_4wdik")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/SharpBumps/Short/SmoothBump32"]
+transform = Transform3D(1, 0.000228796, -0.000110543, -8.36171e-05, 0.707107, 0.707107, 0.000239949, -0.707107, 0.707107, 0, -0.0212806, 1.52588e-05)
+shape = SubResource("BoxShape3D_q13yl")
+
+[node name="SmoothBumps" type="Node3D" parent="Ground/BumpTrack"]
+
+[node name="Short" type="Node3D" parent="Ground/BumpTrack/SmoothBumps"]
+
+[node name="SmoothBump" type="StaticBody3D" parent="Ground/BumpTrack/SmoothBumps/Short"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/SmoothBumps/Short/SmoothBump"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_kxigq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/SmoothBumps/Short/SmoothBump"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("CylinderShape3D_j7c2l")
+
+[node name="SmoothBump2" type="StaticBody3D" parent="Ground/BumpTrack/SmoothBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/SmoothBumps/Short/SmoothBump2"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_kxigq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/SmoothBumps/Short/SmoothBump2"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("CylinderShape3D_j7c2l")
+
+[node name="SmoothBump3" type="StaticBody3D" parent="Ground/BumpTrack/SmoothBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/SmoothBumps/Short/SmoothBump3"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_kxigq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/SmoothBumps/Short/SmoothBump3"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("CylinderShape3D_j7c2l")
+
+[node name="SmoothBump4" type="StaticBody3D" parent="Ground/BumpTrack/SmoothBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/SmoothBumps/Short/SmoothBump4"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_kxigq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/SmoothBumps/Short/SmoothBump4"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("CylinderShape3D_j7c2l")
+
+[node name="SmoothBump5" type="StaticBody3D" parent="Ground/BumpTrack/SmoothBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/SmoothBumps/Short/SmoothBump5"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_kxigq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/SmoothBumps/Short/SmoothBump5"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("CylinderShape3D_j7c2l")
+
+[node name="SmoothBump6" type="StaticBody3D" parent="Ground/BumpTrack/SmoothBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/SmoothBumps/Short/SmoothBump6"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_kxigq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/SmoothBumps/Short/SmoothBump6"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("CylinderShape3D_j7c2l")
+
+[node name="SmoothBump7" type="StaticBody3D" parent="Ground/BumpTrack/SmoothBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/SmoothBumps/Short/SmoothBump7"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_kxigq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/SmoothBumps/Short/SmoothBump7"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("CylinderShape3D_j7c2l")
+
+[node name="SmoothBump8" type="StaticBody3D" parent="Ground/BumpTrack/SmoothBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/SmoothBumps/Short/SmoothBump8"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_kxigq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/SmoothBumps/Short/SmoothBump8"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("CylinderShape3D_j7c2l")
+
+[node name="SmoothBump9" type="StaticBody3D" parent="Ground/BumpTrack/SmoothBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/SmoothBumps/Short/SmoothBump9"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_kxigq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/SmoothBumps/Short/SmoothBump9"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("CylinderShape3D_j7c2l")
+
+[node name="SmoothBump10" type="StaticBody3D" parent="Ground/BumpTrack/SmoothBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/SmoothBumps/Short/SmoothBump10"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_kxigq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/SmoothBumps/Short/SmoothBump10"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("CylinderShape3D_j7c2l")
+
+[node name="SmoothBump11" type="StaticBody3D" parent="Ground/BumpTrack/SmoothBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/SmoothBumps/Short/SmoothBump11"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_kxigq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/SmoothBumps/Short/SmoothBump11"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("CylinderShape3D_j7c2l")
+
+[node name="SmoothBump12" type="StaticBody3D" parent="Ground/BumpTrack/SmoothBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -11)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/SmoothBumps/Short/SmoothBump12"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_kxigq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/SmoothBumps/Short/SmoothBump12"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("CylinderShape3D_j7c2l")
+
+[node name="SmoothBump13" type="StaticBody3D" parent="Ground/BumpTrack/SmoothBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/SmoothBumps/Short/SmoothBump13"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_kxigq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/SmoothBumps/Short/SmoothBump13"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("CylinderShape3D_j7c2l")
+
+[node name="SmoothBump14" type="StaticBody3D" parent="Ground/BumpTrack/SmoothBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -13)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/SmoothBumps/Short/SmoothBump14"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_kxigq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/SmoothBumps/Short/SmoothBump14"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("CylinderShape3D_j7c2l")
+
+[node name="SmoothBump15" type="StaticBody3D" parent="Ground/BumpTrack/SmoothBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/SmoothBumps/Short/SmoothBump15"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_kxigq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/SmoothBumps/Short/SmoothBump15"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("CylinderShape3D_j7c2l")
+
+[node name="SmoothBump16" type="StaticBody3D" parent="Ground/BumpTrack/SmoothBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/SmoothBumps/Short/SmoothBump16"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_kxigq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/SmoothBumps/Short/SmoothBump16"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("CylinderShape3D_j7c2l")
+
+[node name="SmoothBump17" type="StaticBody3D" parent="Ground/BumpTrack/SmoothBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/SmoothBumps/Short/SmoothBump17"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_kxigq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/SmoothBumps/Short/SmoothBump17"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("CylinderShape3D_j7c2l")
+
+[node name="SmoothBump18" type="StaticBody3D" parent="Ground/BumpTrack/SmoothBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -17)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/SmoothBumps/Short/SmoothBump18"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_kxigq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/SmoothBumps/Short/SmoothBump18"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("CylinderShape3D_j7c2l")
+
+[node name="SmoothBump19" type="StaticBody3D" parent="Ground/BumpTrack/SmoothBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -18)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/SmoothBumps/Short/SmoothBump19"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_kxigq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/SmoothBumps/Short/SmoothBump19"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("CylinderShape3D_j7c2l")
+
+[node name="SmoothBump20" type="StaticBody3D" parent="Ground/BumpTrack/SmoothBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -19)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/SmoothBumps/Short/SmoothBump20"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_kxigq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/SmoothBumps/Short/SmoothBump20"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("CylinderShape3D_j7c2l")
+
+[node name="SmoothBump21" type="StaticBody3D" parent="Ground/BumpTrack/SmoothBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/SmoothBumps/Short/SmoothBump21"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_kxigq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/SmoothBumps/Short/SmoothBump21"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("CylinderShape3D_j7c2l")
+
+[node name="SmoothBump22" type="StaticBody3D" parent="Ground/BumpTrack/SmoothBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -21)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/SmoothBumps/Short/SmoothBump22"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_kxigq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/SmoothBumps/Short/SmoothBump22"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("CylinderShape3D_j7c2l")
+
+[node name="SmoothBump23" type="StaticBody3D" parent="Ground/BumpTrack/SmoothBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -22)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/SmoothBumps/Short/SmoothBump23"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_kxigq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/SmoothBumps/Short/SmoothBump23"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("CylinderShape3D_j7c2l")
+
+[node name="SmoothBump24" type="StaticBody3D" parent="Ground/BumpTrack/SmoothBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -23)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/SmoothBumps/Short/SmoothBump24"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_kxigq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/SmoothBumps/Short/SmoothBump24"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("CylinderShape3D_j7c2l")
+
+[node name="SmoothBump25" type="StaticBody3D" parent="Ground/BumpTrack/SmoothBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -24)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/SmoothBumps/Short/SmoothBump25"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_kxigq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/SmoothBumps/Short/SmoothBump25"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("CylinderShape3D_j7c2l")
+
+[node name="SmoothBump26" type="StaticBody3D" parent="Ground/BumpTrack/SmoothBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -25)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/SmoothBumps/Short/SmoothBump26"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_kxigq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/SmoothBumps/Short/SmoothBump26"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("CylinderShape3D_j7c2l")
+
+[node name="SmoothBump27" type="StaticBody3D" parent="Ground/BumpTrack/SmoothBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -26)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/SmoothBumps/Short/SmoothBump27"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_kxigq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/SmoothBumps/Short/SmoothBump27"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("CylinderShape3D_j7c2l")
+
+[node name="SmoothBump28" type="StaticBody3D" parent="Ground/BumpTrack/SmoothBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -27)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/SmoothBumps/Short/SmoothBump28"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_kxigq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/SmoothBumps/Short/SmoothBump28"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("CylinderShape3D_j7c2l")
+
+[node name="SmoothBump29" type="StaticBody3D" parent="Ground/BumpTrack/SmoothBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -28)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/SmoothBumps/Short/SmoothBump29"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_kxigq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/SmoothBumps/Short/SmoothBump29"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("CylinderShape3D_j7c2l")
+
+[node name="SmoothBump30" type="StaticBody3D" parent="Ground/BumpTrack/SmoothBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -29)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/SmoothBumps/Short/SmoothBump30"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_kxigq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/SmoothBumps/Short/SmoothBump30"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("CylinderShape3D_j7c2l")
+
+[node name="SmoothBump31" type="StaticBody3D" parent="Ground/BumpTrack/SmoothBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -30)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/SmoothBumps/Short/SmoothBump31"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_kxigq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/SmoothBumps/Short/SmoothBump31"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("CylinderShape3D_j7c2l")
+
+[node name="SmoothBump32" type="StaticBody3D" parent="Ground/BumpTrack/SmoothBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -31)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/SmoothBumps/Short/SmoothBump32"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_kxigq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/SmoothBumps/Short/SmoothBump32"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("CylinderShape3D_j7c2l")
+
+[node name="BigBumps" type="Node3D" parent="Ground/BumpTrack"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20, 0, 0)
+
+[node name="Short" type="Node3D" parent="Ground/BumpTrack/BigBumps"]
+transform = Transform3D(1, 0, 0, 0, 1.3, 0, 0, 0, 1.1, 0, 0, 0)
+
+[node name="SmoothBump" type="StaticBody3D" parent="Ground/BumpTrack/BigBumps/Short"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/BigBumps/Short/SmoothBump"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_kxigq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/BigBumps/Short/SmoothBump"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("CylinderShape3D_j7c2l")
+
+[node name="SmoothBump2" type="StaticBody3D" parent="Ground/BumpTrack/BigBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/BigBumps/Short/SmoothBump2"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_kxigq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/BigBumps/Short/SmoothBump2"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("CylinderShape3D_j7c2l")
+
+[node name="SmoothBump3" type="StaticBody3D" parent="Ground/BumpTrack/BigBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/BigBumps/Short/SmoothBump3"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_kxigq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/BigBumps/Short/SmoothBump3"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("CylinderShape3D_j7c2l")
+
+[node name="SmoothBump4" type="StaticBody3D" parent="Ground/BumpTrack/BigBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/BigBumps/Short/SmoothBump4"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_kxigq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/BigBumps/Short/SmoothBump4"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("CylinderShape3D_j7c2l")
+
+[node name="SmoothBump5" type="StaticBody3D" parent="Ground/BumpTrack/BigBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/BigBumps/Short/SmoothBump5"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_kxigq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/BigBumps/Short/SmoothBump5"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("CylinderShape3D_j7c2l")
+
+[node name="SmoothBump6" type="StaticBody3D" parent="Ground/BumpTrack/BigBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/BigBumps/Short/SmoothBump6"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_kxigq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/BigBumps/Short/SmoothBump6"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("CylinderShape3D_j7c2l")
+
+[node name="SmoothBump7" type="StaticBody3D" parent="Ground/BumpTrack/BigBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/BigBumps/Short/SmoothBump7"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_kxigq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/BigBumps/Short/SmoothBump7"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("CylinderShape3D_j7c2l")
+
+[node name="SmoothBump8" type="StaticBody3D" parent="Ground/BumpTrack/BigBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/BigBumps/Short/SmoothBump8"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_kxigq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/BigBumps/Short/SmoothBump8"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("CylinderShape3D_j7c2l")
+
+[node name="SmoothBump9" type="StaticBody3D" parent="Ground/BumpTrack/BigBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/BigBumps/Short/SmoothBump9"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_kxigq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/BigBumps/Short/SmoothBump9"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("CylinderShape3D_j7c2l")
+
+[node name="SmoothBump10" type="StaticBody3D" parent="Ground/BumpTrack/BigBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/BigBumps/Short/SmoothBump10"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_kxigq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/BigBumps/Short/SmoothBump10"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("CylinderShape3D_j7c2l")
+
+[node name="SmoothBump11" type="StaticBody3D" parent="Ground/BumpTrack/BigBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/BigBumps/Short/SmoothBump11"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_kxigq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/BigBumps/Short/SmoothBump11"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("CylinderShape3D_j7c2l")
+
+[node name="SmoothBump12" type="StaticBody3D" parent="Ground/BumpTrack/BigBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -11)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/BigBumps/Short/SmoothBump12"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_kxigq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/BigBumps/Short/SmoothBump12"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("CylinderShape3D_j7c2l")
+
+[node name="SmoothBump13" type="StaticBody3D" parent="Ground/BumpTrack/BigBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/BigBumps/Short/SmoothBump13"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_kxigq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/BigBumps/Short/SmoothBump13"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("CylinderShape3D_j7c2l")
+
+[node name="SmoothBump14" type="StaticBody3D" parent="Ground/BumpTrack/BigBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -13)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/BigBumps/Short/SmoothBump14"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_kxigq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/BigBumps/Short/SmoothBump14"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("CylinderShape3D_j7c2l")
+
+[node name="SmoothBump15" type="StaticBody3D" parent="Ground/BumpTrack/BigBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/BigBumps/Short/SmoothBump15"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_kxigq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/BigBumps/Short/SmoothBump15"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("CylinderShape3D_j7c2l")
+
+[node name="SmoothBump16" type="StaticBody3D" parent="Ground/BumpTrack/BigBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/BigBumps/Short/SmoothBump16"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_kxigq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/BigBumps/Short/SmoothBump16"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("CylinderShape3D_j7c2l")
+
+[node name="SmoothBump17" type="StaticBody3D" parent="Ground/BumpTrack/BigBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/BigBumps/Short/SmoothBump17"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_kxigq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/BigBumps/Short/SmoothBump17"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("CylinderShape3D_j7c2l")
+
+[node name="SmoothBump18" type="StaticBody3D" parent="Ground/BumpTrack/BigBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -17)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/BigBumps/Short/SmoothBump18"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_kxigq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/BigBumps/Short/SmoothBump18"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("CylinderShape3D_j7c2l")
+
+[node name="SmoothBump19" type="StaticBody3D" parent="Ground/BumpTrack/BigBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -18)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/BigBumps/Short/SmoothBump19"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_kxigq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/BigBumps/Short/SmoothBump19"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("CylinderShape3D_j7c2l")
+
+[node name="SmoothBump20" type="StaticBody3D" parent="Ground/BumpTrack/BigBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -19)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/BigBumps/Short/SmoothBump20"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_kxigq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/BigBumps/Short/SmoothBump20"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("CylinderShape3D_j7c2l")
+
+[node name="SmoothBump21" type="StaticBody3D" parent="Ground/BumpTrack/BigBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/BigBumps/Short/SmoothBump21"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_kxigq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/BigBumps/Short/SmoothBump21"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("CylinderShape3D_j7c2l")
+
+[node name="SmoothBump22" type="StaticBody3D" parent="Ground/BumpTrack/BigBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -21)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/BigBumps/Short/SmoothBump22"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_kxigq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/BigBumps/Short/SmoothBump22"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("CylinderShape3D_j7c2l")
+
+[node name="SmoothBump23" type="StaticBody3D" parent="Ground/BumpTrack/BigBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -22)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/BigBumps/Short/SmoothBump23"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_kxigq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/BigBumps/Short/SmoothBump23"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("CylinderShape3D_j7c2l")
+
+[node name="SmoothBump24" type="StaticBody3D" parent="Ground/BumpTrack/BigBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -23)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/BigBumps/Short/SmoothBump24"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_kxigq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/BigBumps/Short/SmoothBump24"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("CylinderShape3D_j7c2l")
+
+[node name="SmoothBump25" type="StaticBody3D" parent="Ground/BumpTrack/BigBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -24)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/BigBumps/Short/SmoothBump25"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_kxigq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/BigBumps/Short/SmoothBump25"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("CylinderShape3D_j7c2l")
+
+[node name="SmoothBump26" type="StaticBody3D" parent="Ground/BumpTrack/BigBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -25)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/BigBumps/Short/SmoothBump26"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_kxigq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/BigBumps/Short/SmoothBump26"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("CylinderShape3D_j7c2l")
+
+[node name="SmoothBump27" type="StaticBody3D" parent="Ground/BumpTrack/BigBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -26)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/BigBumps/Short/SmoothBump27"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_kxigq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/BigBumps/Short/SmoothBump27"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("CylinderShape3D_j7c2l")
+
+[node name="SmoothBump28" type="StaticBody3D" parent="Ground/BumpTrack/BigBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -27)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/BigBumps/Short/SmoothBump28"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_kxigq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/BigBumps/Short/SmoothBump28"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("CylinderShape3D_j7c2l")
+
+[node name="SmoothBump29" type="StaticBody3D" parent="Ground/BumpTrack/BigBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -28)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/BigBumps/Short/SmoothBump29"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_kxigq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/BigBumps/Short/SmoothBump29"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("CylinderShape3D_j7c2l")
+
+[node name="SmoothBump30" type="StaticBody3D" parent="Ground/BumpTrack/BigBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -29)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/BigBumps/Short/SmoothBump30"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_kxigq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/BigBumps/Short/SmoothBump30"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("CylinderShape3D_j7c2l")
+
+[node name="SmoothBump31" type="StaticBody3D" parent="Ground/BumpTrack/BigBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -30)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/BigBumps/Short/SmoothBump31"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_kxigq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/BigBumps/Short/SmoothBump31"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("CylinderShape3D_j7c2l")
+
+[node name="SmoothBump32" type="StaticBody3D" parent="Ground/BumpTrack/BigBumps/Short"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -31)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/BumpTrack/BigBumps/Short/SmoothBump32"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_kxigq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/BumpTrack/BigBumps/Short/SmoothBump32"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("CylinderShape3D_j7c2l")
 
 [node name="PlayerController" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 13.305, 0)
 script = ExtResource("4_o2y44")
-VehiclePath = "res://scenes/vehicles/TestCar.tscn"
+VehiclePath = "res://scenes/vehicles/Skyline.tscn"
 CameraPath = "res://scenes/VehicleCamera.tscn"
-
-[node name="BumpTrack" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -28.4999)
-
-[node name="SharpBumps" type="Node3D" parent="BumpTrack"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0, 0)
-
-[node name="Short" type="Node3D" parent="BumpTrack/SharpBumps"]
-
-[node name="SmoothBump" type="StaticBody3D" parent="BumpTrack/SharpBumps/Short"]
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/SharpBumps/Short/SmoothBump"]
-transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0)
-mesh = SubResource("BoxMesh_4wdik")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/SharpBumps/Short/SmoothBump"]
-transform = Transform3D(1, 0.000228796, -0.000110543, -8.36171e-05, 0.707107, 0.707107, 0.000239949, -0.707107, 0.707107, 0, 0.0212806, -1.52588e-05)
-shape = SubResource("BoxShape3D_q13yl")
-
-[node name="SmoothBump2" type="StaticBody3D" parent="BumpTrack/SharpBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/SharpBumps/Short/SmoothBump2"]
-transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0)
-mesh = SubResource("BoxMesh_4wdik")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/SharpBumps/Short/SmoothBump2"]
-transform = Transform3D(1, 0.000228796, -0.000110543, -8.36171e-05, 0.707107, 0.707107, 0.000239949, -0.707107, 0.707107, 0, 0.0199077, -1.33514e-05)
-shape = SubResource("BoxShape3D_q13yl")
-
-[node name="SmoothBump3" type="StaticBody3D" parent="BumpTrack/SharpBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/SharpBumps/Short/SmoothBump3"]
-transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0)
-mesh = SubResource("BoxMesh_4wdik")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/SharpBumps/Short/SmoothBump3"]
-transform = Transform3D(1, 0.000228796, -0.000110543, -8.36171e-05, 0.707107, 0.707107, 0.000239949, -0.707107, 0.707107, 0, 0.0185347, -1.33514e-05)
-shape = SubResource("BoxShape3D_q13yl")
-
-[node name="SmoothBump4" type="StaticBody3D" parent="BumpTrack/SharpBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/SharpBumps/Short/SmoothBump4"]
-transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0)
-mesh = SubResource("BoxMesh_4wdik")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/SharpBumps/Short/SmoothBump4"]
-transform = Transform3D(1, 0.000228796, -0.000110543, -8.36171e-05, 0.707107, 0.707107, 0.000239949, -0.707107, 0.707107, 0, 0.0171618, -1.33514e-05)
-shape = SubResource("BoxShape3D_q13yl")
-
-[node name="SmoothBump5" type="StaticBody3D" parent="BumpTrack/SharpBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/SharpBumps/Short/SmoothBump5"]
-transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0)
-mesh = SubResource("BoxMesh_4wdik")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/SharpBumps/Short/SmoothBump5"]
-transform = Transform3D(1, 0.000228796, -0.000110543, -8.36171e-05, 0.707107, 0.707107, 0.000239949, -0.707107, 0.707107, 0, 0.0157889, -1.14441e-05)
-shape = SubResource("BoxShape3D_q13yl")
-
-[node name="SmoothBump6" type="StaticBody3D" parent="BumpTrack/SharpBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/SharpBumps/Short/SmoothBump6"]
-transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0)
-mesh = SubResource("BoxMesh_4wdik")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/SharpBumps/Short/SmoothBump6"]
-transform = Transform3D(1, 0.000228796, -0.000110543, -8.36171e-05, 0.707107, 0.707107, 0.000239949, -0.707107, 0.707107, 0, 0.0144159, -7.62939e-06)
-shape = SubResource("BoxShape3D_q13yl")
-
-[node name="SmoothBump7" type="StaticBody3D" parent="BumpTrack/SharpBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/SharpBumps/Short/SmoothBump7"]
-transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0)
-mesh = SubResource("BoxMesh_4wdik")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/SharpBumps/Short/SmoothBump7"]
-transform = Transform3D(1, 0.000228796, -0.000110543, -8.36171e-05, 0.707107, 0.707107, 0.000239949, -0.707107, 0.707107, 0, 0.013043, -7.62939e-06)
-shape = SubResource("BoxShape3D_q13yl")
-
-[node name="SmoothBump8" type="StaticBody3D" parent="BumpTrack/SharpBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/SharpBumps/Short/SmoothBump8"]
-transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0)
-mesh = SubResource("BoxMesh_4wdik")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/SharpBumps/Short/SmoothBump8"]
-transform = Transform3D(1, 0.000228796, -0.000110543, -8.36171e-05, 0.707107, 0.707107, 0.000239949, -0.707107, 0.707107, 0, 0.01167, -7.62939e-06)
-shape = SubResource("BoxShape3D_q13yl")
-
-[node name="SmoothBump9" type="StaticBody3D" parent="BumpTrack/SharpBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/SharpBumps/Short/SmoothBump9"]
-transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0)
-mesh = SubResource("BoxMesh_4wdik")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/SharpBumps/Short/SmoothBump9"]
-transform = Transform3D(1, 0.000228796, -0.000110543, -8.36171e-05, 0.707107, 0.707107, 0.000239949, -0.707107, 0.707107, 0, 0.0102971, -7.62939e-06)
-shape = SubResource("BoxShape3D_q13yl")
-
-[node name="SmoothBump10" type="StaticBody3D" parent="BumpTrack/SharpBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/SharpBumps/Short/SmoothBump10"]
-transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0)
-mesh = SubResource("BoxMesh_4wdik")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/SharpBumps/Short/SmoothBump10"]
-transform = Transform3D(1, 0.000228796, -0.000110543, -8.36171e-05, 0.707107, 0.707107, 0.000239949, -0.707107, 0.707107, 0, 0.00892413, -7.62939e-06)
-shape = SubResource("BoxShape3D_q13yl")
-
-[node name="SmoothBump11" type="StaticBody3D" parent="BumpTrack/SharpBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/SharpBumps/Short/SmoothBump11"]
-transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0)
-mesh = SubResource("BoxMesh_4wdik")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/SharpBumps/Short/SmoothBump11"]
-transform = Transform3D(1, 0.000228796, -0.000110543, -8.36171e-05, 0.707107, 0.707107, 0.000239949, -0.707107, 0.707107, 0, 0.00755119, -3.8147e-06)
-shape = SubResource("BoxShape3D_q13yl")
-
-[node name="SmoothBump12" type="StaticBody3D" parent="BumpTrack/SharpBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -11)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/SharpBumps/Short/SmoothBump12"]
-transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0)
-mesh = SubResource("BoxMesh_4wdik")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/SharpBumps/Short/SmoothBump12"]
-transform = Transform3D(1, 0.000228796, -0.000110543, -8.36171e-05, 0.707107, 0.707107, 0.000239949, -0.707107, 0.707107, 0, 0.00617825, -3.8147e-06)
-shape = SubResource("BoxShape3D_q13yl")
-
-[node name="SmoothBump13" type="StaticBody3D" parent="BumpTrack/SharpBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/SharpBumps/Short/SmoothBump13"]
-transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0)
-mesh = SubResource("BoxMesh_4wdik")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/SharpBumps/Short/SmoothBump13"]
-transform = Transform3D(1, 0.000228796, -0.000110543, -8.36171e-05, 0.707107, 0.707107, 0.000239949, -0.707107, 0.707107, 0, 0.0048053, -3.8147e-06)
-shape = SubResource("BoxShape3D_q13yl")
-
-[node name="SmoothBump14" type="StaticBody3D" parent="BumpTrack/SharpBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -13)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/SharpBumps/Short/SmoothBump14"]
-transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0)
-mesh = SubResource("BoxMesh_4wdik")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/SharpBumps/Short/SmoothBump14"]
-transform = Transform3D(1, 0.000228796, -0.000110543, -8.36171e-05, 0.707107, 0.707107, 0.000239949, -0.707107, 0.707107, 0, 0.00343236, -3.8147e-06)
-shape = SubResource("BoxShape3D_q13yl")
-
-[node name="SmoothBump15" type="StaticBody3D" parent="BumpTrack/SharpBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/SharpBumps/Short/SmoothBump15"]
-transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0)
-mesh = SubResource("BoxMesh_4wdik")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/SharpBumps/Short/SmoothBump15"]
-transform = Transform3D(1, 0.000228796, -0.000110543, -8.36171e-05, 0.707107, 0.707107, 0.000239949, -0.707107, 0.707107, 0, 0.00205942, 0)
-shape = SubResource("BoxShape3D_q13yl")
-
-[node name="SmoothBump16" type="StaticBody3D" parent="BumpTrack/SharpBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/SharpBumps/Short/SmoothBump16"]
-transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0)
-mesh = SubResource("BoxMesh_4wdik")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/SharpBumps/Short/SmoothBump16"]
-transform = Transform3D(1, 0.000228796, -0.000110543, -8.36171e-05, 0.707107, 0.707107, 0.000239949, -0.707107, 0.707107, 0, 0.000686472, 0)
-shape = SubResource("BoxShape3D_q13yl")
-
-[node name="SmoothBump17" type="StaticBody3D" parent="BumpTrack/SharpBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/SharpBumps/Short/SmoothBump17"]
-transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0)
-mesh = SubResource("BoxMesh_4wdik")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/SharpBumps/Short/SmoothBump17"]
-transform = Transform3D(1, 0.000228796, -0.000110543, -8.36171e-05, 0.707107, 0.707107, 0.000239949, -0.707107, 0.707107, 0, -0.000686472, 0)
-shape = SubResource("BoxShape3D_q13yl")
-
-[node name="SmoothBump18" type="StaticBody3D" parent="BumpTrack/SharpBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -17)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/SharpBumps/Short/SmoothBump18"]
-transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0)
-mesh = SubResource("BoxMesh_4wdik")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/SharpBumps/Short/SmoothBump18"]
-transform = Transform3D(1, 0.000228796, -0.000110543, -8.36171e-05, 0.707107, 0.707107, 0.000239949, -0.707107, 0.707107, 0, -0.00205942, 0)
-shape = SubResource("BoxShape3D_q13yl")
-
-[node name="SmoothBump19" type="StaticBody3D" parent="BumpTrack/SharpBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -18)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/SharpBumps/Short/SmoothBump19"]
-transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0)
-mesh = SubResource("BoxMesh_4wdik")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/SharpBumps/Short/SmoothBump19"]
-transform = Transform3D(1, 0.000228796, -0.000110543, -8.36171e-05, 0.707107, 0.707107, 0.000239949, -0.707107, 0.707107, 0, -0.00343236, 3.8147e-06)
-shape = SubResource("BoxShape3D_q13yl")
-
-[node name="SmoothBump20" type="StaticBody3D" parent="BumpTrack/SharpBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -19)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/SharpBumps/Short/SmoothBump20"]
-transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0)
-mesh = SubResource("BoxMesh_4wdik")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/SharpBumps/Short/SmoothBump20"]
-transform = Transform3D(1, 0.000228796, -0.000110543, -8.36171e-05, 0.707107, 0.707107, 0.000239949, -0.707107, 0.707107, 0, -0.0048053, 3.8147e-06)
-shape = SubResource("BoxShape3D_q13yl")
-
-[node name="SmoothBump21" type="StaticBody3D" parent="BumpTrack/SharpBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/SharpBumps/Short/SmoothBump21"]
-transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0)
-mesh = SubResource("BoxMesh_4wdik")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/SharpBumps/Short/SmoothBump21"]
-transform = Transform3D(1, 0.000228796, -0.000110543, -8.36171e-05, 0.707107, 0.707107, 0.000239949, -0.707107, 0.707107, 0, -0.00617825, 3.8147e-06)
-shape = SubResource("BoxShape3D_q13yl")
-
-[node name="SmoothBump22" type="StaticBody3D" parent="BumpTrack/SharpBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -21)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/SharpBumps/Short/SmoothBump22"]
-transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0)
-mesh = SubResource("BoxMesh_4wdik")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/SharpBumps/Short/SmoothBump22"]
-transform = Transform3D(1, 0.000228796, -0.000110543, -8.36171e-05, 0.707107, 0.707107, 0.000239949, -0.707107, 0.707107, 0, -0.00755119, 3.8147e-06)
-shape = SubResource("BoxShape3D_q13yl")
-
-[node name="SmoothBump23" type="StaticBody3D" parent="BumpTrack/SharpBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -22)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/SharpBumps/Short/SmoothBump23"]
-transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0)
-mesh = SubResource("BoxMesh_4wdik")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/SharpBumps/Short/SmoothBump23"]
-transform = Transform3D(1, 0.000228796, -0.000110543, -8.36171e-05, 0.707107, 0.707107, 0.000239949, -0.707107, 0.707107, 0, -0.00892413, 7.62939e-06)
-shape = SubResource("BoxShape3D_q13yl")
-
-[node name="SmoothBump24" type="StaticBody3D" parent="BumpTrack/SharpBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -23)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/SharpBumps/Short/SmoothBump24"]
-transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0)
-mesh = SubResource("BoxMesh_4wdik")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/SharpBumps/Short/SmoothBump24"]
-transform = Transform3D(1, 0.000228796, -0.000110543, -8.36171e-05, 0.707107, 0.707107, 0.000239949, -0.707107, 0.707107, 0, -0.0102971, 7.62939e-06)
-shape = SubResource("BoxShape3D_q13yl")
-
-[node name="SmoothBump25" type="StaticBody3D" parent="BumpTrack/SharpBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -24)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/SharpBumps/Short/SmoothBump25"]
-transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0)
-mesh = SubResource("BoxMesh_4wdik")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/SharpBumps/Short/SmoothBump25"]
-transform = Transform3D(1, 0.000228796, -0.000110543, -8.36171e-05, 0.707107, 0.707107, 0.000239949, -0.707107, 0.707107, 0, -0.01167, 7.62939e-06)
-shape = SubResource("BoxShape3D_q13yl")
-
-[node name="SmoothBump26" type="StaticBody3D" parent="BumpTrack/SharpBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -25)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/SharpBumps/Short/SmoothBump26"]
-transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0)
-mesh = SubResource("BoxMesh_4wdik")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/SharpBumps/Short/SmoothBump26"]
-transform = Transform3D(1, 0.000228796, -0.000110543, -8.36171e-05, 0.707107, 0.707107, 0.000239949, -0.707107, 0.707107, 0, -0.013043, 7.62939e-06)
-shape = SubResource("BoxShape3D_q13yl")
-
-[node name="SmoothBump27" type="StaticBody3D" parent="BumpTrack/SharpBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -26)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/SharpBumps/Short/SmoothBump27"]
-transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0)
-mesh = SubResource("BoxMesh_4wdik")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/SharpBumps/Short/SmoothBump27"]
-transform = Transform3D(1, 0.000228796, -0.000110543, -8.36171e-05, 0.707107, 0.707107, 0.000239949, -0.707107, 0.707107, 0, -0.0144159, 7.62939e-06)
-shape = SubResource("BoxShape3D_q13yl")
-
-[node name="SmoothBump28" type="StaticBody3D" parent="BumpTrack/SharpBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -27)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/SharpBumps/Short/SmoothBump28"]
-transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0)
-mesh = SubResource("BoxMesh_4wdik")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/SharpBumps/Short/SmoothBump28"]
-transform = Transform3D(1, 0.000228796, -0.000110543, -8.36171e-05, 0.707107, 0.707107, 0.000239949, -0.707107, 0.707107, 0, -0.0157889, 1.14441e-05)
-shape = SubResource("BoxShape3D_q13yl")
-
-[node name="SmoothBump29" type="StaticBody3D" parent="BumpTrack/SharpBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -28)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/SharpBumps/Short/SmoothBump29"]
-transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0)
-mesh = SubResource("BoxMesh_4wdik")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/SharpBumps/Short/SmoothBump29"]
-transform = Transform3D(1, 0.000228796, -0.000110543, -8.36171e-05, 0.707107, 0.707107, 0.000239949, -0.707107, 0.707107, 0, -0.0171618, 1.14441e-05)
-shape = SubResource("BoxShape3D_q13yl")
-
-[node name="SmoothBump30" type="StaticBody3D" parent="BumpTrack/SharpBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -29)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/SharpBumps/Short/SmoothBump30"]
-transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0)
-mesh = SubResource("BoxMesh_4wdik")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/SharpBumps/Short/SmoothBump30"]
-transform = Transform3D(1, 0.000228796, -0.000110543, -8.36171e-05, 0.707107, 0.707107, 0.000239949, -0.707107, 0.707107, 0, -0.0185347, 1.52588e-05)
-shape = SubResource("BoxShape3D_q13yl")
-
-[node name="SmoothBump31" type="StaticBody3D" parent="BumpTrack/SharpBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -30)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/SharpBumps/Short/SmoothBump31"]
-transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0)
-mesh = SubResource("BoxMesh_4wdik")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/SharpBumps/Short/SmoothBump31"]
-transform = Transform3D(1, 0.000228796, -0.000110543, -8.36171e-05, 0.707107, 0.707107, 0.000239949, -0.707107, 0.707107, 0, -0.0199077, 1.52588e-05)
-shape = SubResource("BoxShape3D_q13yl")
-
-[node name="SmoothBump32" type="StaticBody3D" parent="BumpTrack/SharpBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -31)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/SharpBumps/Short/SmoothBump32"]
-transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0)
-mesh = SubResource("BoxMesh_4wdik")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/SharpBumps/Short/SmoothBump32"]
-transform = Transform3D(1, 0.000228796, -0.000110543, -8.36171e-05, 0.707107, 0.707107, 0.000239949, -0.707107, 0.707107, 0, -0.0212806, 1.52588e-05)
-shape = SubResource("BoxShape3D_q13yl")
-
-[node name="SmoothBumps" type="Node3D" parent="BumpTrack"]
-
-[node name="Short" type="Node3D" parent="BumpTrack/SmoothBumps"]
-
-[node name="SmoothBump" type="StaticBody3D" parent="BumpTrack/SmoothBumps/Short"]
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/SmoothBumps/Short/SmoothBump"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("CylinderMesh_kxigq")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/SmoothBumps/Short/SmoothBump"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-shape = SubResource("CylinderShape3D_j7c2l")
-
-[node name="SmoothBump2" type="StaticBody3D" parent="BumpTrack/SmoothBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/SmoothBumps/Short/SmoothBump2"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("CylinderMesh_kxigq")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/SmoothBumps/Short/SmoothBump2"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-shape = SubResource("CylinderShape3D_j7c2l")
-
-[node name="SmoothBump3" type="StaticBody3D" parent="BumpTrack/SmoothBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/SmoothBumps/Short/SmoothBump3"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("CylinderMesh_kxigq")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/SmoothBumps/Short/SmoothBump3"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-shape = SubResource("CylinderShape3D_j7c2l")
-
-[node name="SmoothBump4" type="StaticBody3D" parent="BumpTrack/SmoothBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/SmoothBumps/Short/SmoothBump4"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("CylinderMesh_kxigq")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/SmoothBumps/Short/SmoothBump4"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-shape = SubResource("CylinderShape3D_j7c2l")
-
-[node name="SmoothBump5" type="StaticBody3D" parent="BumpTrack/SmoothBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/SmoothBumps/Short/SmoothBump5"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("CylinderMesh_kxigq")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/SmoothBumps/Short/SmoothBump5"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-shape = SubResource("CylinderShape3D_j7c2l")
-
-[node name="SmoothBump6" type="StaticBody3D" parent="BumpTrack/SmoothBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/SmoothBumps/Short/SmoothBump6"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("CylinderMesh_kxigq")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/SmoothBumps/Short/SmoothBump6"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-shape = SubResource("CylinderShape3D_j7c2l")
-
-[node name="SmoothBump7" type="StaticBody3D" parent="BumpTrack/SmoothBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/SmoothBumps/Short/SmoothBump7"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("CylinderMesh_kxigq")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/SmoothBumps/Short/SmoothBump7"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-shape = SubResource("CylinderShape3D_j7c2l")
-
-[node name="SmoothBump8" type="StaticBody3D" parent="BumpTrack/SmoothBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/SmoothBumps/Short/SmoothBump8"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("CylinderMesh_kxigq")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/SmoothBumps/Short/SmoothBump8"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-shape = SubResource("CylinderShape3D_j7c2l")
-
-[node name="SmoothBump9" type="StaticBody3D" parent="BumpTrack/SmoothBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/SmoothBumps/Short/SmoothBump9"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("CylinderMesh_kxigq")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/SmoothBumps/Short/SmoothBump9"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-shape = SubResource("CylinderShape3D_j7c2l")
-
-[node name="SmoothBump10" type="StaticBody3D" parent="BumpTrack/SmoothBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/SmoothBumps/Short/SmoothBump10"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("CylinderMesh_kxigq")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/SmoothBumps/Short/SmoothBump10"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-shape = SubResource("CylinderShape3D_j7c2l")
-
-[node name="SmoothBump11" type="StaticBody3D" parent="BumpTrack/SmoothBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/SmoothBumps/Short/SmoothBump11"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("CylinderMesh_kxigq")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/SmoothBumps/Short/SmoothBump11"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-shape = SubResource("CylinderShape3D_j7c2l")
-
-[node name="SmoothBump12" type="StaticBody3D" parent="BumpTrack/SmoothBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -11)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/SmoothBumps/Short/SmoothBump12"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("CylinderMesh_kxigq")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/SmoothBumps/Short/SmoothBump12"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-shape = SubResource("CylinderShape3D_j7c2l")
-
-[node name="SmoothBump13" type="StaticBody3D" parent="BumpTrack/SmoothBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/SmoothBumps/Short/SmoothBump13"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("CylinderMesh_kxigq")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/SmoothBumps/Short/SmoothBump13"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-shape = SubResource("CylinderShape3D_j7c2l")
-
-[node name="SmoothBump14" type="StaticBody3D" parent="BumpTrack/SmoothBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -13)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/SmoothBumps/Short/SmoothBump14"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("CylinderMesh_kxigq")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/SmoothBumps/Short/SmoothBump14"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-shape = SubResource("CylinderShape3D_j7c2l")
-
-[node name="SmoothBump15" type="StaticBody3D" parent="BumpTrack/SmoothBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/SmoothBumps/Short/SmoothBump15"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("CylinderMesh_kxigq")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/SmoothBumps/Short/SmoothBump15"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-shape = SubResource("CylinderShape3D_j7c2l")
-
-[node name="SmoothBump16" type="StaticBody3D" parent="BumpTrack/SmoothBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/SmoothBumps/Short/SmoothBump16"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("CylinderMesh_kxigq")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/SmoothBumps/Short/SmoothBump16"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-shape = SubResource("CylinderShape3D_j7c2l")
-
-[node name="SmoothBump17" type="StaticBody3D" parent="BumpTrack/SmoothBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/SmoothBumps/Short/SmoothBump17"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("CylinderMesh_kxigq")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/SmoothBumps/Short/SmoothBump17"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-shape = SubResource("CylinderShape3D_j7c2l")
-
-[node name="SmoothBump18" type="StaticBody3D" parent="BumpTrack/SmoothBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -17)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/SmoothBumps/Short/SmoothBump18"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("CylinderMesh_kxigq")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/SmoothBumps/Short/SmoothBump18"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-shape = SubResource("CylinderShape3D_j7c2l")
-
-[node name="SmoothBump19" type="StaticBody3D" parent="BumpTrack/SmoothBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -18)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/SmoothBumps/Short/SmoothBump19"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("CylinderMesh_kxigq")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/SmoothBumps/Short/SmoothBump19"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-shape = SubResource("CylinderShape3D_j7c2l")
-
-[node name="SmoothBump20" type="StaticBody3D" parent="BumpTrack/SmoothBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -19)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/SmoothBumps/Short/SmoothBump20"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("CylinderMesh_kxigq")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/SmoothBumps/Short/SmoothBump20"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-shape = SubResource("CylinderShape3D_j7c2l")
-
-[node name="SmoothBump21" type="StaticBody3D" parent="BumpTrack/SmoothBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/SmoothBumps/Short/SmoothBump21"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("CylinderMesh_kxigq")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/SmoothBumps/Short/SmoothBump21"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-shape = SubResource("CylinderShape3D_j7c2l")
-
-[node name="SmoothBump22" type="StaticBody3D" parent="BumpTrack/SmoothBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -21)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/SmoothBumps/Short/SmoothBump22"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("CylinderMesh_kxigq")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/SmoothBumps/Short/SmoothBump22"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-shape = SubResource("CylinderShape3D_j7c2l")
-
-[node name="SmoothBump23" type="StaticBody3D" parent="BumpTrack/SmoothBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -22)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/SmoothBumps/Short/SmoothBump23"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("CylinderMesh_kxigq")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/SmoothBumps/Short/SmoothBump23"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-shape = SubResource("CylinderShape3D_j7c2l")
-
-[node name="SmoothBump24" type="StaticBody3D" parent="BumpTrack/SmoothBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -23)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/SmoothBumps/Short/SmoothBump24"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("CylinderMesh_kxigq")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/SmoothBumps/Short/SmoothBump24"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-shape = SubResource("CylinderShape3D_j7c2l")
-
-[node name="SmoothBump25" type="StaticBody3D" parent="BumpTrack/SmoothBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -24)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/SmoothBumps/Short/SmoothBump25"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("CylinderMesh_kxigq")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/SmoothBumps/Short/SmoothBump25"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-shape = SubResource("CylinderShape3D_j7c2l")
-
-[node name="SmoothBump26" type="StaticBody3D" parent="BumpTrack/SmoothBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -25)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/SmoothBumps/Short/SmoothBump26"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("CylinderMesh_kxigq")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/SmoothBumps/Short/SmoothBump26"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-shape = SubResource("CylinderShape3D_j7c2l")
-
-[node name="SmoothBump27" type="StaticBody3D" parent="BumpTrack/SmoothBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -26)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/SmoothBumps/Short/SmoothBump27"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("CylinderMesh_kxigq")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/SmoothBumps/Short/SmoothBump27"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-shape = SubResource("CylinderShape3D_j7c2l")
-
-[node name="SmoothBump28" type="StaticBody3D" parent="BumpTrack/SmoothBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -27)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/SmoothBumps/Short/SmoothBump28"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("CylinderMesh_kxigq")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/SmoothBumps/Short/SmoothBump28"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-shape = SubResource("CylinderShape3D_j7c2l")
-
-[node name="SmoothBump29" type="StaticBody3D" parent="BumpTrack/SmoothBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -28)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/SmoothBumps/Short/SmoothBump29"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("CylinderMesh_kxigq")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/SmoothBumps/Short/SmoothBump29"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-shape = SubResource("CylinderShape3D_j7c2l")
-
-[node name="SmoothBump30" type="StaticBody3D" parent="BumpTrack/SmoothBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -29)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/SmoothBumps/Short/SmoothBump30"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("CylinderMesh_kxigq")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/SmoothBumps/Short/SmoothBump30"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-shape = SubResource("CylinderShape3D_j7c2l")
-
-[node name="SmoothBump31" type="StaticBody3D" parent="BumpTrack/SmoothBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -30)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/SmoothBumps/Short/SmoothBump31"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("CylinderMesh_kxigq")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/SmoothBumps/Short/SmoothBump31"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-shape = SubResource("CylinderShape3D_j7c2l")
-
-[node name="SmoothBump32" type="StaticBody3D" parent="BumpTrack/SmoothBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -31)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/SmoothBumps/Short/SmoothBump32"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("CylinderMesh_kxigq")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/SmoothBumps/Short/SmoothBump32"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-shape = SubResource("CylinderShape3D_j7c2l")
-
-[node name="BigBumps" type="Node3D" parent="BumpTrack"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20, 0, 0)
-
-[node name="Short" type="Node3D" parent="BumpTrack/BigBumps"]
-transform = Transform3D(1, 0, 0, 0, 1.3, 0, 0, 0, 1.1, 0, 0, 0)
-
-[node name="SmoothBump" type="StaticBody3D" parent="BumpTrack/BigBumps/Short"]
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/BigBumps/Short/SmoothBump"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("CylinderMesh_kxigq")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/BigBumps/Short/SmoothBump"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-shape = SubResource("CylinderShape3D_j7c2l")
-
-[node name="SmoothBump2" type="StaticBody3D" parent="BumpTrack/BigBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/BigBumps/Short/SmoothBump2"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("CylinderMesh_kxigq")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/BigBumps/Short/SmoothBump2"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-shape = SubResource("CylinderShape3D_j7c2l")
-
-[node name="SmoothBump3" type="StaticBody3D" parent="BumpTrack/BigBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/BigBumps/Short/SmoothBump3"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("CylinderMesh_kxigq")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/BigBumps/Short/SmoothBump3"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-shape = SubResource("CylinderShape3D_j7c2l")
-
-[node name="SmoothBump4" type="StaticBody3D" parent="BumpTrack/BigBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/BigBumps/Short/SmoothBump4"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("CylinderMesh_kxigq")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/BigBumps/Short/SmoothBump4"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-shape = SubResource("CylinderShape3D_j7c2l")
-
-[node name="SmoothBump5" type="StaticBody3D" parent="BumpTrack/BigBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/BigBumps/Short/SmoothBump5"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("CylinderMesh_kxigq")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/BigBumps/Short/SmoothBump5"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-shape = SubResource("CylinderShape3D_j7c2l")
-
-[node name="SmoothBump6" type="StaticBody3D" parent="BumpTrack/BigBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/BigBumps/Short/SmoothBump6"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("CylinderMesh_kxigq")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/BigBumps/Short/SmoothBump6"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-shape = SubResource("CylinderShape3D_j7c2l")
-
-[node name="SmoothBump7" type="StaticBody3D" parent="BumpTrack/BigBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/BigBumps/Short/SmoothBump7"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("CylinderMesh_kxigq")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/BigBumps/Short/SmoothBump7"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-shape = SubResource("CylinderShape3D_j7c2l")
-
-[node name="SmoothBump8" type="StaticBody3D" parent="BumpTrack/BigBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/BigBumps/Short/SmoothBump8"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("CylinderMesh_kxigq")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/BigBumps/Short/SmoothBump8"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-shape = SubResource("CylinderShape3D_j7c2l")
-
-[node name="SmoothBump9" type="StaticBody3D" parent="BumpTrack/BigBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/BigBumps/Short/SmoothBump9"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("CylinderMesh_kxigq")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/BigBumps/Short/SmoothBump9"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-shape = SubResource("CylinderShape3D_j7c2l")
-
-[node name="SmoothBump10" type="StaticBody3D" parent="BumpTrack/BigBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/BigBumps/Short/SmoothBump10"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("CylinderMesh_kxigq")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/BigBumps/Short/SmoothBump10"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-shape = SubResource("CylinderShape3D_j7c2l")
-
-[node name="SmoothBump11" type="StaticBody3D" parent="BumpTrack/BigBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/BigBumps/Short/SmoothBump11"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("CylinderMesh_kxigq")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/BigBumps/Short/SmoothBump11"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-shape = SubResource("CylinderShape3D_j7c2l")
-
-[node name="SmoothBump12" type="StaticBody3D" parent="BumpTrack/BigBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -11)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/BigBumps/Short/SmoothBump12"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("CylinderMesh_kxigq")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/BigBumps/Short/SmoothBump12"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-shape = SubResource("CylinderShape3D_j7c2l")
-
-[node name="SmoothBump13" type="StaticBody3D" parent="BumpTrack/BigBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/BigBumps/Short/SmoothBump13"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("CylinderMesh_kxigq")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/BigBumps/Short/SmoothBump13"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-shape = SubResource("CylinderShape3D_j7c2l")
-
-[node name="SmoothBump14" type="StaticBody3D" parent="BumpTrack/BigBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -13)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/BigBumps/Short/SmoothBump14"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("CylinderMesh_kxigq")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/BigBumps/Short/SmoothBump14"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-shape = SubResource("CylinderShape3D_j7c2l")
-
-[node name="SmoothBump15" type="StaticBody3D" parent="BumpTrack/BigBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/BigBumps/Short/SmoothBump15"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("CylinderMesh_kxigq")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/BigBumps/Short/SmoothBump15"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-shape = SubResource("CylinderShape3D_j7c2l")
-
-[node name="SmoothBump16" type="StaticBody3D" parent="BumpTrack/BigBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/BigBumps/Short/SmoothBump16"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("CylinderMesh_kxigq")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/BigBumps/Short/SmoothBump16"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-shape = SubResource("CylinderShape3D_j7c2l")
-
-[node name="SmoothBump17" type="StaticBody3D" parent="BumpTrack/BigBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/BigBumps/Short/SmoothBump17"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("CylinderMesh_kxigq")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/BigBumps/Short/SmoothBump17"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-shape = SubResource("CylinderShape3D_j7c2l")
-
-[node name="SmoothBump18" type="StaticBody3D" parent="BumpTrack/BigBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -17)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/BigBumps/Short/SmoothBump18"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("CylinderMesh_kxigq")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/BigBumps/Short/SmoothBump18"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-shape = SubResource("CylinderShape3D_j7c2l")
-
-[node name="SmoothBump19" type="StaticBody3D" parent="BumpTrack/BigBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -18)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/BigBumps/Short/SmoothBump19"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("CylinderMesh_kxigq")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/BigBumps/Short/SmoothBump19"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-shape = SubResource("CylinderShape3D_j7c2l")
-
-[node name="SmoothBump20" type="StaticBody3D" parent="BumpTrack/BigBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -19)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/BigBumps/Short/SmoothBump20"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("CylinderMesh_kxigq")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/BigBumps/Short/SmoothBump20"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-shape = SubResource("CylinderShape3D_j7c2l")
-
-[node name="SmoothBump21" type="StaticBody3D" parent="BumpTrack/BigBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/BigBumps/Short/SmoothBump21"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("CylinderMesh_kxigq")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/BigBumps/Short/SmoothBump21"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-shape = SubResource("CylinderShape3D_j7c2l")
-
-[node name="SmoothBump22" type="StaticBody3D" parent="BumpTrack/BigBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -21)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/BigBumps/Short/SmoothBump22"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("CylinderMesh_kxigq")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/BigBumps/Short/SmoothBump22"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-shape = SubResource("CylinderShape3D_j7c2l")
-
-[node name="SmoothBump23" type="StaticBody3D" parent="BumpTrack/BigBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -22)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/BigBumps/Short/SmoothBump23"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("CylinderMesh_kxigq")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/BigBumps/Short/SmoothBump23"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-shape = SubResource("CylinderShape3D_j7c2l")
-
-[node name="SmoothBump24" type="StaticBody3D" parent="BumpTrack/BigBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -23)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/BigBumps/Short/SmoothBump24"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("CylinderMesh_kxigq")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/BigBumps/Short/SmoothBump24"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-shape = SubResource("CylinderShape3D_j7c2l")
-
-[node name="SmoothBump25" type="StaticBody3D" parent="BumpTrack/BigBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -24)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/BigBumps/Short/SmoothBump25"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("CylinderMesh_kxigq")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/BigBumps/Short/SmoothBump25"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-shape = SubResource("CylinderShape3D_j7c2l")
-
-[node name="SmoothBump26" type="StaticBody3D" parent="BumpTrack/BigBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -25)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/BigBumps/Short/SmoothBump26"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("CylinderMesh_kxigq")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/BigBumps/Short/SmoothBump26"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-shape = SubResource("CylinderShape3D_j7c2l")
-
-[node name="SmoothBump27" type="StaticBody3D" parent="BumpTrack/BigBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -26)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/BigBumps/Short/SmoothBump27"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("CylinderMesh_kxigq")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/BigBumps/Short/SmoothBump27"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-shape = SubResource("CylinderShape3D_j7c2l")
-
-[node name="SmoothBump28" type="StaticBody3D" parent="BumpTrack/BigBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -27)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/BigBumps/Short/SmoothBump28"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("CylinderMesh_kxigq")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/BigBumps/Short/SmoothBump28"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-shape = SubResource("CylinderShape3D_j7c2l")
-
-[node name="SmoothBump29" type="StaticBody3D" parent="BumpTrack/BigBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -28)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/BigBumps/Short/SmoothBump29"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("CylinderMesh_kxigq")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/BigBumps/Short/SmoothBump29"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-shape = SubResource("CylinderShape3D_j7c2l")
-
-[node name="SmoothBump30" type="StaticBody3D" parent="BumpTrack/BigBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -29)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/BigBumps/Short/SmoothBump30"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("CylinderMesh_kxigq")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/BigBumps/Short/SmoothBump30"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-shape = SubResource("CylinderShape3D_j7c2l")
-
-[node name="SmoothBump31" type="StaticBody3D" parent="BumpTrack/BigBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -30)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/BigBumps/Short/SmoothBump31"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("CylinderMesh_kxigq")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/BigBumps/Short/SmoothBump31"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-shape = SubResource("CylinderShape3D_j7c2l")
-
-[node name="SmoothBump32" type="StaticBody3D" parent="BumpTrack/BigBumps/Short"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -31)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="BumpTrack/BigBumps/Short/SmoothBump32"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("CylinderMesh_kxigq")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BumpTrack/BigBumps/Short/SmoothBump32"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-shape = SubResource("CylinderShape3D_j7c2l")
-
-[node name="TestCar" parent="." instance=ExtResource("3_aw10a")]
-transform = Transform3D(0.493213, 0, 0.869908, 0, 1, 0, -0.869908, 0, 0.493213, 17.5123, 2.62086, -7.98132)

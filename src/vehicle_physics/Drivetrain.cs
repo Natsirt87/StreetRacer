@@ -45,7 +45,7 @@ public partial class Drivetrain : Node
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _PhysicsProcess(double delta)
+	public void PhysicsTick(double delta)
 	{
     double engineTorque = Torque;
     double wheelTorque = engineTorque * GearRatios[_gear] * FinalDriveRatio;
