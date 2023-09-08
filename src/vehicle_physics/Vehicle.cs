@@ -16,7 +16,11 @@ public partial class Vehicle : RigidBody3D
   [Export]
   public float SteeringSpeed = 0.5f;
   [Export]
-  public double SlipRatioRelaxation = 0.12;
+  public double WheelSpinCoefficient = 0.6;
+  [Export]
+  public double MaxSlipRatio = 2.5;
+  [Export]
+  public double SlipRatioRelaxation = 0.1;
 
   public float FrontAxleDist;
   public float RearAxleDist;
@@ -75,11 +79,32 @@ public partial class Vehicle : RigidBody3D
     _lastVelocity = LinearVelocity;
 
     Drivetrain.PhysicsTick(delta);
+    float stopForce = 0;
+    int wheelsStopped = 0;
     foreach (Wheel wheel in Wheels)
     {
       wheel.PhysicsTick(delta);
+      if (wheel.StationaryBraking)
+      {
+        stopForce += (float)wheel.Tire.LongFriction * (float)wheel.TireLoad;
+        wheelsStopped++;
+      }
     }
-	}
+
+    float curForce = Mass * LinearAccel.Length() + (Mass * LinearVelocity.Length() / 0.5f);
+    stopForce = Math.Min(curForce, stopForce);
+    Print("Force: " + stopForce);
+    ApplyCentralForce(-LinearVelocity.Normalized() * stopForce);
+
+    if (wheelsStopped == 4)
+    {
+      LinearDamp = 30;
+    }
+    else
+    {
+      LinearDamp = 0;
+    }
+  }
 
   public override void _PhysicsProcess(double delta)
   {
