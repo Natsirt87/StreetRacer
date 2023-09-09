@@ -2,6 +2,7 @@ using Godot;
 using static Godot.GD;
 using System;
 using System.Collections.Generic;
+using UI;
 
 namespace VehiclePhysics;
 
@@ -15,6 +16,10 @@ public partial class Vehicle : RigidBody3D
   public bool Controlled = true;
   [Export]
   public float SteeringSpeed = 0.5f;
+  [Export]
+  public float FrontalArea = 2.2f;
+  [Export]
+  public float DragCoefficient = 0.35f;
   [Export]
   public double MaxSlipRatio = 3;
   [Export]
@@ -33,10 +38,15 @@ public partial class Vehicle : RigidBody3D
 
   private Vector3 _lastVelocity;
   private bool _handbrake;
+  private HUD _hud;
+
+  private int _hudIter;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
+    _hud = GetNode<HUD>("/root/HUD");
+
     LinearAccel = Vector3.Zero;
     _lastVelocity = Vector3.Zero;
 
@@ -101,6 +111,26 @@ public partial class Vehicle : RigidBody3D
     {
       LinearDamp = 0;
     }
+
+    // Apply drag force
+    if (LinearVelocity.Length() > 2)
+    {
+      float dragMagnitude = 0.5f * DragCoefficient * FrontalArea * 1.29f * Mathf.Pow(LinearVelocity.Length(), 2);
+      ApplyCentralForce(dragMagnitude * -LinearVelocity.Normalized());
+    }
+
+    if (Controlled)
+    {
+      if (_hudIter >= 5)
+      {
+        _hudIter = 0;
+        UpdateHud();
+      }
+      else
+      {
+        _hudIter++;
+      }
+    }
   }
 
   public override void _PhysicsProcess(double delta)
@@ -109,6 +139,28 @@ public partial class Vehicle : RigidBody3D
     {
       PhysicsTick(delta);
     }
+  }
+
+  public override void _Process(double delta)
+  {
+  }
+
+  private void UpdateHud()
+  {
+      // In the future, drivetrain will set the speed based on wheel speed and differential and stuff
+      _hud.SetSpeed(Math.Abs(LinearVelocity.Dot(Forward)) * 2.237);
+
+      for (int i = 0; i < Wheels.Length; i++)
+      {
+        Wheel wheel = Wheels[i];
+        _hud.SetSlipAngle(wheel.SlipAngle, i);
+        _hud.SetSlipRatio(wheel.SlipRatio, i);
+        _hud.SetLatSlip(wheel.LatSlip, i);
+        _hud.SetLongSlip(wheel.LongSlip, i);
+        _hud.SetTorque(wheel.Torque, i);
+        _hud.SetWheelSpeed(wheel.AngularVelocity * wheel.Radius * 2.237, i);
+        _hud.SetLoad(wheel.TireLoad, i);
+      }
   }
 
   public void SetSteeringInput(float input) 

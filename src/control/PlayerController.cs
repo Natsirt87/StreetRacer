@@ -3,7 +3,7 @@ using static Godot.GD;
 using System;
 using VehiclePhysics;
 
-namespace Control;
+namespace Interaction;
 
 public partial class PlayerController : VehicleController
 {

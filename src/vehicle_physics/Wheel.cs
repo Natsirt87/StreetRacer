@@ -41,7 +41,7 @@ public partial class Wheel : Node3D
   public int Surface;
   public bool StationaryBraking;
   public double LongSlip;
-  public bool LatSlip;
+  public double LatSlip;
   
   // Public input variables
   public double DriveTorque;
@@ -137,6 +137,7 @@ public partial class Wheel : Node3D
     }
 
     LongSlip = DetermineLongSlip();
+    LatSlip = Math.Abs(SlipAngle) / (Tire.PeakSlipAngle * 10);
     UpdateVisualWheel(delta);
 
     if (Index == 3 && _vehicle.Controlled)

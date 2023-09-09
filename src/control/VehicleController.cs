@@ -2,7 +2,7 @@ using Godot;
 using System;
 using VehiclePhysics;
 
-namespace Control;
+namespace Interaction;
 
 public partial class VehicleController : Node
 {
