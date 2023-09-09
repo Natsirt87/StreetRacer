@@ -2,6 +2,7 @@ using Godot;
 using static Godot.GD;
 using System;
 using System.Runtime.InteropServices;
+using Utility;
 
 namespace VehiclePhysics;
 
@@ -11,7 +12,7 @@ public partial class Wheel : Node3D
   public const double StationarySpeedThreshold = 2;
   const double StationaryWheelSpeed = 2;
   const double StationarySlip = 0.1;
-  const double SpinSlipRatio = 0.8; 
+  const double SlowSlipThreshold = 0.8; 
   
   [Export]
   public int Index;
@@ -39,10 +40,9 @@ public partial class Wheel : Node3D
   public double TireLoad;
   public int Surface;
   public bool StationaryBraking;
-  public double SpinSlip;
-  public bool SideSlip;
+  public double LongSlip;
+  public bool LatSlip;
   
-
   // Public input variables
   public double DriveTorque;
   public float SteeringInput;
@@ -59,7 +59,6 @@ public partial class Wheel : Node3D
   private Vector3 _lastPosition;
   private double _lastSlipAngle;
   private double _lastSlipRatio;
-  private double _diffSlipRatio;
   private bool _isFront;
   private bool _isLeft;
   private float _initialAngle;
@@ -91,7 +90,7 @@ public partial class Wheel : Node3D
     }
   }
 
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
+	// Called every physics step from the Vehicle class
 	public void PhysicsTick(double delta)
 	{
     // Update unit vectors
@@ -137,22 +136,23 @@ public partial class Wheel : Node3D
       _vehicle.ApplyForce(tireForce, forceOffset);
     }
 
-    SpinSlip = DetermineSpinSlip();
+    LongSlip = DetermineLongSlip();
     UpdateVisualWheel(delta);
 
     if (Index == 3 && _vehicle.Controlled)
     {
-      Print("Spinning slip = " + SpinSlip);
+      Print("Spinning slip = " + LongSlip);
       Print("Speed = " + vehicleSpeed);
       Print("---------------------------------");
     }
 	}
 
+  // Update the visual mesh of this wheel to represent its calculated position and angular speed
   private void UpdateVisualWheel(double delta)
   {
     double visualAngularVelocity;
     double vehicleSpeed = _vehicle.LinearVelocity.Dot(Forward);
-    if (SpinSlip > 0 || TireLoad < 10)
+    if (LongSlip > 0 || TireLoad < 10)
     {
       visualAngularVelocity = AngularVelocity;
     }
@@ -167,45 +167,35 @@ public partial class Wheel : Node3D
     VisualWheel.Position = VisualWheel.Position.Lerp(ToLocal(wheelPos), (float)delta * WheelMovementRate);
   }
 
-  private double DetermineSpinSlip()
+  // Calculate how much longitudinal slip the car is experiencing, used for sounds and effects
+  private double DetermineLongSlip()
   {
     double vehicleSpeed = _vehicle.LinearVelocity.Length();
-    double slip;
+    double slip = 0;
     // Calculate spin slip
-    if (TireLoad < 10 || _stationary)
+
+    if (TireLoad > 10 && !_stationary)
     {
-      slip = 0;
-    }
-    else if (vehicleSpeed < LowSpeedThreshold)
-    {
-      slip = 0;
-      if (Math.Abs(SlipRatio) > SpinSlipRatio)
-      {
+      bool lowSpeedSlip = vehicleSpeed <= LowSpeedThreshold && Math.Abs(SlipRatio) > SlowSlipThreshold;
+      bool highSpeedSlip = vehicleSpeed > LowSpeedThreshold && Math.Abs(SlipRatio) > Tire.PeakSlipRatio * 1.2;
+      
+      if (lowSpeedSlip || highSpeedSlip)
         slip = Math.Abs(SlipRatio) / _vehicle.MaxSlipRatio;
-      }
-    }
-    else
-    {
-      slip = 0;
-      if (Math.Abs(SlipRatio) > Tire.PeakSlipRatio * 1.2)
-      {
-        slip = Math.Abs(SlipRatio) / _vehicle.MaxSlipRatio;
-      }
     }
     return slip;
   }
 
+  // Calculate the angular velocity of the wheel given a torque
   private double ComputeAngularVelocity(double torque, double delta)
   {
-    if (StationaryBraking)
-    {
-      return 0;
-    }
+    if (StationaryBraking) return 0;
+
     double inertia = 0.5 * Mass * Radius * Radius;
     double angularAcceleration = torque / inertia;
     return AngularVelocity + angularAcceleration * delta;
   }
 
+  // Calculate amount of torque that should be applied to this wheel based on user input
   private double ComputeTorque(double delta)
   {
     double inertia = Mass * Radius * Radius / 2;
@@ -213,18 +203,14 @@ public partial class Wheel : Node3D
     double brakeTorque = -brakeMagnitude * BrakeInput * Math.Sign(AngularVelocity);
 
     if (BrakeInput > 0.8 && (AngularVelocity * Radius) < StationaryWheelSpeed)
-    {
       StationaryBraking = true;
-      return 0;
-    }
     else
-    {
       StationaryBraking = false;
-    }
 
     return DriveTorque + brakeTorque;
   }
 
+  // Steer this wheel according to user input and its maximum steering angle
   private void Steer(double delta)
   {
     float steeringAngle = RotationDegrees.Y;
@@ -234,6 +220,7 @@ public partial class Wheel : Node3D
     RotationDegrees = new Vector3(RotationDegrees.X, steeringAngle, RotationDegrees.Z);
   }
 
+  // Calculate slip angle of the wheel, which determines lateral forces
   private double ComputeSlipAngle()
   {
     float vLat = LinearVelocity.Dot(Right);
@@ -252,6 +239,7 @@ public partial class Wheel : Node3D
     }
   }
 
+  // Calculate slip ratio of the wheel, which determines longitudinal forces
   private double ComputeSlipRatio(double delta)
   {
     double slipRatio;
@@ -276,84 +264,37 @@ public partial class Wheel : Node3D
     else
     {
       // Fancy integration for low speeds
-      SlipRatioState state = new((float)vehicleSpeed, AngularVelocity, SlipRatio);
-      state = IntegrateSolution(state, delta);
-      slipRatio = state.SlipRatio;
+      double[] state = {SlipRatio, AngularVelocity, vehicleSpeed};
+      double[] integratedValues = Integrator.IntegrateRK4(state, ComputeSlipRatioDerivatives, delta);
+      slipRatio = integratedValues[0];
     }
 
     return slipRatio;
   }
 
-  // Perform Runge-Kutta integration on slip ratio to get smooth results
-  private SlipRatioState IntegrateSolution(SlipRatioState state, double delta)
+  // Calculate derivatives for slip ratio integration
+  private double[] ComputeSlipRatioDerivatives(double[] input)
   {
-    SlipRatioState k1 = new(), k2 = new(), k3 = new(), k4 = new();
-    SlipRatioState x;
+    double slipRatio = input[0];
+    double angularVelocity = input[1];
+    double longVelocity = input[2];
+    double[] derivatives = new double[3];
+    
+    slipRatio = (angularVelocity * Radius - longVelocity - Math.Abs(longVelocity) * slipRatio) / _vehicle.SlipRatioRelaxation;
 
-    CalcDerivatives(state, ref k1);
-
-    x = state;
-    x.Add(0.5 * delta, k1);
-    CalcDerivatives(x, ref k2);
-
-    x = state;
-    x.Add(0.5 * delta, k2);
-    CalcDerivatives(x, ref k3);
-
-    x = state;
-    x.Add(delta, k3);
-    CalcDerivatives(x, ref k4);
-
-    state.Add(delta / 6, k1);
-    state.Add(delta / 3, k2);
-    state.Add(delta / 3, k3);
-    state.Add(delta / 6, k4);
-
-    return state;
-  }
-
-  private void CalcDerivatives(SlipRatioState input, ref SlipRatioState derivative)
-  {
-    derivative.SlipRatio = (input.AngularVelocity * Radius - input.LongVelocity - Math.Abs(input.LongVelocity) * input.SlipRatio) / _vehicle.SlipRatioRelaxation;
-
-    Vector3 tireForce = Tire.ComputeForce(SlipRatio, SlipAngle, TireLoad, Surface, Forward, Right);
+    Vector3 tireForce = Tire.ComputeForce(slipRatio, SlipAngle, TireLoad, Surface, Forward, Right);
 
     float forceLong = tireForce.Dot(Forward);
     double tractionTorque = (double)forceLong * Radius;
     double torque = Torque - tractionTorque;
 
     double inertia = 0.5 * Mass * Radius * Radius;
-    double angularAcceleration = torque / inertia;
+    angularVelocity = torque / inertia;
+    longVelocity = _vehicle.LinearAccel.Dot(Forward);
 
-    derivative.AngularVelocity = angularAcceleration;
-    derivative.LongVelocity = _vehicle.LinearVelocity.Dot(Forward);
-  }
-}
-
-class SlipRatioState
-{
-  public float LongVelocity;
-  public double AngularVelocity;
-  public double SlipRatio;
-
-  public SlipRatioState()
-  {
-    LongVelocity = 0;
-    AngularVelocity = 0;
-    SlipRatio = 0;
-  }
-
-  public SlipRatioState(float vLong, double angV, double slipRatio)
-  {
-    LongVelocity = vLong;
-    AngularVelocity = angV;
-    SlipRatio = slipRatio;
-  }
-
-  public void Add(double factor, SlipRatioState b)
-  {
-    LongVelocity += (float)factor * b.LongVelocity;
-    AngularVelocity += factor * b.AngularVelocity;
-    SlipRatio += factor * b.SlipRatio;
+    derivatives[0] = slipRatio;
+    derivatives[1] = angularVelocity;
+    derivatives[2] = longVelocity;
+    return derivatives;
   }
 }
