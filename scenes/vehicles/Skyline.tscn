@@ -420,7 +420,7 @@ radius = 0.335
 [sub_resource type="SphereShape3D" id="SphereShape3D_7r34i"]
 radius = 0.335
 
-[node name="RX-7" type="RigidBody3D" node_paths=PackedStringArray("Wheels", "Drivetrain")]
+[node name="Skyline" type="RigidBody3D" node_paths=PackedStringArray("Wheels", "Drivetrain")]
 transform = Transform3D(0.99994, -0.00793544, 0.00761686, 0.0077424, 0.999656, 0.0250478, -0.007813, -0.0249873, 0.999657, 0, 0, 0)
 collision_layer = 2
 collision_mask = 15
@@ -557,7 +557,6 @@ script = ExtResource("6_i8g2p")
 Vehicle = NodePath("..")
 GearRatios = PackedFloat64Array(0, 3)
 FinalDriveRatio = 3.0
-TorqueSplit = -0.35
 
 [node name="TireModel" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.02, -0.153, 0.07)

@@ -16,8 +16,6 @@ public partial class Vehicle : RigidBody3D
   [Export]
   public float SteeringSpeed = 0.5f;
   [Export]
-  public double WheelSpinCoefficient = 0;
-  [Export]
   public double MaxSlipRatio = 3;
   [Export]
   public double SlipRatioRelaxation = 0.1;
