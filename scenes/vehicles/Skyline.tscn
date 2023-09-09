@@ -425,14 +425,13 @@ transform = Transform3D(0.99994, -0.00793544, 0.00761686, 0.0077424, 0.999656, 0
 collision_layer = 2
 collision_mask = 15
 mass = 1560.0
-inertia = Vector3(2000, 3200, 800)
+inertia = Vector3(1560, 3200, 700)
 physics_material_override = SubResource("PhysicsMaterial_8tubw")
 continuous_cd = true
 script = ExtResource("1_1wswf")
 Wheels = [NodePath("Wheels/WheelFL"), NodePath("Wheels/WheelFR"), NodePath("Wheels/WheelRL"), NodePath("Wheels/WheelRR")]
 Drivetrain = NodePath("Drivetrain")
 SteeringSpeed = 2.0
-WheelSpinCoefficient = 0.7
 MaxSlipRatio = 2.0
 
 [node name="Body" type="MeshInstance3D" parent="."]
@@ -459,19 +458,18 @@ script = ExtResource("3_khrj6")
 Tire = NodePath("../../TireModel")
 VisualWheel = NodePath("VisualWheel")
 MaxSteeringAngle = 25.0
-Mass = 60.0
 Radius = 0.335
 Width = 0.12
 
 [node name="Spring" type="ShapeCast3D" parent="Wheels/WheelFL" node_paths=PackedStringArray("Vehicle")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0)
 shape = SubResource("SphereShape3D_tkrji")
-target_position = Vector3(0, -2, 0)
+target_position = Vector3(0, -0.5, 0)
 collision_mask = 13
 script = ExtResource("4_5m3ow")
 Vehicle = NodePath("../../..")
 SpringRate = 12.0
-CompressionDamping = 0.7
+CompressionDamping = 0.8
 ReboundDamping = 0.9
 
 [node name="VisualWheel" type="Node3D" parent="Wheels/WheelFL"]
@@ -486,19 +484,18 @@ Index = 1
 Tire = NodePath("../../TireModel")
 VisualWheel = NodePath("VisualWheel")
 MaxSteeringAngle = 25.0
-Mass = 60.0
 Radius = 0.335
 Width = 0.12
 
 [node name="Spring" type="ShapeCast3D" parent="Wheels/WheelFR" node_paths=PackedStringArray("Vehicle")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0)
 shape = SubResource("SphereShape3D_5r4wa")
-target_position = Vector3(0, -2, 0)
+target_position = Vector3(0, -0.5, 0)
 collision_mask = 13
 script = ExtResource("4_5m3ow")
 Vehicle = NodePath("../../..")
 SpringRate = 12.0
-CompressionDamping = 0.7
+CompressionDamping = 0.8
 ReboundDamping = 0.9
 
 [node name="VisualWheel" type="Node3D" parent="Wheels/WheelFR"]
@@ -511,19 +508,18 @@ script = ExtResource("3_khrj6")
 Index = 2
 Tire = NodePath("../../TireModel")
 VisualWheel = NodePath("VisualWheel")
-Mass = 60.0
 Radius = 0.335
 Width = 0.12
 
 [node name="Spring" type="ShapeCast3D" parent="Wheels/WheelRL" node_paths=PackedStringArray("Vehicle")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0)
 shape = SubResource("SphereShape3D_rp7q8")
-target_position = Vector3(0, -2, 0)
+target_position = Vector3(0, -0.5, 0)
 collision_mask = 13
 script = ExtResource("4_5m3ow")
 Vehicle = NodePath("../../..")
 SpringRate = 12.0
-CompressionDamping = 0.7
+CompressionDamping = 0.8
 ReboundDamping = 0.9
 
 [node name="VisualWheel" type="Node3D" parent="Wheels/WheelRL"]
@@ -537,19 +533,18 @@ script = ExtResource("3_khrj6")
 Index = 3
 Tire = NodePath("../../TireModel")
 VisualWheel = NodePath("VisualWheel")
-Mass = 60.0
 Radius = 0.335
 Width = 0.12
 
 [node name="Spring" type="ShapeCast3D" parent="Wheels/WheelRR" node_paths=PackedStringArray("Vehicle")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0)
 shape = SubResource("SphereShape3D_7r34i")
-target_position = Vector3(0, -2, 0)
+target_position = Vector3(0, -0.5, 0)
 collision_mask = 13
 script = ExtResource("4_5m3ow")
 Vehicle = NodePath("../../..")
 SpringRate = 12.0
-CompressionDamping = 0.7
+CompressionDamping = 0.8
 ReboundDamping = 0.9
 
 [node name="VisualWheel" type="Node3D" parent="Wheels/WheelRR"]
@@ -557,12 +552,12 @@ ReboundDamping = 0.9
 [node name="WheelMesh" parent="Wheels/WheelRR/VisualWheel" instance=ExtResource("4_ku4bm")]
 
 [node name="Drivetrain" type="Node3D" parent="." node_paths=PackedStringArray("Vehicle")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.02, -0.153, 0.07)
+transform = Transform3D(1, 2.47383e-10, -9.31323e-10, -1.10595e-09, 1, 0, 0, 1.86265e-09, 1, -0.02, -0.153, 0.07)
 script = ExtResource("6_i8g2p")
 Vehicle = NodePath("..")
 GearRatios = PackedFloat64Array(0, 3)
 FinalDriveRatio = 3.0
-TorqueSplit = -0.4
+TorqueSplit = -0.35
 
 [node name="TireModel" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.02, -0.153, 0.07)

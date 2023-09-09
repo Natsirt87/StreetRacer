@@ -40,6 +40,11 @@ public partial class PlayerController : Node
       _vehicle.SetClutchInput(true);
     else if (Input.IsActionJustReleased("clutch"))
       _vehicle.SetClutchInput(false);
+
+    if (Input.IsActionJustPressed("handbrake"))
+      _vehicle.SetHandbrakeInput(true);
+    else if (Input.IsActionJustReleased("handbrake"))
+      _vehicle.SetHandbrakeInput(false);
     
     if (Input.IsActionJustPressed("shift_up"))
       _vehicle.ShiftUp();

@@ -31,6 +31,7 @@ public partial class Spring : ShapeCast3D
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _PhysicsProcess(double delta)
 	{
+
     if (!IsColliding())
     {
       ContactPoint = ToGlobal(TargetPosition);
@@ -41,8 +42,8 @@ public partial class Spring : ShapeCast3D
     }
     
     Vector3 forceOffset = GlobalPosition - Vehicle.GlobalPosition;
-
     Length = GlobalPosition.DistanceTo(ContactPoint);
+
     double compressionDistance = Mathf.Abs(TargetPosition.Y) - Length;
     double trueSpringRate = SpringRate * Mass * 10;
     double springForce = SpringRate * compressionDistance * Mass * 10;
@@ -55,8 +56,8 @@ public partial class Spring : ShapeCast3D
     double dampingForce = -velocity * dampingCoefficient * criticalDampForce;
 
     Vector3 suspensionForce = IsColliding() ? (float)(springForce + dampingForce) * Vehicle.Up : Vector3.Zero;
-
     Vehicle.ApplyForce(suspensionForce, forceOffset);
+    
     _normalForce = suspensionForce.Length();
   }
 

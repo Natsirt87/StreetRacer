@@ -16,9 +16,9 @@ public partial class Vehicle : RigidBody3D
   [Export]
   public float SteeringSpeed = 0.5f;
   [Export]
-  public double WheelSpinCoefficient = 0.6;
+  public double WheelSpinCoefficient = 0;
   [Export]
-  public double MaxSlipRatio = 2.5;
+  public double MaxSlipRatio = 3;
   [Export]
   public double SlipRatioRelaxation = 0.1;
 
@@ -34,6 +34,7 @@ public partial class Vehicle : RigidBody3D
   public Vector3 Up;
 
   private Vector3 _lastVelocity;
+  private bool _handbrake;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -84,21 +85,19 @@ public partial class Vehicle : RigidBody3D
     foreach (Wheel wheel in Wheels)
     {
       wheel.PhysicsTick(delta);
-      if (wheel.StationaryBraking)
+      if (wheel.StationaryBraking && LinearVelocity.Length() < Wheel.StationarySpeedThreshold / 20 && wheel.TireLoad > 5)
       {
         stopForce += (float)wheel.Tire.LongFriction * (float)wheel.TireLoad;
         wheelsStopped++;
       }
     }
 
-    float curForce = Mass * LinearAccel.Length() + (Mass * LinearVelocity.Length() / 0.5f);
-    stopForce = Math.Min(curForce, stopForce);
-    Print("Force: " + stopForce);
-    ApplyCentralForce(-LinearVelocity.Normalized() * stopForce);
-
     if (wheelsStopped == 4)
     {
-      LinearDamp = 30;
+      float curForce = Mass * LinearAccel.Length() + (Mass * LinearVelocity.Length() / (float)delta);
+      stopForce = Math.Min(curForce, stopForce);
+      ApplyCentralForce(-LinearVelocity.Normalized() * stopForce);
+      LinearDamp = 500;
     }
     else
     {
@@ -124,10 +123,22 @@ public partial class Vehicle : RigidBody3D
 
   public void SetBrakeInput(float input)
   {
-    foreach(Wheel wheel in Wheels)
+    for (int i = 0; i < Wheels.Length; i++)
     {
-      wheel.BrakeInput = input;
+      if (i > 1 && _handbrake)
+      {
+        Wheels[i].BrakeInput = 1;
+      }
+      else
+      {
+        Wheels[i].BrakeInput = input;
+      }
     }
+  }
+
+  public void SetHandbrakeInput(bool input)
+  {
+    _handbrake = input;
   }
 
   public void SetThrottleInput(float input) { Drivetrain.SetThrottle(input); }

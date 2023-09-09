@@ -37,6 +37,11 @@ public partial class TireModel : Node3D
 
 	public Vector3 ComputeForce(double slipRatio, double slipAngle, double tireLoad, int surfaceType, Vector3 forward, Vector3 right, int wheelIndex)
   {
+    if (wheelIndex > -1)
+    {
+      UpdateDebugData(slipRatio, slipAngle, slipAngle > PeakSlipAngle, tireLoad, wheelIndex);
+    }
+
     var surfaceName = (Surface)surfaceType;
 
     PeakSlipRatio = (double)_tireData.GetValue(surfaceName + "_Long", "peak");
@@ -84,8 +89,7 @@ public partial class TireModel : Node3D
     return normalized * tireLoad * frictionCoefficient;
   }
 
-  private void UpdateDebugData(double slipRatio, double slipAngle, bool sliding, double tireLoad, int wheelIndex)
+  private static void UpdateDebugData(double slipRatio, double slipAngle, bool sliding, double tireLoad, int wheelIndex)
   {
-
   }
 }
