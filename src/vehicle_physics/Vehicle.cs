@@ -3,6 +3,7 @@ using static Godot.GD;
 using System;
 using System.Collections.Generic;
 using UI;
+using System.Linq;
 
 namespace VehiclePhysics;
 
@@ -24,6 +25,8 @@ public partial class Vehicle : RigidBody3D
   public double MaxSlipRatio = 3;
   [Export]
   public double SlipRatioRelaxation = 0.1;
+  [Export]
+  public int HudUpdateFrequency = 20;
 
   public float FrontAxleDist;
   public float RearAxleDist;
@@ -36,11 +39,13 @@ public partial class Vehicle : RigidBody3D
   public Vector3 Right;
   public Vector3 Up;
 
+  // Private fields
   private Vector3 _lastVelocity;
   private bool _handbrake;
   private HUD _hud;
-
   private int _hudIter;
+  private List<float[]> _prevHudValues;
+  private List<float[]>[] _prevDebugValues;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -74,6 +79,12 @@ public partial class Vehicle : RigidBody3D
     {
       wheel.Init(this);
     }
+
+    // Initialize data structures for storing previous hud values
+    _prevHudValues = new List<float[]>();
+    _prevDebugValues = new List<float[]>[Wheels.Length];
+    for (int i = 0; i < Wheels.Length; i++)
+      _prevDebugValues[i] = new List<float[]>();
 	}
 
 	// Called every physics step. 'delta' is the elapsed time since the previous frame.
@@ -121,15 +132,7 @@ public partial class Vehicle : RigidBody3D
 
     if (Controlled)
     {
-      if (_hudIter >= 5)
-      {
-        _hudIter = 0;
-        UpdateHud();
-      }
-      else
-      {
-        _hudIter++;
-      }
+      UpdateHud();
     }
   }
 
@@ -147,20 +150,81 @@ public partial class Vehicle : RigidBody3D
 
   private void UpdateHud()
   {
+    // Keep track of all values in between each hud update so they can be averaged
+    float[] curValues = 
+    {
+      Drivetrain.RPM,
+      Drivetrain.Gear,
       // In the future, drivetrain will set the speed based on wheel speed and differential and stuff
-      _hud.SetSpeed(Math.Abs(LinearVelocity.Dot(Forward)) * 2.237);
+      Mathf.Abs(LinearVelocity.Dot(Forward) * 2.237f)
+    };
+    _prevHudValues.Add(curValues);
 
+    // Also keep track of the debug values
+    if (_hud.Debug)
+    {
       for (int i = 0; i < Wheels.Length; i++)
       {
         Wheel wheel = Wheels[i];
-        _hud.SetSlipAngle(wheel.SlipAngle, i);
-        _hud.SetSlipRatio(wheel.SlipRatio, i);
-        _hud.SetLatSlip(wheel.LatSlip, i);
-        _hud.SetLongSlip(wheel.LongSlip, i);
-        _hud.SetTorque(wheel.Torque, i);
-        _hud.SetWheelSpeed(wheel.AngularVelocity * wheel.Radius * 2.237, i);
-        _hud.SetLoad(wheel.TireLoad, i);
+
+        float[] curDebugValues = 
+        {
+          (float)wheel.SlipAngle,
+          (float)wheel.SlipRatio,
+          (float)wheel.LatSlip,
+          (float)wheel.LongSlip,
+          (float)(wheel.AngularVelocity * wheel.Radius * 2.237f),
+          (float)wheel.TireLoad
+        };
+        _prevDebugValues[i].Add(curDebugValues);
       }
+    }
+
+    // Only continue to set hud values if the current tick is a hud iteration
+    if (_hudIter < Engine.PhysicsTicksPerSecond / HudUpdateFrequency)
+    {
+      _hudIter++;
+      return;
+    }
+    _hudIter = 0;
+    
+    // Set the primary hud data based on averages since the last hud update
+    string[] hudValues = new string[3];
+    for (int i = 0; i < 3; i++)
+    {
+      float avg = _prevHudValues.Average(item => item[i]);
+      hudValues[i] = "" + Math.Round(Math.Abs(avg));
+    }
+    _hud.SetEssentialData(hudValues);
+
+    // Reset previous hud values since they were used this iteration
+    _prevHudValues = new List<float[]>();
+
+    if (_hud.Debug)
+    {
+      for (int i = 0; i < Wheels.Length; i++)
+      {
+        Wheel wheel = Wheels[i];
+
+        string[] debugValues = new string[7];
+        for (int j = 0; j < 6; j++)
+        {
+          float avg = _prevDebugValues[i].Average(item => item[j]);
+          int roundPlace = 1;
+          if (avg >= 100)
+            roundPlace = 0;
+          debugValues[j] = "" + Math.Round(Math.Abs(avg), roundPlace);
+        }
+        debugValues[6] = wheel.TireLoad < 1 ? "None" : "" + (TireModel.Surface)wheel.Surface;
+
+        _hud.SetDebugData(debugValues, i);
+      }
+
+      // Reset previous debug hud values since they were used this iteration
+      _prevDebugValues = new List<float[]>[Wheels.Length];
+      for (int i = 0; i < Wheels.Length; i++)
+        _prevDebugValues[i] = new List<float[]>();
+    }
   }
 
   public void SetSteeringInput(float input) 

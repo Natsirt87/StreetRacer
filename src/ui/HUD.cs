@@ -41,45 +41,21 @@ public partial class HUD : Control
     valueLabel.Text = "" + Math.Round(value, 0);
   }
 
-  public void SetSlipAngle(double value, int index)
+  public void SetEssentialData(string[] values)
   {
-    Label valueLabel = _debugData.GetChild(index).GetChild(0).GetChild(1).GetChild(1) as Label;
-    valueLabel.Text = "" + Math.Round(value, 1);
+    for (int i = 0; i < values.Length; i++)
+    {
+      Label valueLabel = _essentials.GetChild(i).GetChild(1) as Label;
+      valueLabel.Text = values[i];
+    }
   }
 
-  public void SetSlipRatio(double value, int index)
+  public void SetDebugData(string[] values, int index)
   {
-    Label valueLabel = _debugData.GetChild(index).GetChild(0).GetChild(2).GetChild(1) as Label;
-    valueLabel.Text = "" + Math.Round(value, 1);
-  }
-
-  public void SetLatSlip(double value, int index)
-  {
-    Label valueLabel = _debugData.GetChild(index).GetChild(0).GetChild(3).GetChild(1) as Label;
-    valueLabel.Text = "" + Math.Round(value, 1);
-  }
-
-  public void SetLongSlip(double value, int index)
-  {
-    Label valueLabel = _debugData.GetChild(index).GetChild(0).GetChild(4).GetChild(1) as Label;
-    valueLabel.Text = "" + Math.Round(value, 1);
-  }
-
-  public void SetTorque(double value, int index)
-  {
-    Label valueLabel = _debugData.GetChild(index).GetChild(0).GetChild(5).GetChild(1) as Label;
-    valueLabel.Text = "" + Math.Round(value, 0);
-  }
-
-  public void SetWheelSpeed(double value, int index)
-  {
-    Label valueLabel = _debugData.GetChild(index).GetChild(0).GetChild(6).GetChild(1) as Label;
-    valueLabel.Text = "" + Math.Round(value, 0);
-  }
-
-  public void SetLoad(double value, int index)
-  {
-    Label valueLabel = _debugData.GetChild(index).GetChild(0).GetChild(7).GetChild(1) as Label;
-    valueLabel.Text = "" + Math.Round(value, 0);
+    for (int i = 0; i < values.Length; i++)
+    {
+      Label valueLabel = _debugData.GetChild(index).GetChild(0).GetChild(i+1).GetChild(1) as Label;
+      valueLabel.Text = values[i];
+    }
   }
 }

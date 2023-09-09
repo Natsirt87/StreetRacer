@@ -32,10 +32,11 @@ public partial class Drivetrain : Node
   [Export]
   public float flywheelWeight = 9;
 
-  private float _rpm;
+  public float RPM;
+  public int Gear = 1;
+
   private float _throttle;
   private bool _clutchIn;
-  private int _gear = 1;
   private Wheel[] _wheels;
 
 	// Called when the node enters the scene tree for the first time.
@@ -48,11 +49,12 @@ public partial class Drivetrain : Node
 	public void PhysicsTick(double delta)
 	{
     double engineTorque = Torque;
-    double wheelTorque = engineTorque * GearRatios[_gear] * FinalDriveRatio;
+    double wheelTorque = engineTorque * GearRatios[Gear] * FinalDriveRatio;
+
+
 
     double frontTorque = (1 + TorqueSplit) / 2 * _throttle * wheelTorque;
     double rearTorque = (1 - TorqueSplit) / 2 * _throttle * wheelTorque;
-
 
     for (int i = 0; i < _wheels.Length; i++)
     {
@@ -72,11 +74,11 @@ public partial class Drivetrain : Node
 
   public void ShiftUp()
   {
-    _gear = Mathf.Min(_gear + 1, GearRatios.Length - 1);
+    Gear = Mathf.Min(Gear + 1, GearRatios.Length - 1);
   }
 
   public void ShiftDown()
   {
-    _gear = Mathf.Max(_gear - 1, 0);
+    Gear = Mathf.Max(Gear - 1, 0);
   }
 }

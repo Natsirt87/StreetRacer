@@ -204,22 +204,6 @@ theme_override_fonts/font = ExtResource("1_5l2mp")
 theme_override_font_sizes/font_size = 14
 text = "0"
 
-[node name="Torque" type="HBoxContainer" parent="Canvas/DebugData/WheelPanelFL/WheelData"]
-layout_mode = 2
-
-[node name="TorqueLabel" type="Label" parent="Canvas/DebugData/WheelPanelFL/WheelData/Torque"]
-layout_mode = 2
-theme_override_fonts/font = ExtResource("1_5l2mp")
-theme_override_font_sizes/font_size = 14
-text = "Torque: "
-
-[node name="TorqueValue" type="Label" parent="Canvas/DebugData/WheelPanelFL/WheelData/Torque"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_fonts/font = ExtResource("1_5l2mp")
-theme_override_font_sizes/font_size = 14
-text = "0"
-
 [node name="Speed" type="HBoxContainer" parent="Canvas/DebugData/WheelPanelFL/WheelData"]
 layout_mode = 2
 
@@ -227,7 +211,7 @@ layout_mode = 2
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_5l2mp")
 theme_override_font_sizes/font_size = 14
-text = "Speed:  "
+text = "Speed:      "
 
 [node name="SpeedValue" type="Label" parent="Canvas/DebugData/WheelPanelFL/WheelData/Speed"]
 layout_mode = 2
@@ -243,7 +227,7 @@ layout_mode = 2
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_5l2mp")
 theme_override_font_sizes/font_size = 14
-text = "Load:   "
+text = "Load:       "
 
 [node name="LoadValue" type="Label" parent="Canvas/DebugData/WheelPanelFL/WheelData/Load"]
 layout_mode = 2
@@ -251,6 +235,22 @@ size_flags_horizontal = 3
 theme_override_fonts/font = ExtResource("1_5l2mp")
 theme_override_font_sizes/font_size = 14
 text = "0"
+
+[node name="Surface" type="HBoxContainer" parent="Canvas/DebugData/WheelPanelFL/WheelData"]
+layout_mode = 2
+
+[node name="SurfaceLabel" type="Label" parent="Canvas/DebugData/WheelPanelFL/WheelData/Surface"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_5l2mp")
+theme_override_font_sizes/font_size = 14
+text = "Surface:    "
+
+[node name="SurfaceValue" type="Label" parent="Canvas/DebugData/WheelPanelFL/WheelData/Surface"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("1_5l2mp")
+theme_override_font_sizes/font_size = 14
+text = "None"
 
 [node name="WheelPanelFR" type="PanelContainer" parent="Canvas/DebugData"]
 layout_mode = 1
@@ -341,22 +341,6 @@ theme_override_fonts/font = ExtResource("1_5l2mp")
 theme_override_font_sizes/font_size = 14
 text = "0"
 
-[node name="Torque" type="HBoxContainer" parent="Canvas/DebugData/WheelPanelFR/WheelData"]
-layout_mode = 2
-
-[node name="TorqueLabel" type="Label" parent="Canvas/DebugData/WheelPanelFR/WheelData/Torque"]
-layout_mode = 2
-theme_override_fonts/font = ExtResource("1_5l2mp")
-theme_override_font_sizes/font_size = 14
-text = "Torque: "
-
-[node name="TorqueValue" type="Label" parent="Canvas/DebugData/WheelPanelFR/WheelData/Torque"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_fonts/font = ExtResource("1_5l2mp")
-theme_override_font_sizes/font_size = 14
-text = "0"
-
 [node name="Speed" type="HBoxContainer" parent="Canvas/DebugData/WheelPanelFR/WheelData"]
 layout_mode = 2
 
@@ -364,7 +348,7 @@ layout_mode = 2
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_5l2mp")
 theme_override_font_sizes/font_size = 14
-text = "Speed:  "
+text = "Speed:      "
 
 [node name="SpeedValue" type="Label" parent="Canvas/DebugData/WheelPanelFR/WheelData/Speed"]
 layout_mode = 2
@@ -380,7 +364,7 @@ layout_mode = 2
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_5l2mp")
 theme_override_font_sizes/font_size = 14
-text = "Load:   "
+text = "Load:       "
 
 [node name="LoadValue" type="Label" parent="Canvas/DebugData/WheelPanelFR/WheelData/Load"]
 layout_mode = 2
@@ -388,6 +372,22 @@ size_flags_horizontal = 3
 theme_override_fonts/font = ExtResource("1_5l2mp")
 theme_override_font_sizes/font_size = 14
 text = "0"
+
+[node name="Surface" type="HBoxContainer" parent="Canvas/DebugData/WheelPanelFR/WheelData"]
+layout_mode = 2
+
+[node name="SurfaceLabel" type="Label" parent="Canvas/DebugData/WheelPanelFR/WheelData/Surface"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_5l2mp")
+theme_override_font_sizes/font_size = 14
+text = "Surface:    "
+
+[node name="SurfaceValue" type="Label" parent="Canvas/DebugData/WheelPanelFR/WheelData/Surface"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("1_5l2mp")
+theme_override_font_sizes/font_size = 14
+text = "None"
 
 [node name="WheelPanelRL" type="PanelContainer" parent="Canvas/DebugData"]
 layout_mode = 1
@@ -478,22 +478,6 @@ theme_override_fonts/font = ExtResource("1_5l2mp")
 theme_override_font_sizes/font_size = 14
 text = "0"
 
-[node name="Torque" type="HBoxContainer" parent="Canvas/DebugData/WheelPanelRL/WheelData"]
-layout_mode = 2
-
-[node name="TorqueLabel" type="Label" parent="Canvas/DebugData/WheelPanelRL/WheelData/Torque"]
-layout_mode = 2
-theme_override_fonts/font = ExtResource("1_5l2mp")
-theme_override_font_sizes/font_size = 14
-text = "Torque: "
-
-[node name="TorqueValue" type="Label" parent="Canvas/DebugData/WheelPanelRL/WheelData/Torque"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_fonts/font = ExtResource("1_5l2mp")
-theme_override_font_sizes/font_size = 14
-text = "0"
-
 [node name="Speed" type="HBoxContainer" parent="Canvas/DebugData/WheelPanelRL/WheelData"]
 layout_mode = 2
 
@@ -501,7 +485,7 @@ layout_mode = 2
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_5l2mp")
 theme_override_font_sizes/font_size = 14
-text = "Speed:  "
+text = "Speed:      "
 
 [node name="SpeedValue" type="Label" parent="Canvas/DebugData/WheelPanelRL/WheelData/Speed"]
 layout_mode = 2
@@ -517,7 +501,7 @@ layout_mode = 2
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_5l2mp")
 theme_override_font_sizes/font_size = 14
-text = "Load:   "
+text = "Load:       "
 
 [node name="LoadValue" type="Label" parent="Canvas/DebugData/WheelPanelRL/WheelData/Load"]
 layout_mode = 2
@@ -525,6 +509,22 @@ size_flags_horizontal = 3
 theme_override_fonts/font = ExtResource("1_5l2mp")
 theme_override_font_sizes/font_size = 14
 text = "0"
+
+[node name="Surface" type="HBoxContainer" parent="Canvas/DebugData/WheelPanelRL/WheelData"]
+layout_mode = 2
+
+[node name="SurfaceLabel" type="Label" parent="Canvas/DebugData/WheelPanelRL/WheelData/Surface"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_5l2mp")
+theme_override_font_sizes/font_size = 14
+text = "Surface:    "
+
+[node name="SurfaceValue" type="Label" parent="Canvas/DebugData/WheelPanelRL/WheelData/Surface"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("1_5l2mp")
+theme_override_font_sizes/font_size = 14
+text = "None"
 
 [node name="WheelPanelRR" type="PanelContainer" parent="Canvas/DebugData"]
 layout_mode = 1
@@ -615,22 +615,6 @@ theme_override_fonts/font = ExtResource("1_5l2mp")
 theme_override_font_sizes/font_size = 14
 text = "0"
 
-[node name="Torque" type="HBoxContainer" parent="Canvas/DebugData/WheelPanelRR/WheelData"]
-layout_mode = 2
-
-[node name="TorqueLabel" type="Label" parent="Canvas/DebugData/WheelPanelRR/WheelData/Torque"]
-layout_mode = 2
-theme_override_fonts/font = ExtResource("1_5l2mp")
-theme_override_font_sizes/font_size = 14
-text = "Torque: "
-
-[node name="TorqueValue" type="Label" parent="Canvas/DebugData/WheelPanelRR/WheelData/Torque"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_fonts/font = ExtResource("1_5l2mp")
-theme_override_font_sizes/font_size = 14
-text = "0"
-
 [node name="Speed" type="HBoxContainer" parent="Canvas/DebugData/WheelPanelRR/WheelData"]
 layout_mode = 2
 
@@ -638,7 +622,7 @@ layout_mode = 2
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_5l2mp")
 theme_override_font_sizes/font_size = 14
-text = "Speed:  "
+text = "Speed:      "
 
 [node name="SpeedValue" type="Label" parent="Canvas/DebugData/WheelPanelRR/WheelData/Speed"]
 layout_mode = 2
@@ -654,7 +638,7 @@ layout_mode = 2
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_5l2mp")
 theme_override_font_sizes/font_size = 14
-text = "Load:   "
+text = "Load:       "
 
 [node name="LoadValue" type="Label" parent="Canvas/DebugData/WheelPanelRR/WheelData/Load"]
 layout_mode = 2
@@ -662,3 +646,19 @@ size_flags_horizontal = 3
 theme_override_fonts/font = ExtResource("1_5l2mp")
 theme_override_font_sizes/font_size = 14
 text = "0"
+
+[node name="Surface" type="HBoxContainer" parent="Canvas/DebugData/WheelPanelRR/WheelData"]
+layout_mode = 2
+
+[node name="SurfaceLabel" type="Label" parent="Canvas/DebugData/WheelPanelRR/WheelData/Surface"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_5l2mp")
+theme_override_font_sizes/font_size = 14
+text = "Surface:    "
+
+[node name="SurfaceValue" type="Label" parent="Canvas/DebugData/WheelPanelRR/WheelData/Surface"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("1_5l2mp")
+theme_override_font_sizes/font_size = 14
+text = "None"

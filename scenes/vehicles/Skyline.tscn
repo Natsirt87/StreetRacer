@@ -562,5 +562,5 @@ FinalDriveRatio = 3.0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.02, -0.153, 0.07)
 script = ExtResource("7_32bjw")
 TireConfigPath = "res://data/tires/StandardTire.ini"
-LongFriction = 1.1
-LatFriction = 1.1
+LongFriction = 1.2
+LatFriction = 1.2
