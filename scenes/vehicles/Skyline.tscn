@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://dihproqlibro6"]
+[gd_scene load_steps=31 format=3 uid="uid://dihproqlibro6"]
 
 [ext_resource type="Script" path="res://src/vehicle_physics/Vehicle.cs" id="1_1wswf"]
 [ext_resource type="Script" path="res://src/vehicle_physics/Wheel.cs" id="3_khrj6"]
@@ -8,6 +8,7 @@
 [ext_resource type="Script" path="res://src/vehicle_physics/TireModel.cs" id="7_32bjw"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_8tubw"]
+friction = 0.0
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_eg0o0"]
 resource_name = "Paint"
@@ -420,6 +421,10 @@ radius = 0.335
 [sub_resource type="SphereShape3D" id="SphereShape3D_7r34i"]
 radius = 0.335
 
+[sub_resource type="Curve" id="Curve_03gk7"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.115152, 0.273684), 2.66761, 2.66761, 0, 0, Vector2(0.504464, 0.926316), 1.57193, 1.57193, 0, 0, Vector2(0.767857, 0.842105), -0.920154, -0.920154, 0, 0, Vector2(1, 0.621053), 0.0, 0.0, 0, 0]
+point_count = 5
+
 [node name="Skyline" type="RigidBody3D" node_paths=PackedStringArray("Wheels", "Drivetrain")]
 transform = Transform3D(0.99994, -0.00793544, 0.00761686, 0.0077424, 0.999656, 0.0250478, -0.007813, -0.0249873, 0.999657, 0, 0, 0)
 collision_layer = 2
@@ -432,7 +437,6 @@ script = ExtResource("1_1wswf")
 Wheels = [NodePath("Wheels/WheelFL"), NodePath("Wheels/WheelFR"), NodePath("Wheels/WheelRL"), NodePath("Wheels/WheelRR")]
 Drivetrain = NodePath("Drivetrain")
 SteeringSpeed = 2.0
-MaxSlipRatio = 2.0
 
 [node name="Body" type="MeshInstance3D" parent="."]
 transform = Transform3D(-0.01, -8.74228e-10, 3.82137e-17, 0, -4.37114e-10, -0.01, 8.74228e-10, -0.01, 4.37114e-10, 0, 0, 0)
@@ -464,7 +468,7 @@ Width = 0.12
 [node name="Spring" type="ShapeCast3D" parent="Wheels/WheelFL" node_paths=PackedStringArray("Vehicle")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0)
 shape = SubResource("SphereShape3D_tkrji")
-target_position = Vector3(0, -0.5, 0)
+target_position = Vector3(0, -0.45, 0)
 collision_mask = 13
 script = ExtResource("4_5m3ow")
 Vehicle = NodePath("../../..")
@@ -490,7 +494,7 @@ Width = 0.12
 [node name="Spring" type="ShapeCast3D" parent="Wheels/WheelFR" node_paths=PackedStringArray("Vehicle")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0)
 shape = SubResource("SphereShape3D_5r4wa")
-target_position = Vector3(0, -0.5, 0)
+target_position = Vector3(0, -0.45, 0)
 collision_mask = 13
 script = ExtResource("4_5m3ow")
 Vehicle = NodePath("../../..")
@@ -514,7 +518,7 @@ Width = 0.12
 [node name="Spring" type="ShapeCast3D" parent="Wheels/WheelRL" node_paths=PackedStringArray("Vehicle")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0)
 shape = SubResource("SphereShape3D_rp7q8")
-target_position = Vector3(0, -0.5, 0)
+target_position = Vector3(0, -0.45, 0)
 collision_mask = 13
 script = ExtResource("4_5m3ow")
 Vehicle = NodePath("../../..")
@@ -539,7 +543,7 @@ Width = 0.12
 [node name="Spring" type="ShapeCast3D" parent="Wheels/WheelRR" node_paths=PackedStringArray("Vehicle")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0)
 shape = SubResource("SphereShape3D_7r34i")
-target_position = Vector3(0, -0.5, 0)
+target_position = Vector3(0, -0.45, 0)
 collision_mask = 13
 script = ExtResource("4_5m3ow")
 Vehicle = NodePath("../../..")
@@ -554,9 +558,12 @@ ReboundDamping = 0.9
 [node name="Drivetrain" type="Node3D" parent="." node_paths=PackedStringArray("Vehicle")]
 transform = Transform3D(1, 2.47383e-10, -9.31323e-10, -1.10595e-09, 1, 0, 0, 1.86265e-09, 1, -0.02, -0.153, 0.07)
 script = ExtResource("6_i8g2p")
+PeakTorque = 320.0
 Vehicle = NodePath("..")
-GearRatios = PackedFloat64Array(0, 3)
-FinalDriveRatio = 3.0
+EngineTorqueCurve = SubResource("Curve_03gk7")
+GearRatios = PackedFloat32Array(-2.8, 0, 3.827, 2.36, 1.685, 1.312, 1, 0.793)
+FinalDriveRatio = 3.545
+FlywheelMass = 5.0
 
 [node name="TireModel" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.02, -0.153, 0.07)

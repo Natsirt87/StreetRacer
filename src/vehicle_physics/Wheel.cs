@@ -42,6 +42,7 @@ public partial class Wheel : Node3D
   public bool StationaryBraking;
   public double LongSlip;
   public double LatSlip;
+  public float LongForce;
   
   // Public input variables
   public double DriveTorque;
@@ -79,15 +80,9 @@ public partial class Wheel : Node3D
     float frontMass = _vehicle.RearAxleDist / _vehicle.Wheelbase * _vehicle.Mass;
     float rearMass = _vehicle.FrontAxleDist / _vehicle.Wheelbase * _vehicle.Mass;
     if (_isFront)
-    {
       _spring.Mass = frontMass / 2;
-      Print(Name + " spring mass: " + frontMass / 2);
-    }
     else
-    {
       _spring.Mass = rearMass / 2;
-      Print(Name + " spring mass: " + rearMass / 2);
-    }
   }
 
 	// Called every physics step from the Vehicle class
@@ -119,6 +114,7 @@ public partial class Wheel : Node3D
     Vector3 tireForce = Tire.ComputeForce(SlipRatio, SlipAngle, TireLoad, Surface, Forward, Right);
 
     float forceLong = tireForce.Dot(Forward);
+    LongForce = tireForce.Dot(Forward);
     double tractionTorque = (double)forceLong * Radius;
     Torque -= tractionTorque;
 
@@ -131,21 +127,11 @@ public partial class Wheel : Node3D
       forcePoint += Right * (float)(Width / 2);
 
     Vector3 forceOffset = forcePoint - _vehicle.GlobalPosition;
-    if (!_vehicle.Sleeping)
-    {
-      _vehicle.ApplyForce(tireForce, forceOffset);
-    }
+    _vehicle.ApplyForce(tireForce, forceOffset);
 
     LongSlip = DetermineLongSlip();
     LatSlip = Math.Abs(SlipAngle) / (Tire.PeakSlipAngle * 10);
     UpdateVisualWheel(delta);
-
-    if (Index == 3 && _vehicle.Controlled)
-    {
-      Print("Spinning slip = " + LongSlip);
-      Print("Speed = " + vehicleSpeed);
-      Print("---------------------------------");
-    }
 	}
 
   // Update the visual mesh of this wheel to represent its calculated position and angular speed
@@ -173,6 +159,7 @@ public partial class Wheel : Node3D
   {
     double vehicleSpeed = _vehicle.LinearVelocity.Length();
     double slip = 0;
+     
     // Calculate spin slip
 
     if (TireLoad > 10 && !_stationary)
@@ -256,6 +243,7 @@ public partial class Wheel : Node3D
     {
       // High slip
       slipRatio = (wheelSpeed - vehicleSpeed) / Math.Abs(wheelSpeed) * _vehicle.MaxSlipRatio;
+      Torque -= _vehicle.WheelSpinCoefficient * Torque * (slipRatio / _vehicle.MaxSlipRatio);
     }
     else if (Math.Abs(vehicleSpeed) > LowSpeedThreshold)
     {

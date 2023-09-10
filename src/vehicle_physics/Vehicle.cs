@@ -26,6 +26,8 @@ public partial class Vehicle : RigidBody3D
   [Export]
   public double SlipRatioRelaxation = 0.1;
   [Export]
+  public double WheelSpinCoefficient = 0.7;
+  [Export]
   public int HudUpdateFrequency = 20;
 
   public float FrontAxleDist;
@@ -72,8 +74,8 @@ public partial class Vehicle : RigidBody3D
     Print("Rear axle distance: " + RearAxleDist);
     Print("Wheelbase: " + Wheelbase);
     Print("Track width: " + TrackWidth);
-    Print("Front weight distribution" + RearAxleDist / Wheelbase * Mass / Mass);
-    Print("Rear weight distribution" + FrontAxleDist / Wheelbase * Mass / Mass);
+    Print("Front weight distribution: " + RearAxleDist / Wheelbase);
+    Print("Rear weight distribution: " + FrontAxleDist / Wheelbase);
 
     foreach (Wheel wheel in Wheels)
     {
@@ -144,17 +146,13 @@ public partial class Vehicle : RigidBody3D
     }
   }
 
-  public override void _Process(double delta)
-  {
-  }
-
   private void UpdateHud()
   {
     // Keep track of all values in between each hud update so they can be averaged
     float[] curValues = 
     {
-      Drivetrain.RPM,
-      Drivetrain.Gear,
+      Drivetrain.Rpm,
+      Drivetrain.Gear - 1,
       // In the future, drivetrain will set the speed based on wheel speed and differential and stuff
       Mathf.Abs(LinearVelocity.Dot(Forward) * 2.237f)
     };
@@ -173,7 +171,7 @@ public partial class Vehicle : RigidBody3D
           (float)wheel.SlipRatio,
           (float)wheel.LatSlip,
           (float)wheel.LongSlip,
-          (float)(wheel.AngularVelocity * wheel.Radius * 2.237f),
+          (float)wheel.LongForce,
           (float)wheel.TireLoad
         };
         _prevDebugValues[i].Add(curDebugValues);
@@ -192,8 +190,16 @@ public partial class Vehicle : RigidBody3D
     string[] hudValues = new string[3];
     for (int i = 0; i < 3; i++)
     {
-      float avg = _prevHudValues.Average(item => item[i]);
-      hudValues[i] = "" + Math.Round(Math.Abs(avg));
+      if (i == 1)
+      {
+
+        hudValues[i] = Drivetrain.Gear == 1 ? "N" : Drivetrain.Gear == 0 ? "R" : Drivetrain.Gear - 1 + "";
+      }
+      else
+      {
+        float avg = _prevHudValues.Average(item => item[i]);
+        hudValues[i] = "" + Math.Round(Math.Abs(avg));
+      }
     }
     _hud.SetEssentialData(hudValues);
 

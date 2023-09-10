@@ -59,6 +59,7 @@ transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -
 shadow_enabled = true
 
 [node name="Ground" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 collision_mask = 15
 
 [node name="GroundMesh" type="MeshInstance3D" parent="Ground"]
@@ -1141,7 +1142,7 @@ transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 
 shape = SubResource("CylinderShape3D_j7c2l")
 
 [node name="PlayerController" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.72995, 20.0444)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.36197, 7.06779)
 script = ExtResource("4_o2y44")
 VehiclePath = "res://scenes/vehicles/Skyline.tscn"
 CameraPath = "res://scenes/VehicleCamera.tscn"

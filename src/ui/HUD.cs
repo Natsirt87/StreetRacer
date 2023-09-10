@@ -23,24 +23,6 @@ public partial class HUD : Control
     _debugData.Visible = Debug;
   }
 
-	public void SetRPM(double value)
-  {
-    Label valueLabel = _essentials.GetChild(0).GetChild(1) as Label;
-    valueLabel.Text = "" + Math.Round(value, 0);
-  }
-
-  public void SetGear(double value)
-  {
-    Label valueLabel = _essentials.GetChild(1).GetChild(1) as Label;
-    valueLabel.Text = "" + Math.Round(value, 0);
-  }
-
-  public void SetSpeed(double value)
-  {
-    Label valueLabel = _essentials.GetChild(2).GetChild(1) as Label;
-    valueLabel.Text = "" + Math.Round(value, 0);
-  }
-
   public void SetEssentialData(string[] values)
   {
     for (int i = 0; i < values.Length; i++)
