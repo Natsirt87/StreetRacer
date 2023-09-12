@@ -35,7 +35,7 @@ public partial class TireModel : Node3D
     }
 	}
 
-	public Vector3 ComputeForce(double slipRatio, double slipAngle, double tireLoad, int surfaceType, Vector3 forward, Vector3 right, int wheelIndex)
+	public Vector3 ComputeForce(double slipRatio, double slipAngle, double tireLoad, int surfaceType, Vector3 forward, Vector3 right)
   {
     var surfaceName = (Surface)surfaceType;
 
@@ -82,10 +82,5 @@ public partial class TireModel : Node3D
 
     double normalized = Math.Sin(C * Math.Atan(B * x - E * (B * x - Math.Atan(B * x))));
     return normalized * tireLoad * frictionCoefficient;
-  }
-
-  private void UpdateDebugData(double slipRatio, double slipAngle, bool sliding, double tireLoad, int wheelIndex)
-  {
-
   }
 }

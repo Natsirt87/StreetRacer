@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-namespace Control;
+namespace Interaction;
 
 public partial class PlayerCamera : Node3D
 {

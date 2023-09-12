@@ -1,0 +1,664 @@
+[gd_scene load_steps=5 format=3 uid="uid://c5qp8x4abmib4"]
+
+[ext_resource type="FontFile" uid="uid://d33nxvwafsaud" path="res://assets/fonts/RobotoMono-VariableFont_wght.ttf" id="1_5l2mp"]
+[ext_resource type="Script" path="res://src/ui/HUD.cs" id="1_xvby6"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xe1pn"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(0, 0, 0, 0.509804)
+border_color = Color(0, 0, 0, 0.509804)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_564o6"]
+content_margin_left = 8.0
+content_margin_top = 4.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0, 0, 0, 0.509804)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[node name="HUD" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_xvby6")
+Debug = true
+
+[node name="Canvas" type="CanvasLayer" parent="."]
+
+[node name="Essentials" type="PanelContainer" parent="Canvas"]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -185.0
+offset_top = -100.0
+offset_right = 185.0
+offset_bottom = -60.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_xe1pn")
+
+[node name="EssentialsContainer" type="HBoxContainer" parent="Canvas/Essentials"]
+layout_mode = 2
+theme_override_constants/separation = 35
+alignment = 1
+
+[node name="RPM" type="HBoxContainer" parent="Canvas/Essentials/EssentialsContainer"]
+layout_mode = 2
+size_flags_horizontal = 2
+alignment = 1
+
+[node name="RPMLabel" type="Label" parent="Canvas/Essentials/EssentialsContainer/RPM"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_fonts/font = ExtResource("1_5l2mp")
+theme_override_font_sizes/font_size = 20
+text = " RPM:"
+
+[node name="RPMValue" type="Label" parent="Canvas/Essentials/EssentialsContainer/RPM"]
+layout_mode = 2
+size_flags_horizontal = 2
+theme_override_fonts/font = ExtResource("1_5l2mp")
+theme_override_font_sizes/font_size = 20
+text = "1000"
+
+[node name="Gear" type="HBoxContainer" parent="Canvas/Essentials/EssentialsContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="GearLabel" type="Label" parent="Canvas/Essentials/EssentialsContainer/Gear"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("1_5l2mp")
+theme_override_font_sizes/font_size = 20
+text = "Gear:"
+
+[node name="GearValue" type="Label" parent="Canvas/Essentials/EssentialsContainer/Gear"]
+layout_mode = 2
+size_flags_horizontal = 2
+theme_override_fonts/font = ExtResource("1_5l2mp")
+theme_override_font_sizes/font_size = 20
+text = "1"
+
+[node name="Speed" type="HBoxContainer" parent="Canvas/Essentials/EssentialsContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 2
+
+[node name="SpeedLabel" type="Label" parent="Canvas/Essentials/EssentialsContainer/Speed"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_5l2mp")
+theme_override_font_sizes/font_size = 20
+text = "Speed:"
+
+[node name="SpeedValue" type="Label" parent="Canvas/Essentials/EssentialsContainer/Speed"]
+layout_mode = 2
+size_flags_horizontal = 2
+theme_override_fonts/font = ExtResource("1_5l2mp")
+theme_override_font_sizes/font_size = 20
+text = "0"
+
+[node name="DebugData" type="Control" parent="Canvas"]
+layout_mode = 3
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+grow_vertical = 0
+
+[node name="WheelPanelFL" type="PanelContainer" parent="Canvas/DebugData"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 15.0
+offset_top = -462.0
+offset_right = 179.0
+offset_bottom = -246.0
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_564o6")
+
+[node name="WheelData" type="VBoxContainer" parent="Canvas/DebugData/WheelPanelFL"]
+layout_mode = 2
+theme_override_constants/separation = 3
+alignment = 1
+
+[node name="WheelLabel" type="Label" parent="Canvas/DebugData/WheelPanelFL/WheelData"]
+layout_mode = 2
+theme_override_constants/line_spacing = 5
+theme_override_fonts/font = ExtResource("1_5l2mp")
+theme_override_font_sizes/font_size = 18
+text = "Front Left"
+horizontal_alignment = 1
+
+[node name="SlipAngle" type="HBoxContainer" parent="Canvas/DebugData/WheelPanelFL/WheelData"]
+layout_mode = 2
+
+[node name="SlipAngleLabel" type="Label" parent="Canvas/DebugData/WheelPanelFL/WheelData/SlipAngle"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_5l2mp")
+theme_override_font_sizes/font_size = 14
+text = "Slip Angle:"
+
+[node name="SlipAngleValue" type="Label" parent="Canvas/DebugData/WheelPanelFL/WheelData/SlipAngle"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("1_5l2mp")
+theme_override_font_sizes/font_size = 14
+text = "0"
+
+[node name="SlipRatio" type="HBoxContainer" parent="Canvas/DebugData/WheelPanelFL/WheelData"]
+layout_mode = 2
+
+[node name="SlipRatioLabel" type="Label" parent="Canvas/DebugData/WheelPanelFL/WheelData/SlipRatio"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_5l2mp")
+theme_override_font_sizes/font_size = 14
+text = "Slip Ratio:"
+
+[node name="SlipRatioValue" type="Label" parent="Canvas/DebugData/WheelPanelFL/WheelData/SlipRatio"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("1_5l2mp")
+theme_override_font_sizes/font_size = 14
+text = "0"
+
+[node name="LatSlip" type="HBoxContainer" parent="Canvas/DebugData/WheelPanelFL/WheelData"]
+layout_mode = 2
+
+[node name="LatSlipLabel" type="Label" parent="Canvas/DebugData/WheelPanelFL/WheelData/LatSlip"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_5l2mp")
+theme_override_font_sizes/font_size = 14
+text = "Lat Slip:  "
+
+[node name="LatSlipValue" type="Label" parent="Canvas/DebugData/WheelPanelFL/WheelData/LatSlip"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("1_5l2mp")
+theme_override_font_sizes/font_size = 14
+text = "0"
+
+[node name="LongSlip" type="HBoxContainer" parent="Canvas/DebugData/WheelPanelFL/WheelData"]
+layout_mode = 2
+
+[node name="LongSlipLabel" type="Label" parent="Canvas/DebugData/WheelPanelFL/WheelData/LongSlip"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_5l2mp")
+theme_override_font_sizes/font_size = 14
+text = "Long Slip: "
+
+[node name="LongSlipValue" type="Label" parent="Canvas/DebugData/WheelPanelFL/WheelData/LongSlip"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("1_5l2mp")
+theme_override_font_sizes/font_size = 14
+text = "0"
+
+[node name="Force" type="HBoxContainer" parent="Canvas/DebugData/WheelPanelFL/WheelData"]
+layout_mode = 2
+
+[node name="ForceLabel" type="Label" parent="Canvas/DebugData/WheelPanelFL/WheelData/Force"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_5l2mp")
+theme_override_font_sizes/font_size = 14
+text = "Force:     "
+
+[node name="ForceValue" type="Label" parent="Canvas/DebugData/WheelPanelFL/WheelData/Force"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("1_5l2mp")
+theme_override_font_sizes/font_size = 14
+text = "0"
+
+[node name="Load" type="HBoxContainer" parent="Canvas/DebugData/WheelPanelFL/WheelData"]
+layout_mode = 2
+
+[node name="LoadLabel" type="Label" parent="Canvas/DebugData/WheelPanelFL/WheelData/Load"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_5l2mp")
+theme_override_font_sizes/font_size = 14
+text = "Load:      "
+
+[node name="LoadValue" type="Label" parent="Canvas/DebugData/WheelPanelFL/WheelData/Load"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("1_5l2mp")
+theme_override_font_sizes/font_size = 14
+text = "0"
+
+[node name="Surface" type="HBoxContainer" parent="Canvas/DebugData/WheelPanelFL/WheelData"]
+layout_mode = 2
+
+[node name="SurfaceLabel" type="Label" parent="Canvas/DebugData/WheelPanelFL/WheelData/Surface"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_5l2mp")
+theme_override_font_sizes/font_size = 14
+text = "Surface:   "
+
+[node name="SurfaceValue" type="Label" parent="Canvas/DebugData/WheelPanelFL/WheelData/Surface"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("1_5l2mp")
+theme_override_font_sizes/font_size = 14
+text = "None"
+
+[node name="WheelPanelFR" type="PanelContainer" parent="Canvas/DebugData"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 194.0
+offset_top = -462.0
+offset_right = 358.0
+offset_bottom = -246.0
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_564o6")
+
+[node name="WheelData" type="VBoxContainer" parent="Canvas/DebugData/WheelPanelFR"]
+layout_mode = 2
+theme_override_constants/separation = 3
+alignment = 1
+
+[node name="WheelLabel" type="Label" parent="Canvas/DebugData/WheelPanelFR/WheelData"]
+layout_mode = 2
+theme_override_constants/line_spacing = 5
+theme_override_fonts/font = ExtResource("1_5l2mp")
+theme_override_font_sizes/font_size = 18
+text = "Front Right"
+horizontal_alignment = 1
+
+[node name="SlipAngle" type="HBoxContainer" parent="Canvas/DebugData/WheelPanelFR/WheelData"]
+layout_mode = 2
+
+[node name="SlipAngleLabel" type="Label" parent="Canvas/DebugData/WheelPanelFR/WheelData/SlipAngle"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_5l2mp")
+theme_override_font_sizes/font_size = 14
+text = "Slip Angle:"
+
+[node name="SlipAngleValue" type="Label" parent="Canvas/DebugData/WheelPanelFR/WheelData/SlipAngle"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("1_5l2mp")
+theme_override_font_sizes/font_size = 14
+text = "0"
+
+[node name="SlipRatio" type="HBoxContainer" parent="Canvas/DebugData/WheelPanelFR/WheelData"]
+layout_mode = 2
+
+[node name="SlipRatioLabel" type="Label" parent="Canvas/DebugData/WheelPanelFR/WheelData/SlipRatio"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_5l2mp")
+theme_override_font_sizes/font_size = 14
+text = "Slip Ratio:"
+
+[node name="SlipRatioValue" type="Label" parent="Canvas/DebugData/WheelPanelFR/WheelData/SlipRatio"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("1_5l2mp")
+theme_override_font_sizes/font_size = 14
+text = "0"
+
+[node name="LatSlip" type="HBoxContainer" parent="Canvas/DebugData/WheelPanelFR/WheelData"]
+layout_mode = 2
+
+[node name="LatSlipLabel" type="Label" parent="Canvas/DebugData/WheelPanelFR/WheelData/LatSlip"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_5l2mp")
+theme_override_font_sizes/font_size = 14
+text = "Lat Slip:  "
+
+[node name="LatSlipValue" type="Label" parent="Canvas/DebugData/WheelPanelFR/WheelData/LatSlip"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("1_5l2mp")
+theme_override_font_sizes/font_size = 14
+text = "0"
+
+[node name="LongSlip" type="HBoxContainer" parent="Canvas/DebugData/WheelPanelFR/WheelData"]
+layout_mode = 2
+
+[node name="LongSlipLabel" type="Label" parent="Canvas/DebugData/WheelPanelFR/WheelData/LongSlip"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_5l2mp")
+theme_override_font_sizes/font_size = 14
+text = "Long Slip: "
+
+[node name="LongSlipValue" type="Label" parent="Canvas/DebugData/WheelPanelFR/WheelData/LongSlip"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("1_5l2mp")
+theme_override_font_sizes/font_size = 14
+text = "0"
+
+[node name="Force" type="HBoxContainer" parent="Canvas/DebugData/WheelPanelFR/WheelData"]
+layout_mode = 2
+
+[node name="ForceLabel" type="Label" parent="Canvas/DebugData/WheelPanelFR/WheelData/Force"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_5l2mp")
+theme_override_font_sizes/font_size = 14
+text = "Force:     "
+
+[node name="SpeedValue" type="Label" parent="Canvas/DebugData/WheelPanelFR/WheelData/Force"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("1_5l2mp")
+theme_override_font_sizes/font_size = 14
+text = "0"
+
+[node name="Load" type="HBoxContainer" parent="Canvas/DebugData/WheelPanelFR/WheelData"]
+layout_mode = 2
+
+[node name="LoadLabel" type="Label" parent="Canvas/DebugData/WheelPanelFR/WheelData/Load"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_5l2mp")
+theme_override_font_sizes/font_size = 14
+text = "Load:      "
+
+[node name="LoadValue" type="Label" parent="Canvas/DebugData/WheelPanelFR/WheelData/Load"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("1_5l2mp")
+theme_override_font_sizes/font_size = 14
+text = "0"
+
+[node name="Surface" type="HBoxContainer" parent="Canvas/DebugData/WheelPanelFR/WheelData"]
+layout_mode = 2
+
+[node name="SurfaceLabel" type="Label" parent="Canvas/DebugData/WheelPanelFR/WheelData/Surface"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_5l2mp")
+theme_override_font_sizes/font_size = 14
+text = "Surface:   "
+
+[node name="SurfaceValue" type="Label" parent="Canvas/DebugData/WheelPanelFR/WheelData/Surface"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("1_5l2mp")
+theme_override_font_sizes/font_size = 14
+text = "None"
+
+[node name="WheelPanelRL" type="PanelContainer" parent="Canvas/DebugData"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 15.0
+offset_top = -231.0
+offset_right = 179.0
+offset_bottom = -15.0
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_564o6")
+
+[node name="WheelData" type="VBoxContainer" parent="Canvas/DebugData/WheelPanelRL"]
+layout_mode = 2
+theme_override_constants/separation = 3
+alignment = 1
+
+[node name="WheelLabel" type="Label" parent="Canvas/DebugData/WheelPanelRL/WheelData"]
+layout_mode = 2
+theme_override_constants/line_spacing = 5
+theme_override_fonts/font = ExtResource("1_5l2mp")
+theme_override_font_sizes/font_size = 18
+text = "Rear Left"
+horizontal_alignment = 1
+
+[node name="SlipAngle" type="HBoxContainer" parent="Canvas/DebugData/WheelPanelRL/WheelData"]
+layout_mode = 2
+
+[node name="SlipAngleLabel" type="Label" parent="Canvas/DebugData/WheelPanelRL/WheelData/SlipAngle"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_5l2mp")
+theme_override_font_sizes/font_size = 14
+text = "Slip Angle:"
+
+[node name="SlipAngleValue" type="Label" parent="Canvas/DebugData/WheelPanelRL/WheelData/SlipAngle"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("1_5l2mp")
+theme_override_font_sizes/font_size = 14
+text = "0"
+
+[node name="SlipRatio" type="HBoxContainer" parent="Canvas/DebugData/WheelPanelRL/WheelData"]
+layout_mode = 2
+
+[node name="SlipRatioLabel" type="Label" parent="Canvas/DebugData/WheelPanelRL/WheelData/SlipRatio"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_5l2mp")
+theme_override_font_sizes/font_size = 14
+text = "Slip Ratio:"
+
+[node name="SlipRatioValue" type="Label" parent="Canvas/DebugData/WheelPanelRL/WheelData/SlipRatio"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("1_5l2mp")
+theme_override_font_sizes/font_size = 14
+text = "0"
+
+[node name="LatSlip" type="HBoxContainer" parent="Canvas/DebugData/WheelPanelRL/WheelData"]
+layout_mode = 2
+
+[node name="LatSlipLabel" type="Label" parent="Canvas/DebugData/WheelPanelRL/WheelData/LatSlip"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_5l2mp")
+theme_override_font_sizes/font_size = 14
+text = "Lat Slip:  "
+
+[node name="LatSlipValue" type="Label" parent="Canvas/DebugData/WheelPanelRL/WheelData/LatSlip"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("1_5l2mp")
+theme_override_font_sizes/font_size = 14
+text = "0"
+
+[node name="LongSlip" type="HBoxContainer" parent="Canvas/DebugData/WheelPanelRL/WheelData"]
+layout_mode = 2
+
+[node name="LongSlipLabel" type="Label" parent="Canvas/DebugData/WheelPanelRL/WheelData/LongSlip"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_5l2mp")
+theme_override_font_sizes/font_size = 14
+text = "Long Slip: "
+
+[node name="LongSlipValue" type="Label" parent="Canvas/DebugData/WheelPanelRL/WheelData/LongSlip"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("1_5l2mp")
+theme_override_font_sizes/font_size = 14
+text = "0"
+
+[node name="Force" type="HBoxContainer" parent="Canvas/DebugData/WheelPanelRL/WheelData"]
+layout_mode = 2
+
+[node name="ForceLabel" type="Label" parent="Canvas/DebugData/WheelPanelRL/WheelData/Force"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_5l2mp")
+theme_override_font_sizes/font_size = 14
+text = "Force:     "
+
+[node name="ForceValue" type="Label" parent="Canvas/DebugData/WheelPanelRL/WheelData/Force"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("1_5l2mp")
+theme_override_font_sizes/font_size = 14
+text = "0"
+
+[node name="Load" type="HBoxContainer" parent="Canvas/DebugData/WheelPanelRL/WheelData"]
+layout_mode = 2
+
+[node name="LoadLabel" type="Label" parent="Canvas/DebugData/WheelPanelRL/WheelData/Load"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_5l2mp")
+theme_override_font_sizes/font_size = 14
+text = "Load:      "
+
+[node name="LoadValue" type="Label" parent="Canvas/DebugData/WheelPanelRL/WheelData/Load"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("1_5l2mp")
+theme_override_font_sizes/font_size = 14
+text = "0"
+
+[node name="Surface" type="HBoxContainer" parent="Canvas/DebugData/WheelPanelRL/WheelData"]
+layout_mode = 2
+
+[node name="SurfaceLabel" type="Label" parent="Canvas/DebugData/WheelPanelRL/WheelData/Surface"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_5l2mp")
+theme_override_font_sizes/font_size = 14
+text = "Surface:   "
+
+[node name="SurfaceValue" type="Label" parent="Canvas/DebugData/WheelPanelRL/WheelData/Surface"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("1_5l2mp")
+theme_override_font_sizes/font_size = 14
+text = "None"
+
+[node name="WheelPanelRR" type="PanelContainer" parent="Canvas/DebugData"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 194.0
+offset_top = -231.0
+offset_right = 358.0
+offset_bottom = -15.0
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_564o6")
+
+[node name="WheelData" type="VBoxContainer" parent="Canvas/DebugData/WheelPanelRR"]
+layout_mode = 2
+theme_override_constants/separation = 3
+alignment = 1
+
+[node name="WheelLabel" type="Label" parent="Canvas/DebugData/WheelPanelRR/WheelData"]
+layout_mode = 2
+theme_override_constants/line_spacing = 5
+theme_override_fonts/font = ExtResource("1_5l2mp")
+theme_override_font_sizes/font_size = 18
+text = "Rear Right"
+horizontal_alignment = 1
+
+[node name="SlipAngle" type="HBoxContainer" parent="Canvas/DebugData/WheelPanelRR/WheelData"]
+layout_mode = 2
+
+[node name="SlipAngleLabel" type="Label" parent="Canvas/DebugData/WheelPanelRR/WheelData/SlipAngle"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_5l2mp")
+theme_override_font_sizes/font_size = 14
+text = "Slip Angle:"
+
+[node name="SlipAngleValue" type="Label" parent="Canvas/DebugData/WheelPanelRR/WheelData/SlipAngle"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("1_5l2mp")
+theme_override_font_sizes/font_size = 14
+text = "0"
+
+[node name="SlipRatio" type="HBoxContainer" parent="Canvas/DebugData/WheelPanelRR/WheelData"]
+layout_mode = 2
+
+[node name="SlipRatioLabel" type="Label" parent="Canvas/DebugData/WheelPanelRR/WheelData/SlipRatio"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_5l2mp")
+theme_override_font_sizes/font_size = 14
+text = "Slip Ratio:"
+
+[node name="SlipRatioValue" type="Label" parent="Canvas/DebugData/WheelPanelRR/WheelData/SlipRatio"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("1_5l2mp")
+theme_override_font_sizes/font_size = 14
+text = "0"
+
+[node name="LatSlip" type="HBoxContainer" parent="Canvas/DebugData/WheelPanelRR/WheelData"]
+layout_mode = 2
+
+[node name="LatSlipLabel" type="Label" parent="Canvas/DebugData/WheelPanelRR/WheelData/LatSlip"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_5l2mp")
+theme_override_font_sizes/font_size = 14
+text = "Lat Slip:  "
+
+[node name="LatSlipValue" type="Label" parent="Canvas/DebugData/WheelPanelRR/WheelData/LatSlip"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("1_5l2mp")
+theme_override_font_sizes/font_size = 14
+text = "0"
+
+[node name="LongSlip" type="HBoxContainer" parent="Canvas/DebugData/WheelPanelRR/WheelData"]
+layout_mode = 2
+
+[node name="LongSlipLabel" type="Label" parent="Canvas/DebugData/WheelPanelRR/WheelData/LongSlip"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_5l2mp")
+theme_override_font_sizes/font_size = 14
+text = "Long Slip: "
+
+[node name="LongSlipValue" type="Label" parent="Canvas/DebugData/WheelPanelRR/WheelData/LongSlip"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("1_5l2mp")
+theme_override_font_sizes/font_size = 14
+text = "0"
+
+[node name="Force" type="HBoxContainer" parent="Canvas/DebugData/WheelPanelRR/WheelData"]
+layout_mode = 2
+
+[node name="ForceLabel" type="Label" parent="Canvas/DebugData/WheelPanelRR/WheelData/Force"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_5l2mp")
+theme_override_font_sizes/font_size = 14
+text = "Force:     "
+
+[node name="ForceValue" type="Label" parent="Canvas/DebugData/WheelPanelRR/WheelData/Force"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("1_5l2mp")
+theme_override_font_sizes/font_size = 14
+text = "0"
+
+[node name="Load" type="HBoxContainer" parent="Canvas/DebugData/WheelPanelRR/WheelData"]
+layout_mode = 2
+
+[node name="LoadLabel" type="Label" parent="Canvas/DebugData/WheelPanelRR/WheelData/Load"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_5l2mp")
+theme_override_font_sizes/font_size = 14
+text = "Load:      "
+
+[node name="LoadValue" type="Label" parent="Canvas/DebugData/WheelPanelRR/WheelData/Load"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("1_5l2mp")
+theme_override_font_sizes/font_size = 14
+text = "0"
+
+[node name="Surface" type="HBoxContainer" parent="Canvas/DebugData/WheelPanelRR/WheelData"]
+layout_mode = 2
+
+[node name="SurfaceLabel" type="Label" parent="Canvas/DebugData/WheelPanelRR/WheelData/Surface"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_5l2mp")
+theme_override_font_sizes/font_size = 14
+text = "Surface:   "
+
+[node name="SurfaceValue" type="Label" parent="Canvas/DebugData/WheelPanelRR/WheelData/Surface"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("1_5l2mp")
+theme_override_font_sizes/font_size = 14
+text = "None"

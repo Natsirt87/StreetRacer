@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://ddd0c01382wkb"]
+[gd_scene load_steps=15 format=3 uid="uid://ddd0c01382wkb"]
 
 [ext_resource type="Texture2D" uid="uid://bxlayqus8a8x1" path="res://assets/textures/asphalt_road.png" id="1_362ka"]
 [ext_resource type="Script" path="res://src/control/PlayerController.cs" id="4_o2y44"]
@@ -42,6 +42,12 @@ height = 10.0
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_j7c2l"]
 height = 10.0
 radius = 0.25
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_7tl32"]
+size = Vector3(14.1039, 7.14289, 18.7315)
+
+[sub_resource type="BoxMesh" id="BoxMesh_agaho"]
+size = Vector3(14.1039, 7.14289, 18.7315)
 
 [node name="TestTrack" type="Node3D"]
 
@@ -1135,7 +1141,16 @@ transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 
 shape = SubResource("CylinderShape3D_j7c2l")
 
 [node name="PlayerController" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 13.305, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.10966, 7.06779)
 script = ExtResource("4_o2y44")
 VehiclePath = "res://scenes/vehicles/Skyline.tscn"
 CameraPath = "res://scenes/VehicleCamera.tscn"
+
+[node name="Ramp" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.960881, -0.276963, 0, 0.276963, 0.960881, 0, -1.00079, -75.6934)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ramp"]
+shape = SubResource("BoxShape3D_7tl32")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ramp"]
+mesh = SubResource("BoxMesh_agaho")
