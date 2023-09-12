@@ -21,6 +21,8 @@ public partial class Wheel : Node3D
   [Export]
   public Node3D VisualWheel;
   [Export]
+  public RigidBody3D WheelBody;
+  [Export]
   public float MaxSteeringAngle;
   [Export]
   public double Mass = 60;
@@ -201,8 +203,10 @@ public partial class Wheel : Node3D
     float steeringAngle = RotationDegrees.Y;
     float desiredAngle = SteeringInput * MaxSteeringAngle +_initialAngle;
     steeringAngle = Mathf.Lerp(steeringAngle, desiredAngle, _vehicle.SteeringSpeed * (float)delta);
+    
 
     RotationDegrees = new Vector3(RotationDegrees.X, steeringAngle, RotationDegrees.Z);
+    WheelBody.RotationDegrees = Vector3.Zero;
   }
 
   // Calculate slip angle of the wheel, which determines lateral forces

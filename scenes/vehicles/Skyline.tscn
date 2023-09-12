@@ -8,6 +8,7 @@
 [ext_resource type="Script" path="res://src/vehicle_physics/TireModel.cs" id="7_32bjw"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_8tubw"]
+friction = 0.7
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_eg0o0"]
 resource_name = "Paint"
@@ -454,12 +455,14 @@ shape = SubResource("ConvexPolygonShape3D_moe2x")
 [node name="Wheels" type="Node3D" parent="."]
 transform = Transform3D(2.425, 0, 0, 0, 2.425, 0, 0, 0, 2.425, 0, 0, 0)
 
-[node name="WheelFL" type="Node3D" parent="Wheels" node_paths=PackedStringArray("Tire", "VisualWheel")]
+[node name="WheelFL" type="Node3D" parent="Wheels" node_paths=PackedStringArray("Tire", "VisualWheel", "WheelBody")]
 transform = Transform3D(0.412371, -5.96629e-10, 0, 1.30967e-10, 0.412371, -9.31323e-10, -4.65661e-10, -1.86265e-09, 0.412371, -0.31, -0.1, -0.596)
 script = ExtResource("3_khrj6")
 Tire = NodePath("../../TireModel")
 VisualWheel = NodePath("WheelBody/WheelMesh")
-MaxSteeringAngle = 25.0
+WheelBody = NodePath("WheelBody")
+MaxSteeringAngle = 21.0
+Mass = 45.0
 Radius = 0.335
 Width = 0.12
 
@@ -469,15 +472,15 @@ script = ExtResource("4_5m3ow")
 Vehicle = NodePath("../../..")
 Wheel = NodePath("../WheelBody")
 SpringRate = 9.0
-CompressionDamping = 0.3
-ReboundDamping = 0.65
+CompressionDamping = 0.6
+ReboundDamping = 0.6
 EquilibriumLength = 0.2
 
 [node name="WheelBody" type="RigidBody3D" parent="Wheels/WheelFL"]
 transform = Transform3D(1, 1.16415e-09, -9.31323e-10, 2.76486e-10, 1, 0, 0, 1.86265e-09, 1, 0, 0, 0)
 collision_layer = 2
 collision_mask = 15
-mass = 30.0
+mass = 25.0
 physics_material_override = SubResource("PhysicsMaterial_anh32")
 max_contacts_reported = 1
 contact_monitor = true
@@ -494,13 +497,15 @@ linear_limit_y/upper = 0.4
 node_a = NodePath("../WheelBody")
 node_b = NodePath("../../..")
 
-[node name="WheelFR" type="Node3D" parent="Wheels" node_paths=PackedStringArray("Tire", "VisualWheel")]
+[node name="WheelFR" type="Node3D" parent="Wheels" node_paths=PackedStringArray("Tire", "VisualWheel", "WheelBody")]
 transform = Transform3D(0.412371, 0, 0, 0, 0.412371, 0, 0, 0, 0.412371, 0.31, -0.1, -0.596)
 script = ExtResource("3_khrj6")
 Index = 1
 Tire = NodePath("../../TireModel")
 VisualWheel = NodePath("WheelBody/WheelMesh")
-MaxSteeringAngle = 25.0
+WheelBody = NodePath("WheelBody")
+MaxSteeringAngle = 21.0
+Mass = 45.0
 Radius = 0.335
 Width = 0.12
 
@@ -510,14 +515,14 @@ script = ExtResource("4_5m3ow")
 Vehicle = NodePath("../../..")
 Wheel = NodePath("../WheelBody")
 SpringRate = 9.0
-CompressionDamping = 0.3
-ReboundDamping = 0.65
+CompressionDamping = 0.6
+ReboundDamping = 0.6
 EquilibriumLength = 0.2
 
 [node name="WheelBody" type="RigidBody3D" parent="Wheels/WheelFR"]
 collision_layer = 2
 collision_mask = 15
-mass = 30.0
+mass = 25.0
 physics_material_override = SubResource("PhysicsMaterial_anh32")
 max_contacts_reported = 1
 contact_monitor = true
@@ -534,12 +539,14 @@ linear_limit_y/upper = 0.4
 node_a = NodePath("../WheelBody")
 node_b = NodePath("../../..")
 
-[node name="WheelRL" type="Node3D" parent="Wheels" node_paths=PackedStringArray("Tire", "VisualWheel")]
+[node name="WheelRL" type="Node3D" parent="Wheels" node_paths=PackedStringArray("Tire", "VisualWheel", "WheelBody")]
 transform = Transform3D(0.412371, 0, 0, 0, 0.412371, 0, 0, 0, 0.412371, -0.31, -0.1, 0.483)
 script = ExtResource("3_khrj6")
 Index = 2
 Tire = NodePath("../../TireModel")
 VisualWheel = NodePath("WheelBody/WheelMesh")
+WheelBody = NodePath("WheelBody")
+Mass = 45.0
 Radius = 0.335
 Width = 0.12
 
@@ -549,14 +556,14 @@ script = ExtResource("4_5m3ow")
 Vehicle = NodePath("../../..")
 Wheel = NodePath("../WheelBody")
 SpringRate = 9.0
-CompressionDamping = 0.3
-ReboundDamping = 0.65
+CompressionDamping = 0.6
+ReboundDamping = 0.6
 EquilibriumLength = 0.2
 
 [node name="WheelBody" type="RigidBody3D" parent="Wheels/WheelRL"]
 collision_layer = 2
 collision_mask = 15
-mass = 30.0
+mass = 25.0
 physics_material_override = SubResource("PhysicsMaterial_anh32")
 max_contacts_reported = 1
 contact_monitor = true
@@ -573,12 +580,14 @@ linear_limit_y/upper = 0.4
 node_a = NodePath("../WheelBody")
 node_b = NodePath("../../..")
 
-[node name="WheelRR" type="Node3D" parent="Wheels" node_paths=PackedStringArray("Tire", "VisualWheel")]
+[node name="WheelRR" type="Node3D" parent="Wheels" node_paths=PackedStringArray("Tire", "VisualWheel", "WheelBody")]
 transform = Transform3D(0.412371, -8.44011e-10, 0, -3.4197e-10, 0.412371, -9.31323e-10, -4.65661e-10, -3.72529e-09, 0.412371, 0.31, -0.1, 0.483)
 script = ExtResource("3_khrj6")
 Index = 3
 Tire = NodePath("../../TireModel")
 VisualWheel = NodePath("WheelBody/WheelMesh")
+WheelBody = NodePath("WheelBody")
+Mass = 45.0
 Radius = 0.335
 Width = 0.12
 
@@ -588,14 +597,14 @@ script = ExtResource("4_5m3ow")
 Vehicle = NodePath("../../..")
 Wheel = NodePath("../WheelBody")
 SpringRate = 9.0
-CompressionDamping = 0.3
-ReboundDamping = 0.65
+CompressionDamping = 0.6
+ReboundDamping = 0.6
 EquilibriumLength = 0.2
 
 [node name="WheelBody" type="RigidBody3D" parent="Wheels/WheelRR"]
 collision_layer = 2
 collision_mask = 15
-mass = 30.0
+mass = 25.0
 physics_material_override = SubResource("PhysicsMaterial_anh32")
 max_contacts_reported = 1
 contact_monitor = true
@@ -615,7 +624,7 @@ node_b = NodePath("../../..")
 [node name="Drivetrain" type="Node3D" parent="." node_paths=PackedStringArray("Vehicle")]
 transform = Transform3D(1, 2.32831e-10, -1.86265e-09, -2.03727e-09, 1, 0, 0, 3.72529e-09, 1, -0.02, -0.153, 0.07)
 script = ExtResource("6_i8g2p")
-PeakTorque = 400.0
+PeakTorque = 500.0
 Vehicle = NodePath("..")
 EngineTorqueCurve = SubResource("Curve_03gk7")
 RedlineCutTime = 0.0
