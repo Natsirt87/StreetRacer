@@ -125,11 +125,13 @@ public partial class Vehicle : RigidBody3D
       LinearDamp = 0;
     }
 
-    // Apply drag force
+    // Apply drag & rolling resistance force
     if (LinearVelocity.Length() > 2)
     {
-      float dragMagnitude = 0.5f * DragCoefficient * FrontalArea * 1.29f * Mathf.Pow(LinearVelocity.Length(), 2);
-      ApplyCentralForce(dragMagnitude * -LinearVelocity.Normalized());
+      float resistanceCoefficient = 0.5f * DragCoefficient * FrontalArea * 1.29f;
+      float resistanceMagnitude = resistanceCoefficient * Mathf.Pow(LinearVelocity.Length(), 2);
+      resistanceMagnitude += resistanceCoefficient * 30 * LinearVelocity.Length();
+      ApplyCentralForce(resistanceMagnitude * -LinearVelocity.Normalized());
     }
 
     if (Controlled)

@@ -44,7 +44,7 @@ public partial class Spring : ShapeCast3D
     Vector3 forceOffset = GlobalPosition - Vehicle.GlobalPosition;
     Length = GlobalPosition.DistanceTo(ContactPoint);
 
-    double compressionDistance = Mathf.Abs(TargetPosition.Y) - Length;
+    double compressionDistance = Mathf.Abs(TargetPosition.Length()) - Length;
     double trueSpringRate = SpringRate * Mass * 10;
     double springForce = SpringRate * compressionDistance * Mass * 10;
 
