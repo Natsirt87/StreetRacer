@@ -149,9 +149,6 @@ public partial class Wheel : Node3D
     }
     Vector3 wheelRot = new(VisualWheel.Rotation.X - (float)(visualAngularVelocity * delta), VisualWheel.Rotation.Y, VisualWheel.Rotation.Z);
     VisualWheel.Rotation = wheelRot;
-
-    Vector3 wheelPos = _spring.GlobalPosition + -Up * (float)_spring.Length;
-    VisualWheel.Position = VisualWheel.Position.Lerp(ToLocal(wheelPos), (float)delta * WheelMovementRate);
   }
 
   // Calculate how much longitudinal slip the car is experiencing, used for sounds and effects

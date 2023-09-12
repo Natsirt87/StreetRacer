@@ -4,19 +4,22 @@ using System;
 
 namespace VehiclePhysics;
 
-public partial class Spring : ShapeCast3D
+public partial class Spring : Node3D
 {
   [Export]
   public Vehicle Vehicle;
+  [Export]
+  public RigidBody3D Wheel;
   [Export]
   public double SpringRate = 1;
   [Export(PropertyHint.Range, "0,3")]
   public double CompressionDamping = 1;
   [Export(PropertyHint.Range, "0,3")]
   public double ReboundDamping = 1;
+  [Export]
+  public double EquilibriumLength = 0.5;
 
   public float Mass;
-  public Vector3 ContactPoint;
   public double Length;
 
   private double _normalForce;
@@ -31,20 +34,12 @@ public partial class Spring : ShapeCast3D
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _PhysicsProcess(double delta)
 	{
-
-    if (!IsColliding())
-    {
-      ContactPoint = ToGlobal(TargetPosition);
-    }
-    else
-    {
-      ContactPoint = FindWheelCenter();
-    }
+    Vector3 wheelPos = Wheel.GlobalPosition;
     
     Vector3 forceOffset = GlobalPosition - Vehicle.GlobalPosition;
-    Length = GlobalPosition.DistanceTo(ContactPoint);
+    Length = GlobalPosition.DistanceTo(wheelPos);
 
-    double compressionDistance = Mathf.Abs(TargetPosition.Length()) - Length;
+    double compressionDistance = EquilibriumLength - Length;
     double trueSpringRate = SpringRate * Mass * 10;
     double springForce = SpringRate * compressionDistance * Mass * 10;
 
@@ -54,18 +49,12 @@ public partial class Spring : ShapeCast3D
     double dampingCoefficient = velocity < 0 ? CompressionDamping : ReboundDamping;
     double criticalDampForce = 2 * Math.Sqrt(trueSpringRate * Mass);
     double dampingForce = -velocity * dampingCoefficient * criticalDampForce;
+    Vector3 suspensionForce = (float)(springForce + dampingForce) * Vehicle.Up;
 
-    Vector3 suspensionForce = IsColliding() ? (float)(springForce + dampingForce) * Vehicle.Up : Vector3.Zero;
     Vehicle.ApplyForce(suspensionForce, forceOffset);
+    Wheel?.ApplyForce(-suspensionForce, GlobalPosition - Wheel.GlobalPosition);
     
     _normalForce = suspensionForce.Length();
-  }
-
-  private Vector3 FindWheelCenter()
-  {
-    float lengthRatio = GetClosestCollisionUnsafeFraction();
-    Vector3 globalCenter = ToGlobal(TargetPosition * lengthRatio) ;
-    return globalCenter;
   }
 
   public double GetNormalForce() { return _normalForce; }

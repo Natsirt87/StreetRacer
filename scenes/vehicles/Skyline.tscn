@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://dihproqlibro6"]
+[gd_scene load_steps=29 format=3 uid="uid://dihproqlibro6"]
 
 [ext_resource type="Script" path="res://src/vehicle_physics/Vehicle.cs" id="1_1wswf"]
 [ext_resource type="Script" path="res://src/vehicle_physics/Wheel.cs" id="3_khrj6"]
@@ -408,13 +408,18 @@ shadow_mesh = SubResource("ArrayMesh_5q3ug")
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_moe2x"]
 points = PackedVector3Array(-92.4522, 57.8456, -38.2585, -92.4522, 57.8456, -33.7104, -88.2169, 175.969, 7.54301, -88.2531, 173.972, 4.69044, -88.1264, 168.245, -0.659554, -87.9273, 159.101, -5.67732, -91.5653, 58.467, -39.5988, -72.9229, -196.114, -32.519, -75.7283, -196.868, -26.6878, -88.3074, -126.154, -7.37283, -88.3436, 7.19579, 38.3141, -88.3798, 83.3258, 39.3451, -88.3617, 97.0425, 39.517, -88.3074, 104.367, 39.3222, -87.7644, 180.763, 16.8339, -88.6151, -111.372, -7.47593, -88.7237, -98.9423, -4.56608, -87.4567, -78.7002, 39.0931, -79.5292, 200.517, 6.17974, -72.0179, 200.206, -7.73942, -76.6332, 170.198, -14.0059, -72.2713, 195.767, -9.12561, -72.579, 171.131, -17.1105, -89.5563, 59.2661, -40.8819, -53.5383, 16.5622, -65.4896, -51.8912, -25.0318, -67.7006, -51.8912, -32.8002, -67.483, -51.475, -52.3321, -66.2113, -72.9952, -189.721, -33.1261, -49.846, -65.4718, -65.7416, -48.1085, -78.6114, -65.1688, -62.8957, -197.889, -35.2799, -63.7826, -200.686, -29.8382, -67.4206, -200.375, -26.9742, -69.5201, -200.686, -22.8615, -76.0541, -204.503, 0.302757, -77.4296, -199.576, -3.3861, -79.1853, -190.432, -2.49253, -87.7101, -138.006, -3.22572, -85.0495, 183.072, 43.2975, -81.9545, 195.767, 43.7557, -75.674, 211.127, 43.5037, -86.7509, -147.95, 5.90479, -85.6468, -153.587, 16.8339, -83.674, -156.073, 27.9005, -81.1762, -157.272, 37.5236, 87.4386, -78.7002, 39.0931, -76.3437, 206.954, 6.40886, -70.1174, 201.627, -8.67882, -45.7736, 19.3588, -68.7431, -69.7554, 197.765, -10.2025, -43.7827, -30.6251, -71.9623, -42.7691, -51.2667, -70.6334, -41.5021, -77.3241, -66.5894, -41.4659, -201.041, -35.8412, -59.3482, -201.485, -30.8807, -60.9772, -208.765, -0.464798, -58.3166, -213.914, 18.4148, -63.3844, -211.872, 21.5653, -65.9184, -210.585, 24.6355, -67.4568, -209.12, 30.7989, -74.0088, -203.616, 20.0874, -73.1038, -202.284, 32.0132, -78.8233, -191.275, 4.7821, -83.9997, -163.042, 13.3398, 81.9364, 195.767, 43.7557, -57.9003, 219.872, 43.687, -69.502, 214.722, 43.5037, -68.1808, 214.456, 15.2186, -73.6106, 209.662, 6.63798, -75.2939, -189.988, 33.9264, -55.9093, -211.206, 33.5598, 81.1581, -157.272, 37.5236, 83.6558, -156.073, 27.9005, 85.6287, -153.587, 16.8339, 86.7327, -147.95, 5.90479, 87.692, -138.006, -3.22572, 88.2893, -126.154, -7.37283, 88.597, -111.372, -7.47593, 88.7056, -98.9423, -4.56608, 92.4522, 57.8456, -33.7104, 88.3255, 7.19579, 38.3141, 88.3617, 83.3258, 39.3451, 88.3436, 97.0425, 39.517, 85.0314, 183.072, 43.2975, -68.217, 213.657, 6.77545, -59.1853, 209.706, -8.07165, -57.3211, 206.599, -9.70987, -37.3936, 33.6526, -65.6615, -21.1402, 35.961, -66.681, -35.7646, 20.2023, -69.3274, -42.4976, 180.763, -21.7273, -19.4932, 21.534, -70.1179, -18.0271, -30.048, -72.9017, -17.4841, -52.5984, -71.2979, -16.8868, -77.1465, -67.3799, -7.62939e-06, -203.038, -35.8756, -37.0135, -206.057, -25.4276, -54.9863, -202.683, -29.8955, -7.62939e-06, -77.1909, -67.7121, -38.57, -217.377, 17.6931, -36.7058, -217.377, 20.4999, -58.7328, -211.517, 30.7645, 87.7463, 180.763, 16.8339, 75.6559, 211.127, 43.5037, 57.8822, 219.872, 43.687, -7.62939e-06, 232.39, 43.5954, -36.5248, 228.128, 43.561, -34.4795, 231.946, 15.8258, -33.5203, 231.813, 8.4595, -7.62939e-06, -218.708, 20.6602, 55.8912, -211.206, 33.5598, 75.2758, -189.988, 33.9264, 73.0857, -202.284, 32.0132, 83.9816, -163.042, 13.3398, 79.1672, -190.432, -2.49253, 75.7102, -196.868, -26.6878, 92.4522, 57.8456, -38.2585, 88.1988, 175.969, 7.54301, 88.2893, 104.367, 39.3222, -55.9093, 219.96, 6.95876, -33.8461, 224.533, -5.92936, -34.4976, 221.78, -9.09124, -7.62939e-06, 36.8932, -67.0591, -21.3212, 183.782, -21.7846, -7.62939e-06, 186.046, -21.7961, -18.0814, 223.156, -9.53803, -7.62939e-06, 21.6671, -70.6105, -7.62939e-06, -31.2021, -73.2798, -7.62939e-06, -53.8414, -71.5843, 41.4478, -201.041, -35.8412, 36.9954, -206.057, -25.4276, -7.62939e-06, -206.501, -27.5814, -34.4795, -206.767, -23.4114, -51.5474, -203.971, -27.0773, 16.8687, -77.1465, -67.3799, -7.62939e-06, -214.358, 0.00489807, -7.62939e-06, -218.708, 17.8993, 79.5111, 200.517, 6.17974, 76.3256, 206.954, 6.40886, 73.5925, 209.662, 6.63798, 68.1627, 214.456, 15.2186, 69.4839, 214.722, 43.5037, 34.4614, 231.946, 15.8258, 36.5067, 228.128, 43.561, 16.8687, 231.236, 43.4579, 15.7285, 234.343, 14.7489, -7.62939e-06, 234.787, 14.6458, -15.7466, 234.343, 14.7489, -16.8868, 231.236, 43.4579, -29.6108, 229.771, 43.3891, -30.5338, 232.656, 15.0468, -15.9457, 233.455, 8.41367, -17.9004, 227.063, -5.37946, -30.0814, 226.219, -4.52026, 38.5519, -217.377, 17.6931, 36.6877, -217.377, 20.4999, 58.7147, -211.517, 30.7645, 67.4387, -209.12, 30.7989, 73.9907, -203.616, 20.0874, 76.036, -204.503, 0.302757, 78.8052, -191.275, 4.7821, 77.4115, -199.576, -3.3861, 69.502, -200.686, -22.8615, 67.4025, -200.375, -26.9742, 72.9047, -196.114, -32.519, 91.5472, 58.467, -39.5988, 87.9092, 159.101, -5.67732, 88.1083, 168.245, -0.659554, 88.235, 173.972, 4.69044, -17.9366, 225.997, -6.92604, 21.1221, 35.961, -66.681, 19.475, 21.534, -70.1179, -7.62939e-06, 223.822, -9.99627, 21.3031, 183.782, -21.7846, -7.62939e-06, 226.974, -7.20098, 18.009, -30.048, -72.9017, 17.466, -52.5984, -71.2979, 62.8776, -197.889, -35.2799, 59.3301, -201.485, -30.8807, 54.9681, -202.683, -29.8955, 41.484, -77.3241, -66.5894, 51.5292, -203.971, -27.0773, 34.4614, -206.767, -23.4114, 71.9998, 200.206, -7.73942, 70.0993, 201.627, -8.67882, 68.1989, 213.657, 6.77545, 33.5022, 231.813, 8.4595, 30.5157, 232.656, 15.0468, 29.5927, 229.771, 43.3891, 15.9276, 233.455, 8.41367, -7.62939e-06, 233.899, 8.32203, -7.62939e-06, 227.995, -5.62004, 58.2985, -213.914, 18.4148, 63.3663, -211.872, 21.5653, 65.9002, -210.585, 24.6355, 60.9591, -208.765, -0.464798, 63.7645, -200.686, -29.8382, 48.0903, -78.6114, -65.1688, 49.8279, -65.4718, -65.7416, 51.4568, -52.3321, -66.2113, 72.9771, -189.721, -33.1261, 51.8731, -32.8002, -67.483, 51.8731, -25.0318, -67.7006, 53.5202, 16.5622, -65.4896, 89.5382, 59.2661, -40.8819, 72.5609, 171.131, -17.1105, 72.2532, 195.767, -9.12561, 76.6151, 170.198, -14.0059, 37.3755, 33.6526, -65.6615, 45.7555, 19.3588, -68.7431, 35.7465, 20.2023, -69.3274, 42.4795, 180.763, -21.7273, 43.7646, -30.6251, -71.9623, 18.0633, 223.156, -9.53803, 17.8823, 227.063, -5.37946, 17.9185, 225.997, -6.92604, 42.751, -51.2667, -70.6334, 69.7373, 197.765, -10.2025, 57.303, 206.599, -9.70987, 59.1672, 209.706, -8.07165, 33.8279, 224.533, -5.92936, 55.8912, 219.96, 6.95876, 30.0632, 226.219, -4.52026, 34.4795, 221.78, -9.09124)
 
-[sub_resource type="CylinderShape3D" id="CylinderShape3D_fkxto"]
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_anh32"]
+friction = 0.0
+bounce = 0.5
+absorbent = true
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_cpwma"]
 height = 0.24
 radius = 0.335
 
 [sub_resource type="Curve" id="Curve_03gk7"]
-_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.134831, 0.2), 2.66761, 2.66761, 0, 0, Vector2(0.550562, 0.747368), 1.57193, 1.57193, 0, 0, Vector2(0.835206, 0.926316), -0.920154, -0.920154, 0, 0, Vector2(1, 0.621053), 0.0, 0.0, 0, 0]
-point_count = 5
+_data = [Vector2(0, 0.621053), 0.0, 0.0, 0, 0, Vector2(0.541219, 0.8), 0.594039, 0.594039, 0, 0, Vector2(0.820788, 0.989474), -0.920154, -0.920154, 0, 0, Vector2(1, 0.831579), 0.0, 0.0, 0, 0]
+point_count = 4
 
 [node name="Skyline" type="RigidBody3D" node_paths=PackedStringArray("Wheels", "Drivetrain")]
 transform = Transform3D(0.99994, -0.00793544, 0.00761686, 0.0077424, 0.999656, 0.0250478, -0.007813, -0.0249873, 0.999657, 0, 0, 0)
@@ -450,103 +455,162 @@ shape = SubResource("ConvexPolygonShape3D_moe2x")
 transform = Transform3D(2.425, 0, 0, 0, 2.425, 0, 0, 0, 2.425, 0, 0, 0)
 
 [node name="WheelFL" type="Node3D" parent="Wheels" node_paths=PackedStringArray("Tire", "VisualWheel")]
-transform = Transform3D(0.412371, 0, 0, 0, 0.412371, 0, 0, 0, 0.412371, -0.31, -0.157, -0.595503)
+transform = Transform3D(0.412371, -5.96629e-10, 0, 1.30967e-10, 0.412371, -9.31323e-10, -4.65661e-10, -1.86265e-09, 0.412371, -0.31, -0.1, -0.596)
 script = ExtResource("3_khrj6")
 Tire = NodePath("../../TireModel")
-VisualWheel = NodePath("VisualWheel")
+VisualWheel = NodePath("WheelBody/WheelMesh")
 MaxSteeringAngle = 25.0
 Radius = 0.335
 Width = 0.12
 
-[node name="Spring" type="ShapeCast3D" parent="Wheels/WheelFL" node_paths=PackedStringArray("Vehicle")]
-transform = Transform3D(-4.4005e-08, 1, -9.31323e-10, -1, -4.35248e-08, 0, -1.86265e-09, -4.65661e-10, 1, -5.96046e-08, 0.45, 0)
-shape = SubResource("CylinderShape3D_fkxto")
-target_position = Vector3(0.45, 0, 0)
-collision_mask = 13
+[node name="Spring" type="Node3D" parent="Wheels/WheelFL" node_paths=PackedStringArray("Vehicle", "Wheel")]
+transform = Transform3D(-4.39904e-08, 1, -1.86265e-09, -1, -4.30591e-08, 0, -3.72529e-09, -4.65661e-10, 1, 0, 0, 0)
 script = ExtResource("4_5m3ow")
 Vehicle = NodePath("../../..")
-SpringRate = 12.0
-CompressionDamping = 0.8
-ReboundDamping = 0.9
+Wheel = NodePath("../WheelBody")
+SpringRate = 9.0
+CompressionDamping = 0.3
+ReboundDamping = 0.65
+EquilibriumLength = 0.2
 
-[node name="VisualWheel" type="Node3D" parent="Wheels/WheelFL"]
+[node name="WheelBody" type="RigidBody3D" parent="Wheels/WheelFL"]
+transform = Transform3D(1, 1.16415e-09, -9.31323e-10, 2.76486e-10, 1, 0, 0, 1.86265e-09, 1, 0, 0, 0)
+collision_layer = 2
+collision_mask = 15
+mass = 30.0
+physics_material_override = SubResource("PhysicsMaterial_anh32")
+max_contacts_reported = 1
+contact_monitor = true
 
-[node name="WheelMesh" parent="Wheels/WheelFL/VisualWheel" instance=ExtResource("4_ku4bm")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
+[node name="WheelMesh" parent="Wheels/WheelFL/WheelBody" instance=ExtResource("4_ku4bm")]
+transform = Transform3D(-1, 8.8301e-08, -9.31323e-10, -8.93633e-08, -1, -9.31323e-09, -4.65661e-10, -9.31323e-09, 1, 0, 0, 0)
+
+[node name="WheelCollision" type="CollisionShape3D" parent="Wheels/WheelFL/WheelBody"]
+transform = Transform3D(-4.4005e-08, 1, -9.31323e-10, -1, -4.35248e-08, 0, -1.86265e-09, -4.65661e-10, 1, 0, 0, 0)
+shape = SubResource("CylinderShape3D_cpwma")
+
+[node name="WheelJoint" type="JoltGeneric6DOFJoint3D" parent="Wheels/WheelFL"]
+linear_limit_y/upper = 0.4
+node_a = NodePath("../WheelBody")
+node_b = NodePath("../../..")
 
 [node name="WheelFR" type="Node3D" parent="Wheels" node_paths=PackedStringArray("Tire", "VisualWheel")]
-transform = Transform3D(0.412371, 0, 0, 0, 0.412371, 0, 0, 0, 0.412371, 0.31, -0.157, -0.595503)
+transform = Transform3D(0.412371, 0, 0, 0, 0.412371, 0, 0, 0, 0.412371, 0.31, -0.1, -0.596)
 script = ExtResource("3_khrj6")
 Index = 1
 Tire = NodePath("../../TireModel")
-VisualWheel = NodePath("VisualWheel")
+VisualWheel = NodePath("WheelBody/WheelMesh")
 MaxSteeringAngle = 25.0
 Radius = 0.335
 Width = 0.12
 
-[node name="Spring" type="ShapeCast3D" parent="Wheels/WheelFR" node_paths=PackedStringArray("Vehicle")]
-transform = Transform3D(-4.4005e-08, 1, -9.31323e-10, -1, -4.35248e-08, 0, -1.86265e-09, -4.65661e-10, 1, -5.96046e-08, 0.45, 0)
-shape = SubResource("CylinderShape3D_fkxto")
-target_position = Vector3(0.45, 0, 0)
-collision_mask = 13
+[node name="Spring" type="Node3D" parent="Wheels/WheelFR" node_paths=PackedStringArray("Vehicle", "Wheel")]
+transform = Transform3D(1, 1.16415e-09, -9.31323e-10, 2.76486e-10, 1, 0, 0, 1.86265e-09, 1, 0, 0, 0)
 script = ExtResource("4_5m3ow")
 Vehicle = NodePath("../../..")
-SpringRate = 12.0
-CompressionDamping = 0.8
-ReboundDamping = 0.9
+Wheel = NodePath("../WheelBody")
+SpringRate = 9.0
+CompressionDamping = 0.3
+ReboundDamping = 0.65
+EquilibriumLength = 0.2
 
-[node name="VisualWheel" type="Node3D" parent="Wheels/WheelFR"]
+[node name="WheelBody" type="RigidBody3D" parent="Wheels/WheelFR"]
+collision_layer = 2
+collision_mask = 15
+mass = 30.0
+physics_material_override = SubResource("PhysicsMaterial_anh32")
+max_contacts_reported = 1
+contact_monitor = true
 
-[node name="WheelMesh" parent="Wheels/WheelFR/VisualWheel" instance=ExtResource("4_ku4bm")]
+[node name="WheelMesh" parent="Wheels/WheelFR/WheelBody" instance=ExtResource("4_ku4bm")]
+transform = Transform3D(1, -1.74623e-09, 9.75782e-18, 1.74623e-09, 1, -7.45058e-09, 3.25261e-18, 7.45058e-09, 1, 0, 0, 0)
+
+[node name="WheelCollision" type="CollisionShape3D" parent="Wheels/WheelFR/WheelBody"]
+transform = Transform3D(-4.4005e-08, 1, -9.31323e-10, -1, -4.35248e-08, 0, -1.86265e-09, -4.65661e-10, 1, 0, 0, 0)
+shape = SubResource("CylinderShape3D_cpwma")
+
+[node name="WheelJoint" type="JoltGeneric6DOFJoint3D" parent="Wheels/WheelFR"]
+linear_limit_y/upper = 0.4
+node_a = NodePath("../WheelBody")
+node_b = NodePath("../../..")
 
 [node name="WheelRL" type="Node3D" parent="Wheels" node_paths=PackedStringArray("Tire", "VisualWheel")]
-transform = Transform3D(0.412371, 0, 0, 0, 0.412371, 0, 0, 0, 0.412371, -0.31, -0.157, 0.483)
+transform = Transform3D(0.412371, 0, 0, 0, 0.412371, 0, 0, 0, 0.412371, -0.31, -0.1, 0.483)
 script = ExtResource("3_khrj6")
 Index = 2
 Tire = NodePath("../../TireModel")
-VisualWheel = NodePath("VisualWheel")
+VisualWheel = NodePath("WheelBody/WheelMesh")
 Radius = 0.335
 Width = 0.12
 
-[node name="Spring" type="ShapeCast3D" parent="Wheels/WheelRL" node_paths=PackedStringArray("Vehicle")]
-transform = Transform3D(-4.4005e-08, 1, -9.31323e-10, -1, -4.35248e-08, 0, -1.86265e-09, -4.65661e-10, 1, 0, 0.45, 1.19209e-07)
-shape = SubResource("CylinderShape3D_fkxto")
-target_position = Vector3(0.45, 0, 0)
-collision_mask = 13
+[node name="Spring" type="Node3D" parent="Wheels/WheelRL" node_paths=PackedStringArray("Vehicle", "Wheel")]
+transform = Transform3D(1, 1.16415e-09, -9.31323e-10, 2.76486e-10, 1, 0, 0, 1.86265e-09, 1, 0, 0, 0)
 script = ExtResource("4_5m3ow")
 Vehicle = NodePath("../../..")
-SpringRate = 12.0
-CompressionDamping = 0.8
-ReboundDamping = 0.9
+Wheel = NodePath("../WheelBody")
+SpringRate = 9.0
+CompressionDamping = 0.3
+ReboundDamping = 0.65
+EquilibriumLength = 0.2
 
-[node name="VisualWheel" type="Node3D" parent="Wheels/WheelRL"]
+[node name="WheelBody" type="RigidBody3D" parent="Wheels/WheelRL"]
+collision_layer = 2
+collision_mask = 15
+mass = 30.0
+physics_material_override = SubResource("PhysicsMaterial_anh32")
+max_contacts_reported = 1
+contact_monitor = true
 
-[node name="WheelMesh" parent="Wheels/WheelRL/VisualWheel" instance=ExtResource("4_ku4bm")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
+[node name="WheelMesh" parent="Wheels/WheelRL/WheelBody" instance=ExtResource("4_ku4bm")]
+transform = Transform3D(-1, 8.8301e-08, -9.31323e-10, -8.93633e-08, -1, -9.31323e-09, -4.65661e-10, -9.31323e-09, 1, 0, 0, 0)
+
+[node name="WheelCollision" type="CollisionShape3D" parent="Wheels/WheelRL/WheelBody"]
+transform = Transform3D(-4.4005e-08, 1, -9.31323e-10, -1, -4.35248e-08, 0, -1.86265e-09, -4.65661e-10, 1, 0, 0, 0)
+shape = SubResource("CylinderShape3D_cpwma")
+
+[node name="WheelJoint" type="JoltGeneric6DOFJoint3D" parent="Wheels/WheelRL"]
+linear_limit_y/upper = 0.4
+node_a = NodePath("../WheelBody")
+node_b = NodePath("../../..")
 
 [node name="WheelRR" type="Node3D" parent="Wheels" node_paths=PackedStringArray("Tire", "VisualWheel")]
-transform = Transform3D(0.412371, 0, 0, 0, 0.412371, 0, 0, 0, 0.412371, 0.31, -0.157, 0.483)
+transform = Transform3D(0.412371, -8.44011e-10, 0, -3.4197e-10, 0.412371, -9.31323e-10, -4.65661e-10, -3.72529e-09, 0.412371, 0.31, -0.1, 0.483)
 script = ExtResource("3_khrj6")
 Index = 3
 Tire = NodePath("../../TireModel")
-VisualWheel = NodePath("VisualWheel")
+VisualWheel = NodePath("WheelBody/WheelMesh")
 Radius = 0.335
 Width = 0.12
 
-[node name="Spring" type="ShapeCast3D" parent="Wheels/WheelRR" node_paths=PackedStringArray("Vehicle")]
-transform = Transform3D(-4.40341e-08, 1, -2.79397e-09, -1, -4.44707e-08, -1.86265e-09, 0, 1.39698e-09, 1, 0, 0.45, 0)
-shape = SubResource("CylinderShape3D_fkxto")
-target_position = Vector3(0.45, 0, 0)
-collision_mask = 13
+[node name="Spring" type="Node3D" parent="Wheels/WheelRR" node_paths=PackedStringArray("Vehicle", "Wheel")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 script = ExtResource("4_5m3ow")
 Vehicle = NodePath("../../..")
-SpringRate = 12.0
-CompressionDamping = 0.8
-ReboundDamping = 0.9
+Wheel = NodePath("../WheelBody")
+SpringRate = 9.0
+CompressionDamping = 0.3
+ReboundDamping = 0.65
+EquilibriumLength = 0.2
 
-[node name="VisualWheel" type="Node3D" parent="Wheels/WheelRR"]
+[node name="WheelBody" type="RigidBody3D" parent="Wheels/WheelRR"]
+collision_layer = 2
+collision_mask = 15
+mass = 30.0
+physics_material_override = SubResource("PhysicsMaterial_anh32")
+max_contacts_reported = 1
+contact_monitor = true
 
-[node name="WheelMesh" parent="Wheels/WheelRR/VisualWheel" instance=ExtResource("4_ku4bm")]
+[node name="WheelMesh" parent="Wheels/WheelRR/WheelBody" instance=ExtResource("4_ku4bm")]
+transform = Transform3D(1, -1.74623e-09, 9.75782e-18, 1.74623e-09, 1, -7.45058e-09, 3.25261e-18, 7.45058e-09, 1, 0, 0, 0)
+
+[node name="WheelCollision" type="CollisionShape3D" parent="Wheels/WheelRR/WheelBody"]
+transform = Transform3D(-4.4005e-08, 1, -9.31323e-10, -1, -4.35248e-08, 0, -1.86265e-09, -4.65661e-10, 1, 0, 0, 0)
+shape = SubResource("CylinderShape3D_cpwma")
+
+[node name="WheelJoint" type="JoltGeneric6DOFJoint3D" parent="Wheels/WheelRR"]
+linear_limit_y/upper = 0.4
+node_a = NodePath("../WheelBody")
+node_b = NodePath("../../..")
 
 [node name="Drivetrain" type="Node3D" parent="." node_paths=PackedStringArray("Vehicle")]
 transform = Transform3D(1, 2.32831e-10, -1.86265e-09, -2.03727e-09, 1, 0, 0, 3.72529e-09, 1, -0.02, -0.153, 0.07)
