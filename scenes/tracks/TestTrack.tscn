@@ -19,14 +19,14 @@ glow_enabled = true
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hlvub"]
 albedo_texture = ExtResource("1_362ka")
 roughness = 0.92
-uv1_scale = Vector3(200, 200, 200)
+uv1_scale = Vector3(100, 100, 100)
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_wa4ls"]
 material = SubResource("StandardMaterial3D_hlvub")
-size = Vector2(800, 800)
+size = Vector2(500, 500)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_kgurl"]
-size = Vector3(800, 0.1, 800)
+size = Vector3(500, 0.1, 500)
 
 [sub_resource type="BoxMesh" id="BoxMesh_4wdik"]
 size = Vector3(10, 0.5, 0.5)
@@ -1141,7 +1141,7 @@ transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 
 shape = SubResource("CylinderShape3D_j7c2l")
 
 [node name="PlayerController" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.10966, 7.06779)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 7.068)
 script = ExtResource("4_o2y44")
 VehiclePath = "res://scenes/vehicles/Skyline.tscn"
 CameraPath = "res://scenes/VehicleCamera.tscn"
