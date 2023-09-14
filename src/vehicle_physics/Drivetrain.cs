@@ -13,17 +13,17 @@ public partial class Drivetrain : Node
   [Export]
   public Vehicle Vehicle;
   [ExportGroup("Engine")]
-  [Export]
+  [Export(PropertyHint.Range, "0, 2000, suffix:Nm")]
   public float PeakTorque = 200;
   [Export]
-  public Curve EngineTorqueCurve;
-  [Export]
-  public float RedlineRpm = 7000;
-  [Export]
-  public float IdleRpm = 1000;
+  public Curve TorqueCurve;
+  [Export(PropertyHint.Range, "0, 20000, suffix:RPM")]
+  public float Redline = 7000;
+  [Export(PropertyHint.Range, "0, 20000, suffix:RPM")]
+  public float Idle = 1000;
   [Export]
   public bool AutomaticTrans = false;
-  [Export]
+  [Export(PropertyHint.Range, "0, 20, suffix:Kg")]
   public float FlywheelMass = 9;
   [Export]
   public float EngineFriction = 1;
@@ -36,18 +36,30 @@ public partial class Drivetrain : Node
   [Export]
   public float ClutchFriction = 1;
   [Export]
-  public float ClutchEngagementSpeed = 15;
+  public float FullClutchSpeed = 15;
   [Export]
-  public float StartingClutchLevel = 0.8f;
+  public float StartingClutch = 0.8f;
   [Export]
-  public float ClutchSlipTorqueModifier = 1.2f;
+  public float ClutchSlipTorque = 1.2f;
 
   [ExportGroup("Power Application")]
   [Export(PropertyHint.Range, "-1,1")]
   public float TorqueSplit = -1;
-  [Export(PropertyHint.Range, "0, 1")]
+
+  [Export(PropertyHint.Range, "-1, 1")]
   public float DrivetrainLoss = 0.15f;
 
+  [Export(PropertyHint.Range, "0, 1")]
+  public float FrontDiffLock = 0.5f;
+
+  [Export(PropertyHint.Range, "0, 1")]
+  public float RearDiffLock = 0.5f;
+
+  [Export(PropertyHint.Range, "0, 1")]
+  public float CenterDiffLock = 0.5f;
+
+  [Export(PropertyHint.Range, "0.1, 20")]
+  public float DiffLockSlip = 10f;
 
   public float Rpm;
   public int Gear = 2;
@@ -64,17 +76,17 @@ public partial class Drivetrain : Node
 	public override void _Ready()
 	{
     _wheels = Vehicle.Wheels;
-    Rpm = IdleRpm;
+    Rpm = Idle;
 
     float maxTorque = 0;
     for (float i = 0; i <= 1; i += 0.01f)
     {
-      float torque = EngineTorqueCurve.Sample(i);
+      float torque = TorqueCurve.Sample(i);
       
       if (torque > maxTorque)
       {
         maxTorque = torque;
-        _peakTorqueRpm = i * RedlineRpm;
+        _peakTorqueRpm = i * Redline;
       }
     }
 
@@ -85,22 +97,18 @@ public partial class Drivetrain : Node
 	public void PhysicsTick(double delta)
 	{
     if (Gear == 1) _clutch = 1;
-    if (Rpm >= RedlineRpm)
+    if (Rpm >= Redline)
     {
-      Rpm = RedlineRpm - 100;
       _throttle = 0;
     }
 
-    double engineTorque = EngineTorqueCurve.Sample(Rpm / RedlineRpm) * PeakTorque;
-
-    float frontWheelVelocity = (float)Math.Max(_wheels[0].AngularVelocity, _wheels[1].AngularVelocity);
-    float rearWheelVelocity = (float)Math.Max(_wheels[2].AngularVelocity, _wheels[3].AngularVelocity);
+    double engineTorque = TorqueCurve.Sample(Rpm / Redline) * PeakTorque;
     
     float wheelVelocity = TorqueSplit switch
     {
-      1 => frontWheelVelocity,
-      -1 => rearWheelVelocity,
-      _ => Math.Max(frontWheelVelocity, rearWheelVelocity),
+      1 => ComputeWheelVelocity(true),
+      -1 => ComputeWheelVelocity(false),
+      _ => Math.Max(ComputeWheelVelocity(true), ComputeWheelVelocity(false)),
     };
 
     ApplyAutomaticClutch(wheelVelocity);
@@ -119,7 +127,11 @@ public partial class Drivetrain : Node
       AutomaticShifting();
     }
 
-    Rpm = Math.Max(Rpm, IdleRpm);
+    Rpm = Math.Max(Rpm, Idle);
+    if (Rpm >= Redline)
+    {
+      Rpm = Redline;
+    }
 
     WheelSpeed = (float)_wheels.Select(wheel => Math.Abs(wheel.AngularVelocity * wheel.Radius)).Max() * 2.237f;
 	}
@@ -131,7 +143,7 @@ public partial class Drivetrain : Node
     {
       _clutch = 1;
     }
-    else if (Math.Abs(wheelSpeed) < ClutchEngagementSpeed && !_shifting)
+    else if (Math.Abs(wheelSpeed) < FullClutchSpeed && !_shifting)
     {
       if (_wheels.All(wheel => wheel.StationaryBraking) && Vehicle.LinearVelocity.Length() < 1)
       {
@@ -139,7 +151,7 @@ public partial class Drivetrain : Node
       }
       else
       {
-        _clutch = Mathf.Lerp(StartingClutchLevel, 0f, Math.Abs(wheelSpeed) / ClutchEngagementSpeed);
+        _clutch = Mathf.Lerp(StartingClutch, 0f, Math.Abs(wheelSpeed) / FullClutchSpeed);
       }
     }
     else if (!_shifting)
@@ -155,16 +167,66 @@ public partial class Drivetrain : Node
     Rpm = wheelVelocity * GearRatios[Gear] * FinalDriveRatio * 60f / (2f * Mathf.Pi);
   }
 
-  // TODO: Differential simulation
   private void OutputDriveTorque(double torque)
   {
     double wheelTorque = torque * GearRatios[Gear] * FinalDriveRatio * (1 - DrivetrainLoss);
-    double frontTorque = (1 + TorqueSplit) / 2 * wheelTorque;
-    double rearTorque = (1 - TorqueSplit) / 2 * wheelTorque;
+
+    double[] wheelSpeeds = _wheels.Select(wheel => wheel.AngularVelocity * wheel.Radius).ToArray();
+    double vehicleSpeed = (double)Vehicle.LinearVelocity.Dot(Vehicle.Forward);
+    if (Math.Abs(vehicleSpeed) < 1)
+      vehicleSpeed = vehicleSpeed < 0 ? -1 : 1;
+    double maxSpeedDiff = DiffLockSlip * vehicleSpeed;
+
+    double frontDiffRatio = 0.5;
+    double rearDiffRatio = 0.5;
+    double centerDiffRatio = (1 + TorqueSplit) / 2;
+
+    // Front diff
+    double wheelSpeedDiff = wheelSpeeds[0] - wheelSpeeds[1];
+    double diffLock = (2 * FrontDiffLock) - 1;
+    frontDiffRatio += wheelSpeedDiff / maxSpeedDiff * diffLock;
+    frontDiffRatio = Math.Clamp(frontDiffRatio, 0, 1);
+
+    // Rear diff
+    wheelSpeedDiff = wheelSpeeds[2] - wheelSpeeds[3];
+    diffLock = (2 * RearDiffLock) - 1;
+    rearDiffRatio += wheelSpeedDiff / maxSpeedDiff * diffLock;
+    rearDiffRatio = Math.Clamp(rearDiffRatio, 0, 1);
+
+    // Center diff
+    wheelSpeedDiff = ComputeWheelVelocity(false) - ComputeWheelVelocity(true);
+    diffLock = (2 * CenterDiffLock) - 1;
+    centerDiffRatio += wheelSpeedDiff / maxSpeedDiff * diffLock;
+    centerDiffRatio = Math.Clamp(centerDiffRatio, 0, 1);
+
+    Print("Front diff: " + frontDiffRatio);
+    Print("Rear diff: " + rearDiffRatio);
+    Print("Center diff: " + centerDiffRatio);
+
+    double frontTorque = centerDiffRatio * wheelTorque;
+    double rearTorque = (1 - centerDiffRatio) * wheelTorque;
 
     for (int i = 0; i < _wheels.Length; i++)
     {
-      _wheels[i].DriveTorque = i < 2 ? frontTorque/2 : rearTorque/2;
+      double curTorque;
+      double diffRatio;
+      if (i < 2)
+      {
+        curTorque = frontTorque;
+        diffRatio = frontDiffRatio;
+      }
+      else
+      {
+        curTorque = rearTorque;
+        diffRatio = rearDiffRatio;
+      }
+
+      if (i % 2 == 0)
+        curTorque *= 1 - diffRatio;
+      else
+        curTorque *= diffRatio;
+
+      _wheels[i].DriveTorque = curTorque;
     }
   }
 
@@ -172,17 +234,16 @@ public partial class Drivetrain : Node
   {
     float grippedWheelVelocity = Math.Abs(Vehicle.LinearVelocity.Dot(Vehicle.Forward)) / (float)_wheels[0].Radius;
     float shiftingRpm = grippedWheelVelocity * GearRatios[Gear] * FinalDriveRatio * 60f / (2f * Mathf.Pi);
-    float grippedEngineTorque = EngineTorqueCurve.Sample(shiftingRpm / RedlineRpm) * PeakTorque;
+    float grippedEngineTorque = TorqueCurve.Sample(shiftingRpm / Redline) * PeakTorque;
     float grippedWheelTorque = grippedEngineTorque * GearRatios[Gear] * FinalDriveRatio * (1 - DrivetrainLoss);
 
     if (Gear < GearRatios.Length - 1)
     {
       float upShiftRpm = grippedWheelVelocity * GearRatios[Gear+1] * FinalDriveRatio * 60f / (2f * Mathf.Pi);
-      
-      float upShiftEngineTorque = EngineTorqueCurve.Sample(upShiftRpm / RedlineRpm) * PeakTorque;
-      
+      float upShiftEngineTorque = TorqueCurve.Sample(upShiftRpm / Redline) * PeakTorque;
       float upShiftWheelTorque = upShiftEngineTorque * GearRatios[Gear+1] * FinalDriveRatio * (1 - DrivetrainLoss);
-      if (upShiftWheelTorque > grippedWheelTorque || RedlineRpm - shiftingRpm < 100 || (RedlineRpm - shiftingRpm < 800 && RedlineRpm - Rpm < 100))
+      
+      if (upShiftWheelTorque > grippedWheelTorque || Redline - shiftingRpm < 100 || (Redline - shiftingRpm < 800 && Redline - Rpm < 100))
       {
         ShiftUp();
         return;
@@ -191,12 +252,9 @@ public partial class Drivetrain : Node
 
     if (Gear > 2)
     {
-      Print("downshift logic");
       float downShiftRpm = grippedWheelVelocity * GearRatios[Gear-1] * FinalDriveRatio * 60f / (2f * Mathf.Pi);
-      Print("Down rpm: " + downShiftRpm);
-      float downShiftEngineTorque = EngineTorqueCurve.Sample(downShiftRpm / RedlineRpm) * PeakTorque;
-      float downShiftWheelTorque = downShiftEngineTorque *  GearRatios[Gear-1] * FinalDriveRatio * (1 - DrivetrainLoss);
-      if ((downShiftWheelTorque > grippedWheelTorque * 1.5 || Rpm < _peakTorqueRpm * 0.5) && RedlineRpm - downShiftRpm > 800)
+      
+      if ((downShiftRpm < _peakTorqueRpm) && Redline - downShiftRpm > 1000)
         ShiftDown();
     }
   }
@@ -208,7 +266,7 @@ public partial class Drivetrain : Node
       _clutch = 1;
       float target = wheelVelocity * GearRatios[Gear] * FinalDriveRatio * 60f / (2f * Mathf.Pi);
       float diff = target - Rpm;
-      if ((diff < 0 && _shiftFromRpm < target) || (diff > 0 && _shiftFromRpm > target) || target < IdleRpm)
+      if ((diff < 0 && _shiftFromRpm < target) || (diff > 0 && _shiftFromRpm > target) || target < Idle)
       {
         _shifting = false;
         _clutch = 0;
@@ -226,13 +284,13 @@ public partial class Drivetrain : Node
     double flywheelSpeed = 2 * Math.PI * Rpm / 60;
     double flywheelInertia = 0.5 * FlywheelMass * FlywheelRadius * FlywheelRadius;
 
-    // Calculate engine pwer & friction torques acting on flywheel
+    // Calculate engine power & friction torques acting on flywheel
     double f = PeakTorque * 0.0005 * EngineFriction;
     double engineFrictionTorque = -(f * flywheelSpeed + (3 * f));
     double flywheelTorque = engineTorque * _throttle;
     flywheelTorque += engineFrictionTorque;
 
-    double clutchRpm = Math.Max(wheelVelocity * GearRatios[Gear] * FinalDriveRatio * 60f / (2f * Mathf.Pi), IdleRpm);
+    double clutchRpm = Math.Max(wheelVelocity * GearRatios[Gear] * FinalDriveRatio * 60f / (2f * Mathf.Pi), Idle);
     double clutchSpeed = 2 * Math.PI * clutchRpm / 60;
 
     double clutchDiff = clutchSpeed - flywheelSpeed;
@@ -248,7 +306,14 @@ public partial class Drivetrain : Node
 
     Rpm = (float)flywheelSpeed * 60f / (2f * Mathf.Pi);
 
-    OutputDriveTorque(-clutchTorque * ClutchSlipTorqueModifier);
+    OutputDriveTorque(-clutchTorque * ClutchSlipTorque);
+  }
+
+  private float ComputeWheelVelocity(bool front)
+  {
+    float frontWheelVelocity = (float)Math.Max(_wheels[0].AngularVelocity, _wheels[1].AngularVelocity);
+    float rearWheelVelocity = (float)Math.Max(_wheels[2].AngularVelocity, _wheels[3].AngularVelocity);
+    return front ? frontWheelVelocity : rearWheelVelocity;
   }
 
   public void SetThrottle(float input)
@@ -263,7 +328,7 @@ public partial class Drivetrain : Node
   {
     if (Gear == GearRatios.Length - 1 || _shifting) return;
     float upShiftRpm = Rpm * (GearRatios[Gear+1] / GearRatios[Gear]);
-    if (upShiftRpm > IdleRpm || Gear == 0)
+    if (upShiftRpm > Idle || Gear == 0)
     {
       Gear = Mathf.Min(Gear + 1, GearRatios.Length - 1);
       if (Gear > 2)
@@ -279,7 +344,7 @@ public partial class Drivetrain : Node
   {
     if (Gear < 1 || _shifting) return;
     float downShiftRpm = Rpm * (GearRatios[Gear-1] / GearRatios[Gear]);
-    if (downShiftRpm < RedlineRpm)
+    if (downShiftRpm < Redline)
     {
       Gear = Mathf.Max(Gear - 1, 0);
       if (Gear > 1)
