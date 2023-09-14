@@ -109,7 +109,7 @@ public partial class Wheel : Node3D
     SlipRatio = ComputeSlipRatio(delta);
     
     TireLoad = _spring.GetNormalForce();
-    SlipAngle = ComputeSlipAngle();
+    SlipAngle = ComputeSlipAngle(Forward, Right);
 
     Vector3 tireForce = Tire.ComputeForce(SlipRatio, SlipAngle, TireLoad, Surface, Forward, Right);
 
@@ -200,18 +200,21 @@ public partial class Wheel : Node3D
   {
     float steeringAngle = RotationDegrees.Y;
     float desiredAngle = SteeringInput * MaxSteeringAngle +_initialAngle;
-    steeringAngle = Mathf.Lerp(steeringAngle, desiredAngle, _vehicle.SteeringSpeed * (float)delta);
-    
 
+    
+    desiredAngle /= 1 + (float)Math.Pow(_vehicle.SteeringSpeedSensitivity * _vehicle.LinearVelocity.Length(), _vehicle.StereringSensitivityCurve);
+    steeringAngle = Mathf.Lerp(steeringAngle, desiredAngle, _vehicle.SteeringSensitivity * (float)delta);
+    
     RotationDegrees = new Vector3(RotationDegrees.X, steeringAngle, RotationDegrees.Z);
+    
     WheelBody.RotationDegrees = Vector3.Zero;
   }
 
   // Calculate slip angle of the wheel, which determines lateral forces
-  private double ComputeSlipAngle()
+  private double ComputeSlipAngle(Vector3 forward, Vector3 right)
   {
-    float vLat = LinearVelocity.Dot(Right);
-    float vLong = LinearVelocity.Dot(Forward);
+    float vLat = LinearVelocity.Dot(right);
+    float vLong = LinearVelocity.Dot(forward);
 
     if (vLong > LowSpeedThreshold)
     {
@@ -234,20 +237,14 @@ public partial class Wheel : Node3D
     double vehicleSpeed = (double)_vehicle.LinearVelocity.Dot(Forward);
 
     if (_stationary)
-    {
       // Near-zero speeds
       slipRatio = (wheelSpeed - vehicleSpeed) * StationarySlip;
-    }
     else if (Math.Abs(wheelSpeed) > vehicleSpeed * _vehicle.MaxSlipRatio && Math.Abs(wheelSpeed) > StationaryWheelSpeed)
-    {
       // High slip
       slipRatio = (wheelSpeed - vehicleSpeed) / Math.Abs(wheelSpeed) * _vehicle.MaxSlipRatio;
-    }
     else if (Math.Abs(vehicleSpeed) > LowSpeedThreshold)
-    {
       // Standard conditions
       slipRatio = (wheelSpeed - vehicleSpeed) / Math.Abs(vehicleSpeed);
-    }
     else
     {
       // Fancy integration for low speeds
