@@ -17,7 +17,7 @@ public partial class Vehicle : RigidBody3D
   public bool Controlled = true;
   [Export]
   public float SteeringSpeed = 0.5f;
-  [Export]
+  [Export(PropertyHint.Range, "0, 20, suffix:m")]
   public float FrontalArea = 2.2f;
   [Export]
   public float DragCoefficient = 0.35f;
@@ -25,8 +25,6 @@ public partial class Vehicle : RigidBody3D
   public double MaxSlipRatio = 3;
   [Export]
   public double SlipRatioRelaxation = 0.1;
-  [Export]
-  public double WheelSpinCoefficient = 0.7;
   [Export]
   public int HudUpdateFrequency = 20;
 
@@ -173,7 +171,7 @@ public partial class Vehicle : RigidBody3D
           (float)wheel.SlipRatio,
           (float)wheel.LatSlip,
           (float)wheel.LongSlip,
-          (float)wheel.LongForce,
+          (float)wheel.DriveTorque,
           (float)wheel.TireLoad
         };
         _prevDebugValues[i].Add(curDebugValues);

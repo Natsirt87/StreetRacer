@@ -418,16 +418,18 @@ absorbent = true
 height = 0.24
 radius = 0.335
 
-[sub_resource type="Curve" id="Curve_03gk7"]
-_data = [Vector2(0, 0.621053), 0.0, 0.0, 0, 0, Vector2(0.541219, 0.8), 0.594039, 0.594039, 0, 0, Vector2(0.820788, 0.989474), -0.920154, -0.920154, 0, 0, Vector2(1, 0.831579), 0.0, 0.0, 0, 0]
+[sub_resource type="Curve" id="Curve_3j47a"]
+_data = [Vector2(0, 0.347368), 0.0, 0.0, 0, 0, Vector2(0.506073, 0.810526), 0.13, 0.13, 0, 0, Vector2(0.748988, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.726316), -1.3, 0.0, 0, 0]
 point_count = 4
 
 [node name="Skyline" type="RigidBody3D" node_paths=PackedStringArray("Wheels", "Drivetrain")]
 transform = Transform3D(0.99994, -0.00793544, 0.00761686, 0.0077424, 0.999656, 0.0250478, -0.007813, -0.0249873, 0.999657, 0, 0, 0)
 collision_layer = 2
 collision_mask = 15
-mass = 1560.0
+mass = 1542.0
 inertia = Vector3(1560, 3200, 700)
+center_of_mass_mode = 1
+center_of_mass = Vector3(0, 0, -0.32)
 physics_material_override = SubResource("PhysicsMaterial_8tubw")
 continuous_cd = true
 script = ExtResource("1_1wswf")
@@ -435,7 +437,6 @@ Wheels = [NodePath("Wheels/WheelFL"), NodePath("Wheels/WheelFR"), NodePath("Whee
 Drivetrain = NodePath("Drivetrain")
 SteeringSpeed = 2.0
 MaxSlipRatio = 2.5
-WheelSpinCoefficient = 0.0
 
 [node name="Body" type="MeshInstance3D" parent="."]
 transform = Transform3D(-0.01, -8.74228e-10, 3.82137e-17, 0, -4.37114e-10, -0.01, 8.74228e-10, -0.01, 4.37114e-10, 0, 0, 0)
@@ -471,10 +472,10 @@ transform = Transform3D(-4.39904e-08, 1, -1.86265e-09, -1, -4.30591e-08, 0, -3.7
 script = ExtResource("4_5m3ow")
 Vehicle = NodePath("../../..")
 Wheel = NodePath("../WheelBody")
-SpringRate = 9.0
-CompressionDamping = 0.6
+SpringRate = 12.0
+CompressionDamping = 0.5
 ReboundDamping = 0.6
-EquilibriumLength = 0.2
+EquilibriumLength = 0.13
 
 [node name="WheelBody" type="RigidBody3D" parent="Wheels/WheelFL"]
 transform = Transform3D(1, 1.16415e-09, -9.31323e-10, 2.76486e-10, 1, 0, 0, 1.86265e-09, 1, 0, 0, 0)
@@ -493,7 +494,7 @@ transform = Transform3D(-4.4005e-08, 1, -9.31323e-10, -1, -4.35248e-08, 0, -1.86
 shape = SubResource("CylinderShape3D_cpwma")
 
 [node name="WheelJoint" type="JoltGeneric6DOFJoint3D" parent="Wheels/WheelFL"]
-linear_limit_y/upper = 0.4
+linear_limit_y/upper = 0.5
 node_a = NodePath("../WheelBody")
 node_b = NodePath("../../..")
 
@@ -514,10 +515,10 @@ transform = Transform3D(1, 1.16415e-09, -9.31323e-10, 2.76486e-10, 1, 0, 0, 1.86
 script = ExtResource("4_5m3ow")
 Vehicle = NodePath("../../..")
 Wheel = NodePath("../WheelBody")
-SpringRate = 9.0
-CompressionDamping = 0.6
+SpringRate = 12.0
+CompressionDamping = 0.5
 ReboundDamping = 0.6
-EquilibriumLength = 0.2
+EquilibriumLength = 0.13
 
 [node name="WheelBody" type="RigidBody3D" parent="Wheels/WheelFR"]
 collision_layer = 2
@@ -535,7 +536,7 @@ transform = Transform3D(-4.4005e-08, 1, -9.31323e-10, -1, -4.35248e-08, 0, -1.86
 shape = SubResource("CylinderShape3D_cpwma")
 
 [node name="WheelJoint" type="JoltGeneric6DOFJoint3D" parent="Wheels/WheelFR"]
-linear_limit_y/upper = 0.4
+linear_limit_y/upper = 0.5
 node_a = NodePath("../WheelBody")
 node_b = NodePath("../../..")
 
@@ -555,10 +556,10 @@ transform = Transform3D(1, 1.16415e-09, -9.31323e-10, 2.76486e-10, 1, 0, 0, 1.86
 script = ExtResource("4_5m3ow")
 Vehicle = NodePath("../../..")
 Wheel = NodePath("../WheelBody")
-SpringRate = 9.0
-CompressionDamping = 0.6
+SpringRate = 12.0
+CompressionDamping = 0.5
 ReboundDamping = 0.6
-EquilibriumLength = 0.2
+EquilibriumLength = 0.16
 
 [node name="WheelBody" type="RigidBody3D" parent="Wheels/WheelRL"]
 collision_layer = 2
@@ -576,7 +577,7 @@ transform = Transform3D(-4.4005e-08, 1, -9.31323e-10, -1, -4.35248e-08, 0, -1.86
 shape = SubResource("CylinderShape3D_cpwma")
 
 [node name="WheelJoint" type="JoltGeneric6DOFJoint3D" parent="Wheels/WheelRL"]
-linear_limit_y/upper = 0.4
+linear_limit_y/upper = 0.5
 node_a = NodePath("../WheelBody")
 node_b = NodePath("../../..")
 
@@ -592,14 +593,13 @@ Radius = 0.335
 Width = 0.12
 
 [node name="Spring" type="Node3D" parent="Wheels/WheelRR" node_paths=PackedStringArray("Vehicle", "Wheel")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 script = ExtResource("4_5m3ow")
 Vehicle = NodePath("../../..")
 Wheel = NodePath("../WheelBody")
-SpringRate = 9.0
-CompressionDamping = 0.6
+SpringRate = 12.0
+CompressionDamping = 0.5
 ReboundDamping = 0.6
-EquilibriumLength = 0.2
+EquilibriumLength = 0.16
 
 [node name="WheelBody" type="RigidBody3D" parent="Wheels/WheelRR"]
 collision_layer = 2
@@ -617,21 +617,28 @@ transform = Transform3D(-4.4005e-08, 1, -9.31323e-10, -1, -4.35248e-08, 0, -1.86
 shape = SubResource("CylinderShape3D_cpwma")
 
 [node name="WheelJoint" type="JoltGeneric6DOFJoint3D" parent="Wheels/WheelRR"]
-linear_limit_y/upper = 0.4
+linear_limit_y/upper = 0.5
 node_a = NodePath("../WheelBody")
 node_b = NodePath("../../..")
 
 [node name="Drivetrain" type="Node3D" parent="." node_paths=PackedStringArray("Vehicle")]
 transform = Transform3D(1, 2.32831e-10, -1.86265e-09, -2.03727e-09, 1, 0, 0, 3.72529e-09, 1, -0.02, -0.153, 0.07)
 script = ExtResource("6_i8g2p")
-PeakTorque = 500.0
 Vehicle = NodePath("..")
-EngineTorqueCurve = SubResource("Curve_03gk7")
-RedlineCutTime = 0.0
+PeakTorque = 390.0
+TorqueCurve = SubResource("Curve_3j47a")
+Redline = 8000.0
+Idle = 800.0
+AutomaticTrans = true
+FlywheelMass = 7.0
 GearRatios = PackedFloat32Array(-2.8, 0, 3.827, 2.36, 1.685, 1.312, 1, 0.793)
 FinalDriveRatio = 3.545
+FullClutchSpeed = 12.0
+ClutchSlipTorque = 2.0
 TorqueSplit = -0.5
-FlywheelMass = 5.0
+FrontDiffLock = 0.55
+RearDiffLock = 0.75
+CenterDiffLock = 0.55
 
 [node name="TireModel" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.02, -0.153, 0.07)

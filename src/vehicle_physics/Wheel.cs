@@ -22,16 +22,14 @@ public partial class Wheel : Node3D
   public Node3D VisualWheel;
   [Export]
   public RigidBody3D WheelBody;
-  [Export]
+  [Export(PropertyHint.Range, "0, 40, degrees")]
   public float MaxSteeringAngle;
-  [Export]
+  [Export(PropertyHint.Range, "0, 200, suffix:Kg")]
   public double Mass = 60;
-  [Export]
+  [Export(PropertyHint.Range, "0, 5, suffix:m")]
   public double Radius = 0.3;
-  [Export]
+  [Export(PropertyHint.Range, "0, 2, suffix:m")]
   public double Width = 0.15;
-  [Export]
-  public float WheelMovementRate = 30f;
 
   // General public variables
   public Vector3 LinearVelocity;
@@ -244,7 +242,6 @@ public partial class Wheel : Node3D
     {
       // High slip
       slipRatio = (wheelSpeed - vehicleSpeed) / Math.Abs(wheelSpeed) * _vehicle.MaxSlipRatio;
-      Torque -= _vehicle.WheelSpinCoefficient * Torque * (slipRatio / _vehicle.MaxSlipRatio);
     }
     else if (Math.Abs(vehicleSpeed) > LowSpeedThreshold)
     {
