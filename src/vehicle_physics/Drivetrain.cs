@@ -110,7 +110,6 @@ public partial class Drivetrain : Node
     };
 
     ApplyAutomaticClutch(wheelVelocity);
-    Print("Clutch: " + _clutch);
 
     if (_clutch > 0)
     {
