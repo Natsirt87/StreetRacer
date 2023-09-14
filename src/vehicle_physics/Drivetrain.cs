@@ -39,8 +39,6 @@ public partial class Drivetrain : Node
   public float FullClutchSpeed = 15;
   [Export]
   public float StartingClutch = 0.8f;
-  [Export]
-  public float ClutchSlipTorque = 1.2f;
 
   [ExportGroup("Power Application")]
   [Export(PropertyHint.Range, "-1,1")]
@@ -112,6 +110,7 @@ public partial class Drivetrain : Node
     };
 
     ApplyAutomaticClutch(wheelVelocity);
+    Print("Clutch: " + _clutch);
 
     if (_clutch > 0)
     {
@@ -184,24 +183,17 @@ public partial class Drivetrain : Node
     // Front diff
     double wheelSpeedDiff = wheelSpeeds[0] - wheelSpeeds[1];
     double diffLock = (2 * FrontDiffLock) - 1;
-    frontDiffRatio += wheelSpeedDiff / maxSpeedDiff * diffLock;
-    frontDiffRatio = Math.Clamp(frontDiffRatio, 0, 1);
+    frontDiffRatio += Math.Clamp(wheelSpeedDiff * diffLock / (2 * maxSpeedDiff), -0.5, 0.5);
 
     // Rear diff
     wheelSpeedDiff = wheelSpeeds[2] - wheelSpeeds[3];
     diffLock = (2 * RearDiffLock) - 1;
-    rearDiffRatio += wheelSpeedDiff / maxSpeedDiff * diffLock;
-    rearDiffRatio = Math.Clamp(rearDiffRatio, 0, 1);
+    rearDiffRatio += Math.Clamp(wheelSpeedDiff * diffLock / (2 * maxSpeedDiff), -0.5, 0.5);
 
     // Center diff
     wheelSpeedDiff = ComputeWheelVelocity(false) - ComputeWheelVelocity(true);
     diffLock = (2 * CenterDiffLock) - 1;
-    centerDiffRatio += wheelSpeedDiff / maxSpeedDiff * diffLock;
-    centerDiffRatio = Math.Clamp(centerDiffRatio, 0, 1);
-
-    Print("Front diff: " + frontDiffRatio);
-    Print("Rear diff: " + rearDiffRatio);
-    Print("Center diff: " + centerDiffRatio);
+    centerDiffRatio += Math.Clamp(wheelSpeedDiff * diffLock / (2 * maxSpeedDiff), -0.5, 0.5);
 
     double frontTorque = centerDiffRatio * wheelTorque;
     double rearTorque = (1 - centerDiffRatio) * wheelTorque;
@@ -306,7 +298,7 @@ public partial class Drivetrain : Node
 
     Rpm = (float)flywheelSpeed * 60f / (2f * Mathf.Pi);
 
-    OutputDriveTorque(-clutchTorque * ClutchSlipTorque);
+    OutputDriveTorque(-clutchTorque);
   }
 
   private float ComputeWheelVelocity(bool front)
