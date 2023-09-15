@@ -1,7 +1,7 @@
 [gd_scene load_steps=15 format=3 uid="uid://ddd0c01382wkb"]
 
 [ext_resource type="Texture2D" uid="uid://bxlayqus8a8x1" path="res://assets/textures/asphalt_road.png" id="1_362ka"]
-[ext_resource type="Script" path="res://src/control/PlayerController.cs" id="4_o2y44"]
+[ext_resource type="Script" path="res://src/interaction/PlayerController.cs" id="2_g531l"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_0o4ra"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -1142,7 +1142,7 @@ shape = SubResource("CylinderShape3D_j7c2l")
 
 [node name="PlayerController" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 7.068)
-script = ExtResource("4_o2y44")
+script = ExtResource("2_g531l")
 VehiclePath = "res://scenes/vehicles/Skyline.tscn"
 CameraPath = "res://scenes/VehicleCamera.tscn"
 

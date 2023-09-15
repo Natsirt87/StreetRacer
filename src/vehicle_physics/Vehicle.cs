@@ -9,29 +9,36 @@ namespace VehiclePhysics;
 
 public partial class Vehicle : RigidBody3D
 {
+  [ExportGroup("Node References")]
   [Export]
   public Wheel[] Wheels;
   [Export]
   public Drivetrain Drivetrain;
   [Export]
+  public MeshInstance3D Mesh;
+
+  [ExportGroup("Dynamics")]
+  [Export]
   public bool Controlled = true;
   [Export]
   public float SteeringSensitivity = 1f;
+  [Export(PropertyHint.Range, "0, 1")]
+  public float SteeringSpeedSensitivity = 0.3f;
+  [Export(PropertyHint.Range, "0, 1")]
+  public float SteeringSensitivitySlope = 0.3f;
   [Export]
-  public float SteeringSpeedSensitivity = 0;
-  [Export]
-  public float StereringSensitivityCurve = 1;
+  public float StereringSensitivityCurve = 2;
   [Export(PropertyHint.Range, "0, 20, suffix:m")]
   public float FrontalArea = 2.2f;
   [Export]
   public float DragCoefficient = 0.35f;
   [Export]
   public double MaxSlipRatio = 3;
-  
   [Export]
   public double SlipRatioRelaxation = 0.1;
   [Export]
   public int HudUpdateFrequency = 20;
+
 
   public float FrontAxleDist;
   public float RearAxleDist;
@@ -51,6 +58,7 @@ public partial class Vehicle : RigidBody3D
   private int _hudIter;
   private List<float[]> _prevHudValues;
   private List<float[]>[] _prevDebugValues;
+  private float _brakeInput;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -140,6 +148,19 @@ public partial class Vehicle : RigidBody3D
     if (Controlled)
     {
       UpdateHud();
+    }
+
+    if (_brakeInput > 0)
+    {
+      // Set emissive to 1
+      BaseMaterial3D brakeMat = Mesh.Mesh.SurfaceGetMaterial(7) as BaseMaterial3D;
+      brakeMat.EmissionEnergyMultiplier = Mathf.Lerp(brakeMat.EmissionEnergyMultiplier, 1, (float)delta * 7);
+    }
+    else
+    {
+      // Set emissive to 0
+      BaseMaterial3D brakeMat = Mesh.Mesh.SurfaceGetMaterial(7) as BaseMaterial3D;
+      brakeMat.EmissionEnergyMultiplier = Mathf.Lerp(brakeMat.EmissionEnergyMultiplier, 0, (float)delta * 22);
     }
   }
 
@@ -248,6 +269,7 @@ public partial class Vehicle : RigidBody3D
 
   public void SetBrakeInput(float input)
   {
+    _brakeInput = input;
     for (int i = 0; i < Wheels.Length; i++)
     {
       if (i > 1 && _handbrake)

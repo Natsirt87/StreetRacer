@@ -20,6 +20,8 @@ public partial class PlayerCamera : Node3D
   private float _cameraInputX;
   private float _cameraInputY;
 
+  private bool _chase;
+
   public override void _Ready()
   {
     GlobalRotation = Target.GlobalRotation;
@@ -28,9 +30,22 @@ public partial class PlayerCamera : Node3D
   public override void _PhysicsProcess(double delta)
   {
     GlobalPosition = GlobalPosition.Lerp(Target.GlobalPosition, FollowSpeed * (float)delta);
+    if (_chase)
+      ChaseMode(delta);
+    else
+      OrbitMode(delta);
+  }
+
+  private void OrbitMode(double delta)
+  {
     float rotationY = _cameraInputY * HorizontalSensitivity * (float)delta;
     float rotationX = _cameraInputX * VerticalSensitivity * (float)delta;
     Rotation = new Vector3(Rotation.X + rotationX, Rotation.Y + rotationY, 0);
+  }
+
+  private void ChaseMode(double delta)
+  {
+
   }
 
   public override void _Input(InputEvent @event)

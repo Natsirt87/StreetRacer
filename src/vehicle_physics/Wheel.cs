@@ -201,8 +201,15 @@ public partial class Wheel : Node3D
     float steeringAngle = RotationDegrees.Y;
     float desiredAngle = SteeringInput * MaxSteeringAngle +_initialAngle;
 
-    desiredAngle /= 1 + (float)Math.Pow(_vehicle.SteeringSpeedSensitivity * _vehicle.LinearVelocity.Length(), _vehicle.StereringSensitivityCurve);
-    steeringAngle = Mathf.Lerp(steeringAngle, desiredAngle, _vehicle.SteeringSensitivity * (float)delta);
+    float speedSensitivity = ((1 - _vehicle.SteeringSensitivitySlope) * 0.05f) + 0.05f;
+    desiredAngle /= 1 + (float)Math.Pow(speedSensitivity * _vehicle.LinearVelocity.Length(), _vehicle.StereringSensitivityCurve);
+
+    float steerSensitivity = _vehicle.SteeringSensitivity;
+    
+    if (Math.Abs(desiredAngle) > Math.Abs(steeringAngle) && Math.Sign(desiredAngle) == Math.Sign(steeringAngle))
+      steerSensitivity /= 1 + (1 - _vehicle.SteeringSpeedSensitivity) * 0.2f * _vehicle.LinearVelocity.Length();
+
+    steeringAngle = Mathf.Lerp(steeringAngle, desiredAngle, steerSensitivity * (float)delta);
     
     RotationDegrees = new Vector3(RotationDegrees.X, steeringAngle, RotationDegrees.Z);
     

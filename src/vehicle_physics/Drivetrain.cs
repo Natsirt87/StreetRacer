@@ -53,9 +53,6 @@ public partial class Drivetrain : Node
   [Export(PropertyHint.Range, "0, 1")]
   public float RearDiffLock = 0.5f;
 
-  [Export(PropertyHint.Range, "0, 1")]
-  public float CenterDiffLock = 0.5f;
-
   [Export(PropertyHint.Range, "0.1, 20")]
   public float DiffLockSlip = 10f;
 
@@ -188,11 +185,6 @@ public partial class Drivetrain : Node
     wheelSpeedDiff = wheelSpeeds[2] - wheelSpeeds[3];
     diffLock = (2 * RearDiffLock) - 1;
     rearDiffRatio += Math.Clamp(wheelSpeedDiff * diffLock / (2 * maxSpeedDiff), -0.5, 0.5);
-
-    // Center diff
-    wheelSpeedDiff = ComputeWheelVelocity(false) - ComputeWheelVelocity(true);
-    diffLock = (2 * CenterDiffLock) - 1;
-    centerDiffRatio += Math.Clamp(wheelSpeedDiff * diffLock / (2 * maxSpeedDiff), -0.5, 0.5);
 
     double frontTorque = centerDiffRatio * wheelTorque;
     double rearTorque = (1 - centerDiffRatio) * wheelTorque;
