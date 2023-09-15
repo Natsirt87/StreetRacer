@@ -160,7 +160,7 @@ public partial class Vehicle : RigidBody3D
     {
       // Set emissive to 0
       BaseMaterial3D brakeMat = Mesh.Mesh.SurfaceGetMaterial(7) as BaseMaterial3D;
-      brakeMat.EmissionEnergyMultiplier = Mathf.Lerp(brakeMat.EmissionEnergyMultiplier, 0, (float)delta * 22);
+      brakeMat.EmissionEnergyMultiplier = Mathf.Lerp(brakeMat.EmissionEnergyMultiplier, 0, (float)delta * 30);
     }
   }
 

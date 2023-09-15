@@ -89,7 +89,7 @@ roughness = 0.2
 resource_name = "InnerBrakeLights"
 cull_mode = 2
 vertex_color_use_as_albedo = true
-albedo_color = Color(0.613327, 0.0313985, 0, 1)
+albedo_color = Color(0.482353, 0.0196078, 0, 1)
 roughness = 0.5
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_16217"]
@@ -430,9 +430,9 @@ Wheels = [NodePath("Wheels/WheelFL"), NodePath("Wheels/WheelFR"), NodePath("Whee
 Drivetrain = NodePath("Drivetrain")
 Mesh = NodePath("Body")
 SteeringSensitivity = 5.0
-SteeringSpeedSensitivity = 0.75
+SteeringSpeedSensitivity = 0.9
 SteeringSensitivitySlope = 0.2
-StereringSensitivityCurve = 1.9
+StereringSensitivityCurve = 1.8
 MaxSlipRatio = 2.5
 
 [node name="Body" type="MeshInstance3D" parent="."]
@@ -631,9 +631,10 @@ FlywheelMass = 7.0
 GearRatios = PackedFloat32Array(-2.8, 0, 3.827, 2.36, 1.685, 1.312, 1, 0.793)
 FinalDriveRatio = 3.545
 ClutchFriction = 2.0
-TorqueSplit = -0.7
+FullClutchSpeed = 10.0
+TorqueSplit = -0.5
 FrontDiffLock = 0.6
-RearDiffLock = 0.52
+RearDiffLock = 0.6
 DiffLockSlip = 0.2
 
 [node name="TireModel" type="Node3D" parent="."]

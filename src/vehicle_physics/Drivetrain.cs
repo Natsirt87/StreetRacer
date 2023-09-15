@@ -53,7 +53,7 @@ public partial class Drivetrain : Node
   [Export(PropertyHint.Range, "0, 1")]
   public float RearDiffLock = 0.5f;
 
-  [Export(PropertyHint.Range, "0.1, 20")]
+  [Export(PropertyHint.Range, "0.01, 1")]
   public float DiffLockSlip = 10f;
 
   public float Rpm;
