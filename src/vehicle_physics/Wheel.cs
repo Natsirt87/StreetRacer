@@ -64,6 +64,7 @@ public partial class Wheel : Node3D
   private bool _isLeft;
   private float _initialAngle;
   private bool _stationary = false;
+  private PIDController _absController;
 
   // Called by the vehicle to initialize the wheel data and stuff
   public void Init(Vehicle vehicle)
@@ -76,6 +77,7 @@ public partial class Wheel : Node3D
     _spring = GetChild<Spring>(0);
     Surface = 0;
     AngularVelocity = 0;
+    _absController = new PIDController(_vehicle.BrakeTorqueGain, 0, _vehicle.BrakeTorqueDamping, 0);
 
     float frontMass = _vehicle.RearAxleDist / _vehicle.Wheelbase * _vehicle.Mass;
     float rearMass = _vehicle.FrontAxleDist / _vehicle.Wheelbase * _vehicle.Mass;
@@ -183,14 +185,45 @@ public partial class Wheel : Node3D
   // Calculate amount of torque that should be applied to this wheel based on user input
   private double ComputeTorque(double delta)
   {
+    float speed = _vehicle.LinearVelocity.Length();
     double inertia = Mass * Radius * Radius / 2;
-    double brakeMagnitude = Math.Abs(AngularVelocity * inertia) / delta;
-    double brakeTorque = -brakeMagnitude * BrakeInput * Math.Sign(AngularVelocity);
 
-    if (BrakeInput > 0.8 && (AngularVelocity * Radius) < StationaryWheelSpeed)
-      StationaryBraking = true;
+    double brakeTorque;
+    double brakeMagnitude = Math.Abs(AngularVelocity * inertia) / delta;
+    
+    if (Math.Abs(speed) < 3)
+    {
+      brakeTorque = -brakeMagnitude * BrakeInput * Math.Sign(AngularVelocity);
+      if (BrakeInput > 0.8 && (AngularVelocity * Radius) < StationaryWheelSpeed)
+        StationaryBraking = true;
+      else
+        StationaryBraking = false;
+    }
     else
+    {
       StationaryBraking = false;
+      _absController.ProportionalGain = _vehicle.BrakeTorqueGain;
+      _absController.DerivativeGain = _vehicle.BrakeTorqueDamping;
+
+      double targetSlipRatio = Tire.PeakSlipRatio;
+      if (speed > 0)
+        targetSlipRatio *= -1;
+      double error = targetSlipRatio - SlipRatio;
+      
+      double torqueOutput = _absController.Update(SlipRatio, targetSlipRatio, delta);
+      if (speed > 0)
+        torqueOutput = Mathf.Min(torqueOutput, 0);
+      else
+        torqueOutput = Mathf.Max(torqueOutput, 0);
+      if (Index == 0)
+      {
+        Print("Error: " + error);
+        Print("Torque: " + torqueOutput); 
+        Print("Slip Ratio: " + SlipRatio);
+        Print("-------------------------------------------");
+      }
+      brakeTorque = torqueOutput * BrakeInput;
+    }
 
     return DriveTorque + brakeTorque;
   }

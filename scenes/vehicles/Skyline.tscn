@@ -433,6 +433,8 @@ SteeringSensitivity = 5.0
 SteeringSpeedSensitivity = 0.9
 SteeringSensitivitySlope = 0.2
 StereringSensitivityCurve = 1.8
+BrakeTorqueGain = 20000.0
+BrakeTorqueDamping = 200.0
 MaxSlipRatio = 2.5
 
 [node name="Body" type="MeshInstance3D" parent="."]

@@ -33,6 +33,10 @@ public partial class Vehicle : RigidBody3D
   [Export]
   public float DragCoefficient = 0.35f;
   [Export]
+  public float BrakeTorqueGain = 100f;
+  [Export]
+  public float BrakeTorqueDamping = 100f;
+  [Export]
   public double MaxSlipRatio = 3;
   [Export]
   public double SlipRatioRelaxation = 0.1;
