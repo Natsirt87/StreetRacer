@@ -28,7 +28,7 @@ public partial class Vehicle : RigidBody3D
   [Export(PropertyHint.Range, "0, 1")]
   public float SteeringSensitivitySlope = 0.3f;
   [Export]
-  public float StereringSensitivityCurve = 2;
+  public float SteeringSensitivityCurve = 2;
   [Export(PropertyHint.Range, "0, 20, suffix:m")]
   public float FrontalArea = 2.2f;
   [Export]

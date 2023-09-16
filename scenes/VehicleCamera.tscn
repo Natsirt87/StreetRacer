@@ -12,10 +12,13 @@ MouseSensitivity = 80.0
 ControllerLinearity = 1.8
 AccelerationSmoothing = 0.1
 ChaseSmoothSpeed = 50.0
-ChaseVelocitySmooth = 2.5
+ChaseVelocitySmooth = 2.0
+OrbitRotationSmooth = 10.0
 ChaseMouseSmooth = 10.0
 ChaseSpeed = 2.0
-TransitionDuration = 0.8
+TransitionDuration = 1.5
+OversteerTransitionDuration = 1.0
+Damping = 50.0
 
 [node name="SpringArm3D" type="SpringArm3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.906307, 0.422618, 0, -0.422618, 0.906307, 0, 0, 0)

@@ -48,6 +48,10 @@ public partial class PlayerCamera : Node3D
   [Export]
   public float TransitionDuration = 1f;
   [Export]
+  public float OversteerTransitionDuration = 0.8f;
+  [Export]
+  public float Damping = 0.2f;
+  [Export]
   public float MouseResetDelay = 1f;
 
   public RigidBody3D Target;
@@ -61,9 +65,12 @@ public partial class PlayerCamera : Node3D
   private Vector2 _mouseInput;
   private Vector2 _chaseMouseRotation;
   private Vector2 _targetChaseMouseRotation;
+  private Vector2 _cameraVelocity;
 
   private float _transitionLevel;
   private float _transitionTimeElapsed;
+  private float _oversteerTimeElapsed;
+  private bool _oversteer;
   private bool _chase;
   
   private bool _mouseResetting;
@@ -93,6 +100,7 @@ public partial class PlayerCamera : Node3D
     _camera = _arm.GetChild(0) as Camera3D;
     _camera.Fov = Fov;
     _mouseInput = Vector2.Zero;
+    _oversteerTimeElapsed = TransitionDuration;
 
     Input.UseAccumulatedInput = false;
     Input.MouseMode = Input.MouseModeEnum.Captured;
@@ -122,6 +130,7 @@ public partial class PlayerCamera : Node3D
     _arm.SpringLength = Mathf.Lerp(_arm.SpringLength, armlength, AccelerationSmoothing * (float)delta);
 
     _mouseInput = Vector2.Zero;
+    Print("Camera velocity: " + _cameraVelocity);
   }
 
   private void OrbitMode(double delta)
@@ -134,7 +143,7 @@ public partial class PlayerCamera : Node3D
     if (_transitionTimeElapsed <= TransitionDuration)
     {
       _transitionTimeElapsed += (float)delta;
-      _transitionLevel = Mathf.Lerp(0.2f, 1, _transitionTimeElapsed / TransitionDuration);
+      _transitionLevel = Mathf.Lerp(0.25f, 1, _transitionTimeElapsed / TransitionDuration);
     }
 
     float yawRotation = _yawCameraInput * OrbitSensitivity * (float)delta;
@@ -162,18 +171,9 @@ public partial class PlayerCamera : Node3D
     smoothedTransform.Origin = GlobalTransform.Origin;
     GlobalTransform = smoothedTransform;
 
-    // Caclulate vehicle direction in order to get accurate yaw and pitch values
-    Vector3 vehicleDirection;
-    if (Target.LinearVelocity.LengthSquared() > 1)
-      vehicleDirection = Target.LinearVelocity.Normalized();
-    else
-      vehicleDirection = -Target.GlobalTransform.Basis.Z;
-    
-    // Calculate yaw and pitch for chase to use during transition so it's as seamless as possible
-    Basis vehicleBasis = Basis.LookingAt(vehicleDirection, Vector3.Up);
-    _yaw = GlobalRotation.Y - vehicleBasis.GetEuler().Y;
-    _pitch = GlobalRotation.X - vehicleBasis.GetEuler().X;
-    _direction = vehicleDirection;
+    _yaw = 0;
+    _pitch = 0;
+    _direction = -GlobalTransform.Basis.Z;
     _chaseMouseRotation = Vector2.Zero;
     _targetChaseMouseRotation = Vector2.Zero;
   }
@@ -191,17 +191,37 @@ public partial class PlayerCamera : Node3D
       _transitionLevel = Mathf.Lerp(0, 1, _transitionTimeElapsed / TransitionDuration);
     }
 
-    Vector3 velocityDirection = Target.LinearVelocity.Normalized();
+    Vector3 velocityDirection;
+    Vehicle vehicle = Target as Vehicle;
     
-    float velocitySmooth = ChaseVelocitySmooth;
-    if (Target is Vehicle vehicle && vehicle.Oversteering)
+    if (_oversteerTimeElapsed < TransitionDuration)
     {
-      velocityDirection = velocityDirection.Lerp(vehicle.Forward, ChaseVelocitySmooth * (float)delta * 50f);
+      _oversteerTimeElapsed += (float)delta;
+      _oversteerTimeElapsed = Mathf.Min(_oversteerTimeElapsed, OversteerTransitionDuration);
+    }
+    
+    if (vehicle.Oversteering && Math.Abs(vehicle.YawRate) > 0.05f)
+    {
+      if (!_oversteer)
+      {
+        _oversteer = true;
+        _oversteerTimeElapsed = OversteerTransitionDuration - _oversteerTimeElapsed;
+      }
+      velocityDirection = Target.LinearVelocity.Normalized().Lerp(vehicle.Forward, _oversteerTimeElapsed / OversteerTransitionDuration);
+    }
+    else
+    {
+      if (_oversteer)
+      {
+        _oversteer = false;
+        _oversteerTimeElapsed = OversteerTransitionDuration - _oversteerTimeElapsed;
+      }
+      velocityDirection = vehicle.Forward.Lerp(Target.LinearVelocity.Normalized(), _oversteerTimeElapsed / OversteerTransitionDuration);
     }
 
     velocityDirection.Y = 0;
 
-    _direction = _direction.Lerp(velocityDirection, velocitySmooth * (float)delta);
+    _direction = _direction.Lerp(velocityDirection, _transitionLevel * ChaseVelocitySmooth * (float)delta);
 
     Transform3D velocityTransform = new()
     {
@@ -222,7 +242,7 @@ public partial class PlayerCamera : Node3D
     };
 
     // Add controller pitch input
-    float pitchInput = _pitchCameraInput;
+    float pitchInput = CustomSensitivity(_pitchCameraInput);
     float targetPitch = pitchInput > 0 ? pitchInput * Mathf.DegToRad(15) : pitchInput * Mathf.DegToRad(35);
     _pitch = Mathf.LerpAngle(_pitch, targetPitch, _transitionLevel * ChaseSensitivity * (float)delta);
     Transform3D pitchTransform = new()
@@ -270,13 +290,19 @@ public partial class PlayerCamera : Node3D
       Origin = GlobalTransform.Origin
     };
 
-    Transform3D targetTransform = velocityTransform * yawTransform * pitchTransform * mouseInputTransform;
+    Transform3D targetTransform = velocityTransform * mouseInputTransform * yawTransform * pitchTransform;
     Transform3D smoothedTransform = GlobalTransform.InterpolateWith(targetTransform, ChaseSmoothSpeed * (float)delta);
+
+    Vector3 newRot = smoothedTransform.Basis.GetEuler();
+    Vector3 lastRot = GlobalTransform.Basis.GetEuler();
+
+    _cameraVelocity = new(Mathf.RadToDeg(newRot.Y - lastRot.Y) / (float)delta, Mathf.RadToDeg(newRot.X - lastRot.X) / (float)delta);
+    
     smoothedTransform.Origin = GlobalTransform.Origin;
     GlobalTransform = smoothedTransform;
 
-    _orbitYaw = GlobalRotationDegrees.Y;
-    _orbitPitch = GlobalRotationDegrees.X;
+    _orbitYaw = GlobalRotationDegrees.Y + (_cameraVelocity.X * Damping * (float)delta);
+    _orbitPitch = GlobalRotationDegrees.X + (_cameraVelocity.Y * Damping * (float)delta);
   }
 
   private float CustomSensitivity(float input)

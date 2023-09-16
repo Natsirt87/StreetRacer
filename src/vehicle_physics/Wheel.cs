@@ -231,25 +231,28 @@ public partial class Wheel : Node3D
     float steerSensitivity = _vehicle.SteeringSensitivity;
     float speedSensitivity = ((1 - _vehicle.SteeringSensitivitySlope) * 0.05f) + 0.05f;
     
-    if (!_vehicle.Oversteering && Math.Abs(_vehicle.YawRate) > 0.2f)
+    // Auto counter steer using PID
+    if (_vehicle.Oversteering && Math.Abs(_vehicle.YawRate) > 0.1f)
     {
-      desiredAngle /= 1 + (float)Math.Pow(speedSensitivity * vehicleSpeed, _vehicle.StereringSensitivityCurve);
-      
-      if (Math.Abs(desiredAngle) > Math.Abs(steeringAngle) && Math.Sign(desiredAngle) == Math.Sign(steeringAngle))
-        steerSensitivity /= 1 + (1 - _vehicle.SteeringSpeedSensitivity) * 0.2f * vehicleSpeed;
-    }
-    else
-    {
-      // Auto counter steer using PID
-      desiredAngle /= 1 + (float)Math.Pow(speedSensitivity * vehicleSpeed, _vehicle.StereringSensitivityCurve) * 0.2f;
-      if (Math.Abs(desiredAngle) > Math.Abs(steeringAngle) && Math.Sign(desiredAngle) == Math.Sign(steeringAngle))
-        steerSensitivity /= 1 + (1 - _vehicle.SteeringSpeedSensitivity) * 0.2f * vehicleSpeed;
-      _driftController.ProportionalGain = _vehicle.CounterSteerGain;
+      desiredAngle /= 1 + (float)Math.Pow(speedSensitivity * vehicleSpeed, _vehicle.SteeringSensitivityCurve) * 0.3f;
 
+      if (Math.Abs(desiredAngle) > Math.Abs(steeringAngle) && Math.Sign(desiredAngle) == Math.Sign(steeringAngle))
+      {
+        steerSensitivity /= 1 + (1 - _vehicle.SteeringSpeedSensitivity) * 0.1f * vehicleSpeed;
+      }
+
+      _driftController.ProportionalGain = _vehicle.CounterSteerGain;
       float curYawRate = _vehicle.YawRate;
       float targetYawRate = _vehicle.CounterSteerTarget * Math.Sign(curYawRate);
       float counterSteerAngle = (float)_driftController.Update(curYawRate, targetYawRate, delta);
       desiredAngle += Mathf.Clamp(counterSteerAngle, -_vehicle.CounterSteerMaxAngle, _vehicle.CounterSteerMaxAngle);
+    }
+    else
+    {
+      desiredAngle /= 1 + (float)Math.Pow(speedSensitivity * vehicleSpeed, _vehicle.SteeringSensitivityCurve);
+      
+      if (Math.Abs(desiredAngle) > Math.Abs(steeringAngle) && Math.Sign(desiredAngle) == Math.Sign(steeringAngle))
+        steerSensitivity /= 1 + (1 - _vehicle.SteeringSpeedSensitivity) * 0.2f * vehicleSpeed;
     }
 
     steeringAngle = Mathf.Lerp(steeringAngle, desiredAngle, steerSensitivity * (float)delta);
