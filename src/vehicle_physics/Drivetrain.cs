@@ -36,6 +36,8 @@ public partial class Drivetrain : Node
   [Export]
   public float ClutchFriction = 1;
   [Export]
+  public float FlywheelFriction = 1;
+  [Export]
   public float FullClutchSpeed = 15;
   [Export]
   public float StartingClutch = 0.8f;
@@ -280,9 +282,9 @@ public partial class Drivetrain : Node
     double clutchTorque = ClutchFriction * 0.01 * PeakTorque * (1 - _clutch) * Math.Abs(clutchDiff);
     if (clutchDiff < 0)
       clutchTorque *= -1;
-      flywheelTorque += clutchTorque;
+      flywheelTorque += clutchTorque * FlywheelFriction;
     if (clutchDiff > 0)
-      flywheelTorque += clutchTorque;
+      flywheelTorque += clutchTorque * FlywheelFriction;
 
     double acceleration = flywheelTorque / flywheelInertia;
     flywheelSpeed += acceleration * delta;

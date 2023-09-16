@@ -4,17 +4,19 @@
 
 [node name="VehicleCamera" type="Node3D"]
 script = ExtResource("1_fu16g")
-Fov = 70.0
+Fov = 72.0
+MaxFov = 90.0
 FovSmooth = 2.0
-HorizontalSensitivity = 80.0
-VerticalSensitivity = 80.0
-AccelerationSmoothing = 1.0
-AccelerationMagnitude = 0.05
+OrbitSensitivity = 80.0
+MouseSensitivity = 80.0
+ChaseSensitivity = 3.0
+ControllerLinearity = 1.5
+AccelerationSmoothing = 0.1
 ChaseVelocitySmooth = 2.0
-ChaseRotationSmooth = 1.0
-OrbitRotationSmooth = 25.0
+OrbitRotationSmooth = 10.0
+ChaseMouseSmooth = 40.0
 ChaseSpeed = 2.0
-IntermediateSmoothRatio = 8.0
+IntermediateSmoothRatio = 5.0
 
 [node name="SpringArm3D" type="SpringArm3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.906307, 0.422618, 0, -0.422618, 0.906307, 0, 0, 0)
