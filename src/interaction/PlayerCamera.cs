@@ -4,6 +4,7 @@ using System.IO;
 using System.Net.NetworkInformation;
 using System.Security.AccessControl;
 using static Godot.GD;
+using VehiclePhysics;
 
 namespace Interaction;
 
@@ -67,6 +68,7 @@ public partial class PlayerCamera : Node3D
   
   private bool _mouseResetting;
   private float _mouseChaseDuration;
+  private float _mouseSmoothSpeed;
 
   private SpringArm3D _arm;
   private float _initialArmLength;
@@ -190,14 +192,16 @@ public partial class PlayerCamera : Node3D
     }
 
     Vector3 velocityDirection = Target.LinearVelocity.Normalized();
+    
+    float velocitySmooth = ChaseVelocitySmooth;
+    if (Target is Vehicle vehicle && vehicle.Oversteering)
+    {
+      velocityDirection = velocityDirection.Lerp(vehicle.Forward, ChaseVelocitySmooth * (float)delta * 50f);
+    }
+
     velocityDirection.Y = 0;
 
-    Vector3 directionDifference = velocityDirection - _direction;
-    float easeThreshold = 0.25f * directionDifference.Length();
-    float lerpFactor = Mathf.Clamp(directionDifference.Length() / easeThreshold, 0, 1);
-    float easedChaseVelocitySmooth = Mathf.Lerp(0.7f * ChaseVelocitySmooth, ChaseVelocitySmooth, lerpFactor);
-
-    _direction = _direction.Lerp(velocityDirection, easedChaseVelocitySmooth * (float)delta);
+    _direction = _direction.Lerp(velocityDirection, velocitySmooth * (float)delta);
 
     Transform3D velocityTransform = new()
     {
@@ -228,7 +232,7 @@ public partial class PlayerCamera : Node3D
     };
 
     // Mouse rotation reset delay
-    float mouseSmoothSpeed = ChaseMouseSmooth;
+    
     if (_mouseInput == Vector2.Zero)
     {
       if (_mouseChaseDuration >= MouseResetDelay)
@@ -236,16 +240,14 @@ public partial class PlayerCamera : Node3D
         _mouseChaseDuration = 0;
         _targetChaseMouseRotation = Vector2.Zero;
         _mouseResetting = true;
+        _mouseSmoothSpeed = 0;
       }
-      else
+      else if (!_mouseResetting)
       {
         _mouseChaseDuration += (float)delta;
       }
 
-      Vector2 rotationDifference = _targetChaseMouseRotation - _chaseMouseRotation;
-      easeThreshold = 0.2f * rotationDifference.Length();
-      lerpFactor = Mathf.Clamp(directionDifference.Length() / easeThreshold, 0, 1);
-      mouseSmoothSpeed = Mathf.Lerp(0.5f * ChaseVelocitySmooth, ChaseVelocitySmooth, lerpFactor);
+      _mouseSmoothSpeed = Mathf.Lerp(_mouseSmoothSpeed, ChaseVelocitySmooth * 1.2f, 1f * (float)delta);
     }
     else
     {
@@ -255,10 +257,11 @@ public partial class PlayerCamera : Node3D
         _targetChaseMouseRotation = _chaseMouseRotation;
         _mouseResetting = false;
       }
+      _mouseSmoothSpeed = ChaseMouseSmooth;
     }
 
     _targetChaseMouseRotation -= _mouseInput * MouseSensitivity * (float)delta;
-    _chaseMouseRotation = _chaseMouseRotation.Lerp(_targetChaseMouseRotation, mouseSmoothSpeed * (float)delta); 
+    _chaseMouseRotation = _chaseMouseRotation.Lerp(_targetChaseMouseRotation, _mouseSmoothSpeed * (float)delta); 
     Basis mouseXBasis =  new(Vector3.Up, Mathf.DegToRad(_chaseMouseRotation.X));
     Basis mouseYBasis = new(Vector3.Right, Mathf.DegToRad(_chaseMouseRotation.Y));
     Transform3D mouseInputTransform = new()

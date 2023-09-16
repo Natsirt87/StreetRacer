@@ -78,6 +78,7 @@ public partial class Vehicle : RigidBody3D
   private List<float[]>[] _prevDebugValues;
   private float _brakeInput;
   private float _lastYaw;
+  private BaseMaterial3D _brakeMat;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -119,7 +120,14 @@ public partial class Vehicle : RigidBody3D
       _prevDebugValues[i] = new List<float[]>();
     
     _lastYaw = GlobalRotation.Y;
-	}
+
+    _brakeMat = new StandardMaterial3D
+    {
+      AlbedoColor = new Color(0.3f, 0, 0, 1),
+      EmissionEnabled = true,
+      Emission = new Color(1, 0, 0)
+    };
+  }
 
 	// Called every physics step. 'delta' is the elapsed time since the previous frame.
 	public void PhysicsTick(double delta)
@@ -183,14 +191,17 @@ public partial class Vehicle : RigidBody3D
     if (_brakeInput > 0)
     {
       // Set emissive to 1
-      BaseMaterial3D brakeMat = Mesh.Mesh.SurfaceGetMaterial(7) as BaseMaterial3D;
-      brakeMat.EmissionEnergyMultiplier = Mathf.Lerp(brakeMat.EmissionEnergyMultiplier, 1, (float)delta * 7);
+      //BaseMaterial3D brakeMat = Mesh.GetSurfaceOverrideMaterial(7) as BaseMaterial3D;
+      
+      _brakeMat.EmissionEnergyMultiplier = Mathf.Lerp(_brakeMat.EmissionEnergyMultiplier, 0.8f, (float)delta * 7);
+      Mesh.SetSurfaceOverrideMaterial(7, _brakeMat);
     }
     else
     {
       // Set emissive to 0
-      BaseMaterial3D brakeMat = Mesh.Mesh.SurfaceGetMaterial(7) as BaseMaterial3D;
-      brakeMat.EmissionEnergyMultiplier = Mathf.Lerp(brakeMat.EmissionEnergyMultiplier, 0, (float)delta * 30);
+      //BaseMaterial3D brakeMat = Mesh.GetSurfaceOverrideMaterial(7) as BaseMaterial3D;
+      _brakeMat.EmissionEnergyMultiplier = Mathf.Lerp(_brakeMat.EmissionEnergyMultiplier, 0f, (float)delta * 30);
+      Mesh.SetSurfaceOverrideMaterial(7, _brakeMat);
     }
 
     DetermineOversteer();

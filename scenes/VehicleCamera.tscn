@@ -11,8 +11,9 @@ OrbitSensitivity = 80.0
 MouseSensitivity = 80.0
 ControllerLinearity = 1.8
 AccelerationSmoothing = 0.1
-OrbitRotationSmooth = 10.0
-ChaseMouseSmooth = 40.0
+ChaseSmoothSpeed = 50.0
+ChaseVelocitySmooth = 2.5
+ChaseMouseSmooth = 10.0
 ChaseSpeed = 2.0
 TransitionDuration = 0.8
 

@@ -231,7 +231,7 @@ public partial class Wheel : Node3D
     float steerSensitivity = _vehicle.SteeringSensitivity;
     float speedSensitivity = ((1 - _vehicle.SteeringSensitivitySlope) * 0.05f) + 0.05f;
     
-    if (!_vehicle.Oversteering)
+    if (!_vehicle.Oversteering && Math.Abs(_vehicle.YawRate) > 0.2f)
     {
       desiredAngle /= 1 + (float)Math.Pow(speedSensitivity * vehicleSpeed, _vehicle.StereringSensitivityCurve);
       
@@ -241,7 +241,9 @@ public partial class Wheel : Node3D
     else
     {
       // Auto counter steer using PID
-      desiredAngle /= 1 + (float)Math.Pow(speedSensitivity * vehicleSpeed, _vehicle.StereringSensitivityCurve) * 0.5f;
+      desiredAngle /= 1 + (float)Math.Pow(speedSensitivity * vehicleSpeed, _vehicle.StereringSensitivityCurve) * 0.2f;
+      if (Math.Abs(desiredAngle) > Math.Abs(steeringAngle) && Math.Sign(desiredAngle) == Math.Sign(steeringAngle))
+        steerSensitivity /= 1 + (1 - _vehicle.SteeringSpeedSensitivity) * 0.2f * vehicleSpeed;
       _driftController.ProportionalGain = _vehicle.CounterSteerGain;
 
       float curYawRate = _vehicle.YawRate;
