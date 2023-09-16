@@ -48,6 +48,7 @@ public partial class Wheel : Node3D
   public double DriveTorque;
   public float SteeringInput;
   public float BrakeInput;
+  public bool Handbrake;
 
   // Unit vectors
   public Vector3 Forward;
@@ -65,6 +66,7 @@ public partial class Wheel : Node3D
   private float _initialAngle;
   private bool _stationary = false;
   private PIDController _absController;
+  private PIDController _driftController;
 
   // Called by the vehicle to initialize the wheel data and stuff
   public void Init(Vehicle vehicle)
@@ -78,6 +80,7 @@ public partial class Wheel : Node3D
     Surface = 0;
     AngularVelocity = 0;
     _absController = new PIDController(_vehicle.BrakeTorqueGain, 0, _vehicle.BrakeTorqueDamping, 0);
+    _driftController = new PIDController(_vehicle.CounterSteerGain, 0, _vehicle.CounterSteerDamping, 0);
 
     float frontMass = _vehicle.RearAxleDist / _vehicle.Wheelbase * _vehicle.Mass;
     float rearMass = _vehicle.FrontAxleDist / _vehicle.Wheelbase * _vehicle.Mass;
@@ -185,13 +188,13 @@ public partial class Wheel : Node3D
   // Calculate amount of torque that should be applied to this wheel based on user input
   private double ComputeTorque(double delta)
   {
-    float speed = _vehicle.LinearVelocity.Length();
+    float speed = _vehicle.LinearVelocity.Dot(_vehicle.Forward);
     double inertia = Mass * Radius * Radius / 2;
 
     double brakeTorque;
     double brakeMagnitude = Math.Abs(AngularVelocity * inertia) / delta;
     
-    if (Math.Abs(speed) < 3)
+    if (Math.Abs(speed) < 3 || Handbrake || TireLoad < 50)
     {
       brakeTorque = -brakeMagnitude * BrakeInput * Math.Sign(AngularVelocity);
       if (BrakeInput > 0.8 && (AngularVelocity * Radius) < StationaryWheelSpeed)
@@ -202,26 +205,16 @@ public partial class Wheel : Node3D
     else
     {
       StationaryBraking = false;
-      _absController.ProportionalGain = _vehicle.BrakeTorqueGain;
-      _absController.DerivativeGain = _vehicle.BrakeTorqueDamping;
 
       double targetSlipRatio = Tire.PeakSlipRatio;
       if (speed > 0)
         targetSlipRatio *= -1;
-      double error = targetSlipRatio - SlipRatio;
       
       double torqueOutput = _absController.Update(SlipRatio, targetSlipRatio, delta);
       if (speed > 0)
         torqueOutput = Mathf.Min(torqueOutput, 0);
       else
         torqueOutput = Mathf.Max(torqueOutput, 0);
-      if (Index == 0)
-      {
-        Print("Error: " + error);
-        Print("Torque: " + torqueOutput); 
-        Print("Slip Ratio: " + SlipRatio);
-        Print("-------------------------------------------");
-      }
       brakeTorque = torqueOutput * BrakeInput;
     }
 
@@ -234,13 +227,28 @@ public partial class Wheel : Node3D
     float steeringAngle = RotationDegrees.Y;
     float desiredAngle = SteeringInput * MaxSteeringAngle +_initialAngle;
 
-    float speedSensitivity = ((1 - _vehicle.SteeringSensitivitySlope) * 0.05f) + 0.05f;
-    desiredAngle /= 1 + (float)Math.Pow(speedSensitivity * _vehicle.LinearVelocity.Length(), _vehicle.StereringSensitivityCurve);
-
+    float vehicleSpeed = Math.Abs(_vehicle.LinearVelocity.Dot(_vehicle.Forward));
     float steerSensitivity = _vehicle.SteeringSensitivity;
+    float speedSensitivity = ((1 - _vehicle.SteeringSensitivitySlope) * 0.05f) + 0.05f;
     
-    if (Math.Abs(desiredAngle) > Math.Abs(steeringAngle) && Math.Sign(desiredAngle) == Math.Sign(steeringAngle))
-      steerSensitivity /= 1 + (1 - _vehicle.SteeringSpeedSensitivity) * 0.2f * _vehicle.LinearVelocity.Length();
+    if (!_vehicle.Oversteering)
+    {
+      desiredAngle /= 1 + (float)Math.Pow(speedSensitivity * vehicleSpeed, _vehicle.StereringSensitivityCurve);
+      
+      if (Math.Abs(desiredAngle) > Math.Abs(steeringAngle) && Math.Sign(desiredAngle) == Math.Sign(steeringAngle))
+        steerSensitivity /= 1 + (1 - _vehicle.SteeringSpeedSensitivity) * 0.2f * vehicleSpeed;
+    }
+    else
+    {
+      // Auto counter steer using PID
+      desiredAngle /= 1 + (float)Math.Pow(speedSensitivity * vehicleSpeed, _vehicle.StereringSensitivityCurve) * 0.5f;
+      _driftController.ProportionalGain = _vehicle.CounterSteerGain;
+
+      float curYawRate = _vehicle.YawRate;
+      float targetYawRate = _vehicle.CounterSteerTarget * Math.Sign(curYawRate);
+      float counterSteerAngle = (float)_driftController.Update(curYawRate, targetYawRate, delta);
+      desiredAngle += Mathf.Clamp(counterSteerAngle, -_vehicle.CounterSteerMaxAngle, _vehicle.CounterSteerMaxAngle);
+    }
 
     steeringAngle = Mathf.Lerp(steeringAngle, desiredAngle, steerSensitivity * (float)delta);
     

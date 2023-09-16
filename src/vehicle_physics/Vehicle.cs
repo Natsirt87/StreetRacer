@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using UI;
 using System.Linq;
+using System.ComponentModel;
 
 namespace VehiclePhysics;
 
@@ -33,16 +34,29 @@ public partial class Vehicle : RigidBody3D
   [Export]
   public float DragCoefficient = 0.35f;
   [Export]
-  public float BrakeTorqueGain = 100f;
-  [Export]
-  public float BrakeTorqueDamping = 100f;
-  [Export]
   public double MaxSlipRatio = 3;
   [Export]
   public double SlipRatioRelaxation = 0.1;
   [Export]
   public int HudUpdateFrequency = 20;
 
+  [ExportGroup("PID Tuning")]
+  [Export]
+  public float BrakeTorqueGain = 20000f;
+  [Export]
+  public float BrakeTorqueDamping = 200f;
+  [Export]
+  public float CounterSteerGain = 1f;
+  [Export]
+  public float CounterSteerDamping = 1f;
+  [Export]
+  public float CounterSteerMaxAngle = 20;
+  [Export]
+  public float CounterSteerTarget = 0.2f;
+
+  public bool Oversteering;
+  public float YawRate;
+  public float Sideslip;
 
   public float FrontAxleDist;
   public float RearAxleDist;
@@ -63,6 +77,7 @@ public partial class Vehicle : RigidBody3D
   private List<float[]> _prevHudValues;
   private List<float[]>[] _prevDebugValues;
   private float _brakeInput;
+  private float _lastYaw;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -102,6 +117,8 @@ public partial class Vehicle : RigidBody3D
     _prevDebugValues = new List<float[]>[Wheels.Length];
     for (int i = 0; i < Wheels.Length; i++)
       _prevDebugValues[i] = new List<float[]>();
+    
+    _lastYaw = GlobalRotation.Y;
 	}
 
 	// Called every physics step. 'delta' is the elapsed time since the previous frame.
@@ -114,6 +131,15 @@ public partial class Vehicle : RigidBody3D
 
     LinearAccel = (LinearVelocity - _lastVelocity) / (float)delta;
     _lastVelocity = LinearVelocity;
+
+    float yaw = GlobalRotation.Y;
+    YawRate = (yaw - _lastYaw) / (float)delta;
+    _lastYaw = yaw;
+
+    if (LinearVelocity.Dot(Forward) >= 0)
+      Sideslip = Forward.AngleTo(LinearVelocity.Normalized());
+    else
+      Sideslip = -Forward.AngleTo(LinearVelocity.Normalized());
 
     Drivetrain.PhysicsTick(delta);
     float stopForce = 0;
@@ -166,6 +192,17 @@ public partial class Vehicle : RigidBody3D
       BaseMaterial3D brakeMat = Mesh.Mesh.SurfaceGetMaterial(7) as BaseMaterial3D;
       brakeMat.EmissionEnergyMultiplier = Mathf.Lerp(brakeMat.EmissionEnergyMultiplier, 0, (float)delta * 30);
     }
+
+    DetermineOversteer();
+  }
+
+  private void DetermineOversteer()
+  {
+    int steerDir = Math.Sign(Wheels[0].RotationDegrees.Y);
+    int rearIndex = steerDir > 0 ? 3 : 2;
+    Wheel rear = Wheels[rearIndex];
+
+    Oversteering = Math.Abs(rear.SlipAngle) > rear.Tire.PeakSlipAngle;
   }
 
   public override void _PhysicsProcess(double delta)
@@ -279,10 +316,12 @@ public partial class Vehicle : RigidBody3D
       if (i > 1 && _handbrake)
       {
         Wheels[i].BrakeInput = 1;
+        Wheels[i].Handbrake = true;
       }
       else
       {
         Wheels[i].BrakeInput = input;
+        Wheels[i].Handbrake = false;
       }
     }
   }

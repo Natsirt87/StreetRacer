@@ -45,7 +45,7 @@ public partial class PlayerCamera : Node3D
   [Export]
   public float ChaseSpeed = 5f;
   [Export]
-  public float IntermediateSmoothRatio = 0.4f;
+  public float TransitionDuration = 1f;
   [Export]
   public float MouseResetDelay = 1f;
 
@@ -60,6 +60,10 @@ public partial class PlayerCamera : Node3D
   private Vector2 _mouseInput;
   private Vector2 _chaseMouseRotation;
   private Vector2 _targetChaseMouseRotation;
+
+  private float _transitionLevel;
+  private float _transitionTimeElapsed;
+  private bool _chase;
   
   private bool _mouseResetting;
   private float _mouseChaseDuration;
@@ -120,6 +124,17 @@ public partial class PlayerCamera : Node3D
 
   private void OrbitMode(double delta)
   {
+    if (_chase)
+    {
+      _chase = false;
+      _transitionTimeElapsed = 0;
+    }
+    if (_transitionTimeElapsed <= TransitionDuration)
+    {
+      _transitionTimeElapsed += (float)delta;
+      _transitionLevel = Mathf.Lerp(0.2f, 1, _transitionTimeElapsed / TransitionDuration);
+    }
+
     float yawRotation = _yawCameraInput * OrbitSensitivity * (float)delta;
     yawRotation -= _mouseInput.X * MouseSensitivity * (float)delta;
     float pitchRotation = _pitchCameraInput * OrbitSensitivity * (float)delta;
@@ -141,7 +156,7 @@ public partial class PlayerCamera : Node3D
     };
     
     Transform3D rotateTransform = yawTransform * pitchTransform;
-    Transform3D smoothedTransform = GlobalTransform.InterpolateWith(rotateTransform, OrbitRotationSmooth * (float)delta);
+    Transform3D smoothedTransform = GlobalTransform.InterpolateWith(rotateTransform, _transitionLevel * OrbitRotationSmooth * (float)delta);
     smoothedTransform.Origin = GlobalTransform.Origin;
     GlobalTransform = smoothedTransform;
 
@@ -158,15 +173,20 @@ public partial class PlayerCamera : Node3D
     _pitch = GlobalRotation.X - vehicleBasis.GetEuler().X;
     _direction = vehicleDirection;
     _chaseMouseRotation = Vector2.Zero;
+    _targetChaseMouseRotation = Vector2.Zero;
   }
 
   private void ChaseMode(double delta)
   {
-    float vTransitionFactor = 1;
-    float speedDiff = Target.LinearVelocity.Length() - ChaseSpeed;
-    if (speedDiff < IntermediateSmoothRatio * ChaseSpeed && speedDiff > 0)
+    if (!_chase)
     {
-      vTransitionFactor = speedDiff / (IntermediateSmoothRatio * ChaseSpeed);
+      _chase = true;
+      _transitionTimeElapsed = 0;
+    }
+    if (_transitionTimeElapsed <= TransitionDuration)
+    {
+      _transitionTimeElapsed += (float)delta;
+      _transitionLevel = Mathf.Lerp(0, 1, _transitionTimeElapsed / TransitionDuration);
     }
 
     Vector3 velocityDirection = Target.LinearVelocity.Normalized();
@@ -175,9 +195,9 @@ public partial class PlayerCamera : Node3D
     Vector3 directionDifference = velocityDirection - _direction;
     float easeThreshold = 0.25f * directionDifference.Length();
     float lerpFactor = Mathf.Clamp(directionDifference.Length() / easeThreshold, 0, 1);
-    float easedChaseVelocitySmooth = Mathf.Lerp(0.5f * ChaseVelocitySmooth, 1.5f * ChaseVelocitySmooth, lerpFactor);
+    float easedChaseVelocitySmooth = Mathf.Lerp(0.7f * ChaseVelocitySmooth, ChaseVelocitySmooth, lerpFactor);
 
-    _direction = _direction.Lerp(velocityDirection, easedChaseVelocitySmooth * (float)delta * vTransitionFactor);
+    _direction = _direction.Lerp(velocityDirection, easedChaseVelocitySmooth * (float)delta);
 
     Transform3D velocityTransform = new()
     {
@@ -190,7 +210,7 @@ public partial class PlayerCamera : Node3D
     float targetYaw = yawInput * Mathf.DegToRad(90);
     if (Input.IsActionPressed("look_behind"))
       targetYaw += Mathf.DegToRad(180);
-    _yaw = Mathf.LerpAngle(_yaw, targetYaw, ChaseSensitivity * (float)delta);
+    _yaw = Mathf.LerpAngle(_yaw, targetYaw, _transitionLevel * ChaseSensitivity * (float)delta);
     Transform3D yawTransform = new()
     {
       Basis = new Basis(Vector3.Up, _yaw),
@@ -200,7 +220,7 @@ public partial class PlayerCamera : Node3D
     // Add controller pitch input
     float pitchInput = _pitchCameraInput;
     float targetPitch = pitchInput > 0 ? pitchInput * Mathf.DegToRad(15) : pitchInput * Mathf.DegToRad(35);
-    _pitch = Mathf.LerpAngle(_pitch, targetPitch, ChaseSensitivity * (float)delta);
+    _pitch = Mathf.LerpAngle(_pitch, targetPitch, _transitionLevel * ChaseSensitivity * (float)delta);
     Transform3D pitchTransform = new()
     {
       Basis = new Basis(Vector3.Right, _pitch),

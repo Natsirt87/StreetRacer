@@ -119,7 +119,7 @@ public partial class Drivetrain : Node
       ClutchEngaged(wheelVelocity, engineTorque, delta);
     }
 
-    if (AutomaticTrans && Gear > 1 && !_shifting)
+    if (AutomaticTrans && !_shifting)
     {
       AutomaticShifting();
     }
@@ -136,7 +136,7 @@ public partial class Drivetrain : Node
   private void ApplyAutomaticClutch(float wheelVelocity)
   {
     float wheelSpeed = wheelVelocity * (float)_wheels[0].Radius * 2.237f;
-    if (Gear == 1 || (wheelSpeed < 0 && Gear > 1))
+    if (Gear == 1)
     {
       _clutch = 1;
     }
@@ -222,7 +222,7 @@ public partial class Drivetrain : Node
     float grippedEngineTorque = TorqueCurve.Sample(shiftingRpm / Redline) * PeakTorque;
     float grippedWheelTorque = grippedEngineTorque * GearRatios[Gear] * FinalDriveRatio * (1 - DrivetrainLoss);
 
-    if (Gear < GearRatios.Length - 1)
+    if (Gear < GearRatios.Length - 1 && Gear > 1)
     {
       float upShiftRpm = grippedWheelVelocity * GearRatios[Gear+1] * FinalDriveRatio * 60f / (2f * Mathf.Pi);
       float upShiftEngineTorque = TorqueCurve.Sample(upShiftRpm / Redline) * PeakTorque;

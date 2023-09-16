@@ -431,11 +431,11 @@ Drivetrain = NodePath("Drivetrain")
 Mesh = NodePath("Body")
 SteeringSensitivity = 5.0
 SteeringSpeedSensitivity = 0.9
-SteeringSensitivitySlope = 0.2
-StereringSensitivityCurve = 1.8
-BrakeTorqueGain = 20000.0
-BrakeTorqueDamping = 200.0
-MaxSlipRatio = 2.5
+SteeringSensitivitySlope = 0.11
+StereringSensitivityCurve = 1.9
+MaxSlipRatio = 2.0
+CounterSteerGain = 11.0
+CounterSteerDamping = 2.0
 
 [node name="Body" type="MeshInstance3D" parent="."]
 transform = Transform3D(-0.01, -1.49157e-09, 0, 3.09228e-11, -3.20142e-10, -0.01, 1.50612e-09, -0.01, 3.7835e-10, 0, 0, 0)
@@ -633,10 +633,10 @@ FlywheelMass = 8.0
 GearRatios = PackedFloat32Array(-2.8, 0, 3.827, 2.36, 1.685, 1.312, 1, 0.793)
 FinalDriveRatio = 3.545
 ClutchFriction = 2.0
-FlywheelFriction = 0.6
-TorqueSplit = -0.5
+FlywheelFriction = 0.4
+TorqueSplit = -0.4
 FrontDiffLock = 0.6
-RearDiffLock = 0.6
+RearDiffLock = 0.8
 DiffLockSlip = 0.2
 
 [node name="TireModel" type="Node3D" parent="."]
