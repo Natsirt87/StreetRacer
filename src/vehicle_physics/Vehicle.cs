@@ -138,7 +138,6 @@ public partial class Vehicle : RigidBody3D
 	// Called every physics step. 'delta' is the elapsed time since the previous frame.
 	public void PhysicsTick(double delta)
 	{
-    Print(LinearVelocity.Length());
     // Update unit vectors
     Forward = -GlobalTransform.Basis.Z;
     Right = GlobalTransform.Basis.X;

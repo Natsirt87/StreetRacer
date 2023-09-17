@@ -5,12 +5,13 @@
 [node name="VehicleCamera" type="Node3D"]
 script = ExtResource("1_fu16g")
 Fov = 72.0
-MaxFov = 90.0
+MaxFov = 95.0
 FovSmooth = 2.0
 OrbitSensitivity = 80.0
 MouseSensitivity = 80.0
 ControllerLinearity = 1.8
 AccelerationSmoothing = 0.1
+AccelerationMagnitude = 0.2
 ChaseSmoothSpeed = 50.0
 ChaseVelocitySmooth = 2.0
 OrbitRotationSmooth = 10.0

@@ -13,17 +13,20 @@ config_version=5
 config/name="StreetRacer"
 run/main_scene="res://scenes/tracks/TestTrack.tscn"
 config/features=PackedStringArray("4.1", "C#", "Forward Plus")
-run/max_fps=144
+run/max_fps=200
 config/icon="res://icon.svg"
 
 [autoload]
 
 HUD="*res://scenes/ui/HUD.tscn"
 
+[debug]
+
+settings/stdout/print_fps=true
+
 [display]
 
 window/size/mode=3
-window/vsync/vsync_mode=0
 
 [dotnet]
 
