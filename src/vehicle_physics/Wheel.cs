@@ -22,6 +22,8 @@ public partial class Wheel : Node3D
   public Node3D VisualWheel;
   [Export]
   public RigidBody3D WheelBody;
+  [Export]
+  public GpuParticles3D SmokeParticles;
   [Export(PropertyHint.Range, "0, 40, degrees")]
   public float MaxSteeringAngle;
   [Export(PropertyHint.Range, "0, 200, suffix:Kg")]
@@ -67,6 +69,8 @@ public partial class Wheel : Node3D
   private bool _stationary = false;
   private PIDController _absController;
   private PIDController _driftController;
+  private float _smokeDuration;
+  private bool _tireSmoking;
 
   // Called by the vehicle to initialize the wheel data and stuff
   public void Init(Vehicle vehicle)
@@ -137,7 +141,36 @@ public partial class Wheel : Node3D
     LongSlip = DetermineLongSlip();
     LatSlip = Math.Abs(SlipAngle) / (Tire.PeakSlipAngle * 10);
     UpdateVisualWheel(delta);
+    //ShowEffects(delta);
 	}
+
+  private void ShowEffects(double delta)
+  {
+    SmokeParticles.Emitting = true;
+    ParticleProcessMaterial mat = SmokeParticles.ProcessMaterial as ParticleProcessMaterial;
+    mat.InitialVelocityMin = _vehicle.LinearVelocity.Length();
+    mat.InitialVelocityMax = _vehicle.LinearVelocity.Length();
+    //Print("V: " + _vehicle.LinearVelocity.Dot(Forward) + " Index: " + Index);
+    // mat.LinearAccelMin = -LinearVelocity.Length() / 2;
+    // mat.LinearAccelMax = -LinearVelocity.Length() / 2;
+    // if (LongSlip > 0.3)
+    // {
+      
+    //   if (_smokeDuration < _vehicle.TireSmokeDuration)
+    //   {
+    //     _smokeDuration += (float)delta;
+    //   }
+    //   else
+    //   {
+    //     SmokeParticles.Emitting = true;
+    //   }
+    // }
+    // else
+    // {
+    //   _smokeDuration = 0;
+    //   SmokeParticles.Emitting = false;
+    // }
+  }
 
   // Update the visual mesh of this wheel to represent its calculated position and angular speed
   private void UpdateVisualWheel(double delta)
@@ -194,7 +227,7 @@ public partial class Wheel : Node3D
     double brakeTorque;
     double brakeMagnitude = Math.Abs(AngularVelocity * inertia) / delta;
     
-    if (Math.Abs(speed) < 3 || Handbrake || TireLoad < 50)
+    if (Math.Abs(speed) < 1 || Handbrake || TireLoad < 50 || !_vehicle.ABS)
     {
       brakeTorque = -brakeMagnitude * BrakeInput * Math.Sign(AngularVelocity);
       if (BrakeInput > 0.8 && (AngularVelocity * Radius) < StationaryWheelSpeed)

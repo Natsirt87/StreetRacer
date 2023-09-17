@@ -29,6 +29,8 @@ public partial class Vehicle : RigidBody3D
   public float SteeringSensitivitySlope = 0.3f;
   [Export]
   public float SteeringSensitivityCurve = 2;
+  [Export]
+  public bool ABS = false;
   [Export(PropertyHint.Range, "0, 20, suffix:m")]
   public float FrontalArea = 2.2f;
   [Export]
@@ -53,6 +55,12 @@ public partial class Vehicle : RigidBody3D
   public float CounterSteerMaxAngle = 20;
   [Export]
   public float CounterSteerTarget = 0.2f;
+
+  [ExportGroup("Effects")]
+  [Export]
+  public float TireSmokeDuration = 3f;
+  [Export]
+  public float TireSmokeThreshold = 1f;
 
   public bool Oversteering;
   public float YawRate;
@@ -132,6 +140,7 @@ public partial class Vehicle : RigidBody3D
 	// Called every physics step. 'delta' is the elapsed time since the previous frame.
 	public void PhysicsTick(double delta)
 	{
+    Print("V: " + LinearVelocity);
     // Update unit vectors
     Forward = -GlobalTransform.Basis.Z;
     Right = GlobalTransform.Basis.X;

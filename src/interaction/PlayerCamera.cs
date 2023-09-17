@@ -130,7 +130,6 @@ public partial class PlayerCamera : Node3D
     _arm.SpringLength = Mathf.Lerp(_arm.SpringLength, armlength, AccelerationSmoothing * (float)delta);
 
     _mouseInput = Vector2.Zero;
-    Print("Camera velocity: " + _cameraVelocity);
   }
 
   private void OrbitMode(double delta)

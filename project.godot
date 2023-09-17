@@ -22,8 +22,7 @@ HUD="*res://scenes/ui/HUD.tscn"
 
 [display]
 
-window/size/viewport_width=1920
-window/size/viewport_height=1080
+window/size/mode=3
 window/vsync/vsync_mode=0
 
 [dotnet]
@@ -118,7 +117,7 @@ look_behind={
 
 [physics]
 
-common/physics_ticks_per_second=150
+common/physics_ticks_per_second=120
 common/max_physics_steps_per_frame=16
 common/physics_jitter_fix=0.0
 3d/physics_engine="JoltPhysics3D"
