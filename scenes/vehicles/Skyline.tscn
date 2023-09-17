@@ -47,6 +47,7 @@ roughness = 0.5
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_s35t4"]
 resource_name = "Windows"
+transparency = 1
 albedo_color = Color(0, 0, 0, 0.992157)
 metallic_specular = 0.32
 emission = Color(1, 1, 1, 1)
@@ -435,14 +436,7 @@ script = ExtResource("1_1wswf")
 Wheels = [NodePath("Wheels/WheelFL"), NodePath("Wheels/WheelFR"), NodePath("Wheels/WheelRL"), NodePath("Wheels/WheelRR")]
 Drivetrain = NodePath("Drivetrain")
 Mesh = NodePath("Body")
-SteeringSensitivity = 5.0
-SteeringSpeedSensitivity = 0.9
-SteeringSensitivitySlope = 0.11
 MaxSlipRatio = 2.0
-BrakeTorqueGain = 10000.0
-CounterSteerGain = 11.0
-CounterSteerDamping = 2.0
-TireSmokeDuration = 0.7
 
 [node name="Body" type="MeshInstance3D" parent="."]
 transform = Transform3D(-0.01, -1.4843e-09, -6.59384e-12, 4.57021e-11, -2.61934e-10, -0.01, 1.50612e-09, -0.01, 3.49246e-10, 0, 0, 0)
@@ -661,7 +655,6 @@ FlywheelMass = 8.0
 GearRatios = PackedFloat32Array(-2.8, 0, 3.827, 2.36, 1.685, 1.312, 1, 0.793)
 FinalDriveRatio = 3.545
 ClutchFriction = 2.0
-FlywheelFriction = 0.4
 FrontDiffLock = 0.6
 RearDiffLock = 0.8
 DiffLockSlip = 0.2

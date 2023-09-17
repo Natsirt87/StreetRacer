@@ -1161,3 +1161,10 @@ mesh = SubResource("BoxMesh_agaho")
 [node name="Skyline" parent="." instance=ExtResource("3_xpcy5")]
 transform = Transform3D(0.99994, -0.00793544, 0.00761686, 0.0077424, 0.999656, 0.0250478, -0.007813, -0.0249873, 0.999657, -7.13895, 0.621645, -22.5292)
 Controlled = false
+SteeringSensitivity = 1.0
+SteeringSpeedSensitivity = 0.3
+SteeringSensitivitySlope = 0.3
+BrakeTorqueGain = 20000.0
+CounterSteerGain = 1.0
+CounterSteerDamping = 1.0
+TireSmokeDuration = 3.0
