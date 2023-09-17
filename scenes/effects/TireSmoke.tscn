@@ -4,7 +4,8 @@
 
 [sub_resource type="Gradient" id="Gradient_fet10"]
 interpolation_mode = 2
-colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+offsets = PackedFloat32Array(0, 0.326284, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0.435294, 1, 1, 1, 0)
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_diu1l"]
 gradient = SubResource("Gradient_fet10")
@@ -26,11 +27,12 @@ gravity = Vector3(0, 0, 0)
 angular_velocity_max = 180.0
 tangential_accel_min = 4.0
 tangential_accel_max = 5.0
-damping_min = 40.0
-damping_max = 40.0
+damping_min = 30.0
+damping_max = 30.0
 scale_min = 0.1
 scale_max = 0.8
 scale_curve = SubResource("CurveTexture_kpvoj")
+color = Color(1, 1, 1, 0.152941)
 color_ramp = SubResource("GradientTexture1D_diu1l")
 turbulence_noise_strength = 2.04
 turbulence_noise_scale = 8.2
@@ -53,7 +55,7 @@ proximity_fade_distance = 0.3
 material = SubResource("StandardMaterial3D_2u4ao")
 size = Vector2(0.5, 0.5)
 
-[node name="GPUParticles3D" type="GPUParticles3D"]
+[node name="TireSmoke" type="GPUParticles3D"]
 amount = 5000
 speed_scale = 0.8
 collision_base_size = 0.5

@@ -141,35 +141,33 @@ public partial class Wheel : Node3D
     LongSlip = DetermineLongSlip();
     LatSlip = Math.Abs(SlipAngle) / (Tire.PeakSlipAngle * 10);
     UpdateVisualWheel(delta);
-    //ShowEffects(delta);
+    ShowEffects(delta);
 	}
 
   private void ShowEffects(double delta)
-  {
-    SmokeParticles.Emitting = true;
-    ParticleProcessMaterial mat = SmokeParticles.ProcessMaterial as ParticleProcessMaterial;
-    mat.InitialVelocityMin = _vehicle.LinearVelocity.Length();
-    mat.InitialVelocityMax = _vehicle.LinearVelocity.Length();
-    //Print("V: " + _vehicle.LinearVelocity.Dot(Forward) + " Index: " + Index);
-    // mat.LinearAccelMin = -LinearVelocity.Length() / 2;
-    // mat.LinearAccelMax = -LinearVelocity.Length() / 2;
-    // if (LongSlip > 0.3)
-    // {
+  { 
+    if (LongSlip > 0.3 && Surface == 0 && TireLoad > 500)
+    {
       
-    //   if (_smokeDuration < _vehicle.TireSmokeDuration)
-    //   {
-    //     _smokeDuration += (float)delta;
-    //   }
-    //   else
-    //   {
-    //     SmokeParticles.Emitting = true;
-    //   }
-    // }
-    // else
-    // {
-    //   _smokeDuration = 0;
-    //   SmokeParticles.Emitting = false;
-    // }
+      if (_smokeDuration < _vehicle.TireSmokeDuration)
+      {
+        _smokeDuration += (float)delta;
+      }
+      else
+      {
+        SmokeParticles.Emitting = true;
+        ParticleProcessMaterial mat = SmokeParticles.ProcessMaterial as ParticleProcessMaterial;
+        mat.InitialVelocityMin = Mathf.Max(_vehicle.LinearVelocity.Length(), 3);
+        mat.InitialVelocityMax = Mathf.Max(_vehicle.LinearVelocity.Length(), 3);
+        mat.DampingMin = _vehicle.LinearVelocity.Length() * 1.8f;
+        mat.DampingMax = _vehicle.LinearVelocity.Length() * 1.8f;
+      }
+    }
+    else
+    {
+      _smokeDuration = 0;
+      SmokeParticles.Emitting = false;
+    }
   }
 
   // Update the visual mesh of this wheel to represent its calculated position and angular speed

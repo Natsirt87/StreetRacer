@@ -58,9 +58,7 @@ public partial class Vehicle : RigidBody3D
 
   [ExportGroup("Effects")]
   [Export]
-  public float TireSmokeDuration = 3f;
-  [Export]
-  public float TireSmokeThreshold = 1f;
+  public float TireSmokeDuration = 0.5f;
 
   public bool Oversteering;
   public float YawRate;
@@ -140,7 +138,7 @@ public partial class Vehicle : RigidBody3D
 	// Called every physics step. 'delta' is the elapsed time since the previous frame.
 	public void PhysicsTick(double delta)
 	{
-    Print("V: " + LinearVelocity);
+    Print(LinearVelocity.Length());
     // Update unit vectors
     Forward = -GlobalTransform.Basis.Z;
     Right = GlobalTransform.Basis.X;

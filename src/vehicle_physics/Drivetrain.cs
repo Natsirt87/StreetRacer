@@ -291,7 +291,7 @@ public partial class Drivetrain : Node
 
     Rpm = (float)flywheelSpeed * 60f / (2f * Mathf.Pi);
 
-    OutputDriveTorque(-clutchTorque);
+    OutputDriveTorque(-clutchTorque * _throttle);
   }
 
   private float ComputeWheelVelocity(bool front)
