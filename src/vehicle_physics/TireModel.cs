@@ -75,12 +75,13 @@ public partial class TireModel : Node3D
 
   private double MagicFormula(double input, double tireLoad, string dataLabel, double frictionCoefficient)
   {
+    double A = (double)_tireData.GetValue(dataLabel, "scale");
     double B = (double)_tireData.GetValue(dataLabel, "stiffness");
     double C = (double)_tireData.GetValue(dataLabel, "shape");
     double E = (double)_tireData.GetValue(dataLabel, "curve");
     double x = input;
 
-    double normalized = Math.Sin(C * Math.Atan(B * x - E * (B * x - Math.Atan(B * x))));
+    double normalized = A * Math.Sin(C * Math.Atan(B * x - E * (B * x - Math.Atan(B * x))));
     return normalized * tireLoad * frictionCoefficient;
   }
 }

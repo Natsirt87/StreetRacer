@@ -30,7 +30,7 @@ public partial class Vehicle : RigidBody3D
   [Export]
   public float SteeringSensitivityCurve = 2;
   [Export]
-  public bool ABS = false;
+  public bool ABS = true;
   [Export(PropertyHint.Range, "0, 20, suffix:m")]
   public float FrontalArea = 2.2f;
   [Export]
@@ -43,10 +43,6 @@ public partial class Vehicle : RigidBody3D
   public int HudUpdateFrequency = 20;
 
   [ExportGroup("PID Tuning")]
-  [Export]
-  public float BrakeTorqueGain = 20000f;
-  [Export]
-  public float BrakeTorqueDamping = 200f;
   [Export]
   public float CounterSteerGain = 1f;
   [Export]

@@ -10,6 +10,9 @@ namespace Interaction;
 
 public partial class PlayerCamera : Node3D
 {
+  [Export]
+  public bool UseMouse = true;
+
   [ExportGroup("Field of View")]
   [Export]
   public float Fov = 65;
@@ -103,11 +106,20 @@ public partial class PlayerCamera : Node3D
     _oversteerTimeElapsed = TransitionDuration;
 
     Input.UseAccumulatedInput = false;
-    Input.MouseMode = Input.MouseModeEnum.Captured;
+    
   }
 
   public override void _PhysicsProcess(double delta)
   {
+    if (UseMouse)
+    {
+      Input.MouseMode = Input.MouseModeEnum.Captured;
+    }
+    else
+    {
+      Input.MouseMode = Input.MouseModeEnum.Visible;
+    }
+
     float speed = Target.LinearVelocity.Length();
     if (speed > ChaseSpeed)
     {

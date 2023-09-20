@@ -16,10 +16,11 @@ resource_name = "Paint"
 cull_mode = 2
 vertex_color_use_as_albedo = true
 albedo_color = Color(0, 0.176471, 0.427451, 1)
-metallic = 0.647668
+metallic = 0.74
+metallic_specular = 0.51
 roughness = 0.5
 clearcoat_enabled = true
-clearcoat_roughness = 0.6
+clearcoat_roughness = 0.57
 backlight = Color(1, 1, 1, 1)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0n0ax"]
@@ -48,7 +49,8 @@ roughness = 0.5
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_s35t4"]
 resource_name = "Windows"
 albedo_color = Color(0, 0, 0, 0.992157)
-metallic_specular = 0.32
+metallic_specular = 0.24
+roughness = 0.63
 emission = Color(1, 1, 1, 1)
 emission_energy_multiplier = 5.0
 rim_enabled = true
@@ -436,13 +438,14 @@ Wheels = [NodePath("Wheels/WheelFL"), NodePath("Wheels/WheelFR"), NodePath("Whee
 Drivetrain = NodePath("Drivetrain")
 Mesh = NodePath("Body")
 SteeringSensitivity = 5.0
-SteeringSpeedSensitivity = 0.9
-SteeringSensitivitySlope = 0.11
-ABS = true
+SteeringSpeedSensitivity = 1.0
+SteeringSensitivitySlope = 0.09
 MaxSlipRatio = 2.0
-BrakeTorqueGain = 25000.0
-CounterSteerGain = 11.0
-CounterSteerDamping = 2.0
+CounterSteerGain = 27.0
+CounterSteerDamping = 3.0
+CounterSteerMaxAngle = 25.0
+CounterSteerTarget = 0.05
+TireSmokeDuration = 0.6
 
 [node name="Body" type="MeshInstance3D" parent="."]
 transform = Transform3D(-0.01, -1.4843e-09, -6.59384e-12, 4.57021e-11, -2.61934e-10, -0.01, 1.50612e-09, -0.01, 3.49246e-10, 0, 0, 0)
@@ -502,7 +505,7 @@ transform = Transform3D(-4.4005e-08, 1, -9.31323e-10, -1, -4.35248e-08, 0, -1.86
 shape = SubResource("CylinderShape3D_cpwma")
 
 [node name="TireSmoke" parent="Wheels/WheelFL/WheelBody" instance=ExtResource("5_ypbly")]
-transform = Transform3D(1, 3.07045e-09, -1.39698e-09, -1.16415e-10, 1, 1.86265e-09, 4.65661e-10, 1.30385e-08, 1, 0, -0.36, 0.25)
+transform = Transform3D(1, 3.07045e-09, -1.39698e-09, -1.16415e-10, 1, 1.86265e-09, 4.65661e-10, 1.30385e-08, 1, 0, -0.36, 0.2)
 emitting = false
 
 [node name="WheelJoint" type="JoltGeneric6DOFJoint3D" parent="Wheels/WheelFL"]
@@ -549,7 +552,7 @@ transform = Transform3D(-4.4005e-08, 1, -9.31323e-10, -1, -4.35248e-08, 0, -1.86
 shape = SubResource("CylinderShape3D_cpwma")
 
 [node name="TireSmoke" parent="Wheels/WheelFR/WheelBody" instance=ExtResource("5_ypbly")]
-transform = Transform3D(1, 3.07045e-09, -1.39698e-09, -1.16415e-10, 1, 1.86265e-09, 4.65661e-10, 1.30385e-08, 1, 0, -0.36, 0.25)
+transform = Transform3D(1, 3.07045e-09, -1.39698e-09, -1.16415e-10, 1, 1.86265e-09, 4.65661e-10, 1.30385e-08, 1, 0, -0.36, 0.2)
 emitting = false
 
 [node name="WheelJoint" type="JoltGeneric6DOFJoint3D" parent="Wheels/WheelFR"]
@@ -595,7 +598,7 @@ transform = Transform3D(-4.4005e-08, 1, -9.31323e-10, -1, -4.35248e-08, 0, -1.86
 shape = SubResource("CylinderShape3D_cpwma")
 
 [node name="TireSmoke" parent="Wheels/WheelRL/WheelBody" instance=ExtResource("5_ypbly")]
-transform = Transform3D(1, 3.07045e-09, -1.39698e-09, -1.16415e-10, 1, 1.86265e-09, 4.65661e-10, 1.30385e-08, 1, 0, -0.36, 0.25)
+transform = Transform3D(1, 3.07045e-09, -1.39698e-09, -1.16415e-10, 1, 1.86265e-09, 4.65661e-10, 1.30385e-08, 1, 0, -0.36, 0.2)
 emitting = false
 
 [node name="WheelJoint" type="JoltGeneric6DOFJoint3D" parent="Wheels/WheelRL"]
@@ -640,7 +643,7 @@ transform = Transform3D(-4.4005e-08, 1, -9.31323e-10, -1, -4.35248e-08, 0, -1.86
 shape = SubResource("CylinderShape3D_cpwma")
 
 [node name="TireSmoke" parent="Wheels/WheelRR/WheelBody" instance=ExtResource("5_ypbly")]
-transform = Transform3D(1, 6.67933e-09, -3.25963e-09, 1.74623e-09, 1, 0, 0, 2.04891e-08, 1, 0, -0.36, 0.25)
+transform = Transform3D(1, 6.67933e-09, -3.25963e-09, 1.74623e-09, 1, 0, 0, 2.04891e-08, 1, 0, -0.36, 0.2)
 emitting = false
 
 [node name="WheelJoint" type="JoltGeneric6DOFJoint3D" parent="Wheels/WheelRR"]
@@ -656,13 +659,15 @@ PeakTorque = 390.0
 TorqueCurve = SubResource("Curve_3j47a")
 Redline = 8000.0
 Idle = 800.0
+AutomaticTrans = true
 FlywheelMass = 6.0
 GearRatios = PackedFloat32Array(-2.8, 0, 3.827, 2.36, 1.685, 1.312, 1, 0.793)
 FinalDriveRatio = 3.545
-ClutchFriction = 8.0
-FlywheelFriction = 0.3
+ClutchFriction = 1.7
+FlywheelFriction = 0.8
+TorqueSplit = -0.4
 FrontDiffLock = 0.6
-RearDiffLock = 1.0
+RearDiffLock = 0.8
 DiffLockSlip = 0.2
 
 [node name="TireModel" type="Node3D" parent="."]

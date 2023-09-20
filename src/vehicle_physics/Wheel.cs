@@ -12,7 +12,6 @@ public partial class Wheel : Node3D
   public const double StationarySpeedThreshold = 2;
   const double StationaryWheelSpeed = 2;
   const double StationarySlip = 0.1;
-  const double SlowSlipThreshold = 0.8; 
   
   [Export]
   public int Index;
@@ -67,7 +66,6 @@ public partial class Wheel : Node3D
   private bool _isLeft;
   private float _initialAngle;
   private bool _stationary = false;
-  private PIDController _absController;
   private PIDController _driftController;
   private float _smokeDuration;
   private bool _tireSmoking;
@@ -83,7 +81,6 @@ public partial class Wheel : Node3D
     _spring = GetChild<Spring>(0);
     Surface = 0;
     AngularVelocity = 0;
-    _absController = new PIDController(_vehicle.BrakeTorqueGain, 0, _vehicle.BrakeTorqueDamping, 0);
     _driftController = new PIDController(_vehicle.CounterSteerGain, 0, _vehicle.CounterSteerDamping, 0);
 
     float frontMass = _vehicle.RearAxleDist / _vehicle.Wheelbase * _vehicle.Mass;
@@ -146,7 +143,7 @@ public partial class Wheel : Node3D
 
   private void ShowEffects(double delta)
   { 
-    if (LongSlip > 0.2 && Surface == 0 && TireLoad > 500)
+    if (LongSlip >= 0.5 && Surface == 0 && TireLoad > 500)
     {
       
       if (_smokeDuration < _vehicle.TireSmokeDuration)
@@ -168,35 +165,19 @@ public partial class Wheel : Node3D
   // Update the visual mesh of this wheel to represent its calculated position and angular speed
   private void UpdateVisualWheel(double delta)
   {
-    double visualAngularVelocity;
-    double vehicleSpeed = _vehicle.LinearVelocity.Dot(Forward);
-    if (LongSlip > 0 || TireLoad < 10)
-    {
-      visualAngularVelocity = AngularVelocity;
-    }
-    else
-    {
-      visualAngularVelocity = vehicleSpeed / Radius;
-    }
-    Vector3 wheelRot = new(VisualWheel.Rotation.X - (float)(visualAngularVelocity * delta), VisualWheel.Rotation.Y, VisualWheel.Rotation.Z);
+    Vector3 wheelRot = new(VisualWheel.Rotation.X - (float)(AngularVelocity * delta), VisualWheel.Rotation.Y, VisualWheel.Rotation.Z);
     VisualWheel.Rotation = wheelRot;
   }
 
   // Calculate how much longitudinal slip the car is experiencing, used for sounds and effects
   private double DetermineLongSlip()
   {
-    double vehicleSpeed = _vehicle.LinearVelocity.Length();
     double slip = 0;
      
     // Calculate spin slip
-
     if (TireLoad > 10 && !_stationary)
     {
-      bool lowSpeedSlip = vehicleSpeed <= LowSpeedThreshold && Math.Abs(SlipRatio) > SlowSlipThreshold;
-      bool highSpeedSlip = vehicleSpeed > LowSpeedThreshold && Math.Abs(SlipRatio) > Tire.PeakSlipRatio * 1.2;
-      
-      if (lowSpeedSlip || highSpeedSlip)
-        slip = Math.Abs(SlipRatio) / _vehicle.MaxSlipRatio;
+      slip = Math.Abs(SlipRatio) / _vehicle.MaxSlipRatio;
     }
     return slip;
   }
@@ -214,38 +195,44 @@ public partial class Wheel : Node3D
   // Calculate amount of torque that should be applied to this wheel based on user input
   private double ComputeTorque(double delta)
   {
-    float speed = _vehicle.LinearVelocity.Dot(_vehicle.Forward);
-    double inertia = Mass * Radius * Radius / 2;
+    double vehicleSpeed = _vehicle.LinearVelocity.Dot(Forward);
+    double inertia = 0.5 * Mass * Radius * Radius;
 
     double brakeTorque;
-    double brakeMagnitude = Math.Abs(AngularVelocity * inertia) / delta;
-    
-    if (Math.Abs(speed) < 1 || Handbrake || TireLoad < 50 || !_vehicle.ABS)
+
+    if (Math.Abs(vehicleSpeed) < StationarySpeedThreshold * 0.5)
     {
-      brakeTorque = -brakeMagnitude * BrakeInput * Math.Sign(AngularVelocity);
-      if (BrakeInput > 0.8 && (AngularVelocity * Radius) < StationaryWheelSpeed)
-        StationaryBraking = true;
-      else
-        StationaryBraking = false;
+      // If at or near stationary, just apply scaled braking force to the wheels because slip ratio calculation is unstable
+      brakeTorque = -Math.Sign(AngularVelocity) * BrakeInput * Math.Abs(AngularVelocity * inertia) / delta * 0.5;
+    }
+    else if (Handbrake || !_vehicle.ABS)
+    {
+       brakeTorque = -Math.Sign(AngularVelocity) * BrakeInput * Math.Abs(AngularVelocity * inertia) / delta * 0.8;
     }
     else
     {
-      StationaryBraking = false;
+      // Caclulate the ideal slip ratio for maximum braking
+      double targetSlipRatio = Tire.PeakSlipRatio * 1.6 * -Math.Sign(vehicleSpeed);
+      // Use the slip ratio equation to get the wheel speed that would produce this slip ratio at the current speed
+      double targetWheelSpeed = targetSlipRatio * Math.Abs(vehicleSpeed) + vehicleSpeed;
+      // Convert wheel speed into angular velocity
+      double targetAngularVelocity = targetWheelSpeed / Radius;
 
-      double targetSlipRatio = Tire.PeakSlipRatio;
-      if (speed > 0)
-        targetSlipRatio *= -1;
-      
-      double torqueOutput = _absController.Update(SlipRatio, targetSlipRatio, delta);
-      if (speed > 0)
-        torqueOutput = Mathf.Min(torqueOutput, 0);
+      double targetAcceleration = (targetAngularVelocity - AngularVelocity) / delta;
+
+      // accel = torque / inertia, so torque = accel * inertia
+      brakeTorque = targetAcceleration * inertia * BrakeInput;
+
+      if (vehicleSpeed > 0)
+        brakeTorque = Math.Min(0, brakeTorque);
       else
-        torqueOutput = Mathf.Max(torqueOutput, 0);
-      brakeTorque = torqueOutput * BrakeInput;
-      Print("Torque: " + brakeTorque);
-      Print("Slip: " + SlipRatio);
-      Print("----------------------------------------------");
+        brakeTorque = Math.Max(0, brakeTorque);
     }
+
+    if (BrakeInput > 0.8 && (AngularVelocity * Radius) < StationaryWheelSpeed)
+      StationaryBraking = true;
+    else
+      StationaryBraking = false;
 
     return DriveTorque + brakeTorque;
   }

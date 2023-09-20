@@ -4,6 +4,7 @@
 
 [node name="VehicleCamera" type="Node3D"]
 script = ExtResource("1_fu16g")
+UseMouse = false
 Fov = 72.0
 MaxFov = 95.0
 FovSmooth = 2.0
@@ -22,8 +23,8 @@ OversteerTransitionDuration = 1.0
 Damping = 50.0
 
 [node name="SpringArm3D" type="SpringArm3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.906307, 0.422618, 0, -0.422618, 0.906307, 0, 0, 0)
-spring_length = 11.0
+transform = Transform3D(1, 0, 0, 0, 0.83867, 0.544639, 0, -0.544639, 0.83867, 0, 0, 0)
+spring_length = 15.0
 margin = 1.0
 
 [node name="Camera3D" type="Camera3D" parent="SpringArm3D"]

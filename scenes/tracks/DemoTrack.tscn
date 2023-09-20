@@ -1,0 +1,68 @@
+[gd_scene load_steps=9 format=3 uid="uid://b3joh518icfav"]
+
+[ext_resource type="Texture2D" uid="uid://bxlayqus8a8x1" path="res://assets/textures/asphalt_road.png" id="1_0obc2"]
+[ext_resource type="PackedScene" uid="uid://dihproqlibro6" path="res://scenes/vehicles/Skyline.tscn" id="1_xeh1j"]
+[ext_resource type="Script" path="res://src/interaction/PlayerController.cs" id="3_6acbt"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_wu6uj"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_hqsj8"]
+sky_material = SubResource("ProceduralSkyMaterial_wu6uj")
+
+[sub_resource type="Environment" id="Environment_m4qe5"]
+background_mode = 2
+sky = SubResource("Sky_hqsj8")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="Curve3D" id="Curve3D_g8dy4"]
+_data = {
+"points": PackedVector3Array(6.12368, 0.887648, -19.9025, -6.12368, -0.887648, 19.9025, 53.5784, -3.55811, 31.2846, -15.7348, 0, -13.2622, 15.7348, 0, 13.2622, 104.824, -3.85308, 67.8138, 17.533, 0, -1.12392, -17.533, 0, 1.12392, 102.451, -2.5269, 111.113, 17.174, -1.80101, 7.04841, -17.174, 1.80101, -7.04841, -70.4446, 13.736, 97.0694, 2.7879, 0, 15.8603, -2.7879, 0, -15.8603, -98.9915, 13.074, 55.384, 2.34075, -0.822692, 13.7573, -2.34075, 0.822692, -13.7573, -89.0576, 13.4616, -8.9341, -2.04773, 0.744282, 16.9946, 2.04773, -0.744282, -16.9946, -106.123, 10.0748, -36.8334, -17.3917, 0, -3.0294, 17.3917, 0, 3.0294, -73.2481, 8.65748, -68.9318, -11.4896, 0.733517, -2.89192, 11.4896, -0.733517, 2.89192, -21.2718, 1.64164, -50.2046, -17.3716, 1.67692, -0.041748, 17.3716, -1.67692, 0.041748, 41.4572, -4.97499, -35.6275, -2.85145, -0.430069, -24.8722, 2.85145, 0.430069, 24.8722, 96.7039, -10.4531, -11.7818, 6.31539, 0.880557, -20.8615, -6.31539, -0.880557, 20.8615, 54.0709, -3.51124, 29.8783),
+"tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+}
+point_count = 12
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mr8ie"]
+albedo_texture = ExtResource("1_0obc2")
+uv1_scale = Vector3(1, 25, 2)
+
+[node name="DemoTrack" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_m4qe5")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
+shadow_enabled = true
+
+[node name="Track" type="Node3D" parent="."]
+
+[node name="Path3D" type="Path3D" parent="Track"]
+curve = SubResource("Curve3D_g8dy4")
+
+[node name="CSGPolygon3D" type="CSGPolygon3D" parent="Track"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.211515, -0.102036, 0.24059)
+use_collision = true
+polygon = PackedVector2Array(-8, 0, -8, 0.2, 8, 0.2, 8, 0)
+mode = 2
+path_node = NodePath("../Path3D")
+path_interval_type = 0
+path_interval = 1.0
+path_simplify_angle = 0.0
+path_rotation = 2
+path_local = false
+path_continuous_u = true
+path_u_distance = 1.0
+path_joined = true
+material = SubResource("StandardMaterial3D_mr8ie")
+
+[node name="Skyline" parent="." instance=ExtResource("1_xeh1j")]
+transform = Transform3D(-0.116296, -0.00793544, -0.993183, 0.0238959, 0.999656, -0.0107852, 0.992928, -0.0249873, -0.116066, -0.263017, -0.659282, -34.3152)
+
+[node name="PlayerController" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.1782, -42.9305)
+script = ExtResource("3_6acbt")
+VehiclePath = "res://scenes/vehicles/Skyline.tscn"
+CameraPath = "res://scenes/VehicleCamera.tscn"
