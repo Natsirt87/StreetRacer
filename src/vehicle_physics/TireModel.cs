@@ -2,24 +2,35 @@ using Godot;
 using static Godot.GD;
 using System;
 using System.Collections.Specialized;
+using System.Collections.Generic;
 
 namespace VehiclePhysics;
 
 public partial class TireModel : Node3D
 {
-  public enum Surface {Dry, Wet, Dirt}
+  public enum Surface {Dry, Wet, Grass, Dirt}
 
   const float MagnitudeThreshold = 0.01f;
 
   [Export(PropertyHint.File, "*.ini")]
   public string TireConfigPath;
   [Export]
-  public double LongFriction = 1;
-  [Export]
-  public double LatFriction = 1;
+  public Godot.Collections.Dictionary<string, double> FrictionCoefficients = new()
+    {
+      ["Dry_Long"] = 1,
+      ["Dry_Lat"] = 1,
+      ["Wet_Long"] = 0.7,
+      ["Wet_Lat"] = 0.7,
+      ["Grass_Long"] = 0.5,
+      ["Grass_Lat"] = 0.5,
+      ["Dirt_Long"] = 0.6,
+      ["Dirt_Lat"] = 0.6
+    };
 
-  public double PeakSlipRatio = 0;
-  public double PeakSlipAngle = 0;
+  public double PeakSlipRatio;
+  public double PeakSlipAngle;
+  public double LongFriction;
+  public double LatFriction;
 
   private ConfigFile _tireData;
 
@@ -51,16 +62,16 @@ public partial class TireModel : Node3D
 
     if (slipMagnitude < MagnitudeThreshold)
     {
-      forceLat = MagicFormula(slipAngle, tireLoad, surfaceName + "_Lat", LatFriction);
-      forceLong = MagicFormula(slipRatio, tireLoad, surfaceName + "_Long", LongFriction);
+      forceLat = MagicFormula(slipAngle, tireLoad, surfaceName + "_Lat", false);
+      forceLong = MagicFormula(slipRatio, tireLoad, surfaceName + "_Long", true);
     }
     else
     {
       double inputLat = slipMagnitude * PeakSlipAngle;
       double inputLong = slipMagnitude * PeakSlipRatio;
 
-      double maxLat = MagicFormula(inputLat, tireLoad, surfaceName + "_Lat", LatFriction);
-      double maxLong = MagicFormula(inputLong, tireLoad, surfaceName + "_Long", LongFriction);
+      double maxLat = MagicFormula(inputLat, tireLoad, surfaceName + "_Lat", false);
+      double maxLong = MagicFormula(inputLong, tireLoad, surfaceName + "_Long", true);
 
       forceLat = slipLat / slipMagnitude * maxLat;
       forceLong = slipLong / slipMagnitude * maxLong;
@@ -73,15 +84,20 @@ public partial class TireModel : Node3D
     return appliedForce;
   }
 
-  private double MagicFormula(double input, double tireLoad, string dataLabel, double frictionCoefficient)
+  private double MagicFormula(double input, double tireLoad, string dataLabel, bool longitudinal)
   {
-    double A = (double)_tireData.GetValue(dataLabel, "scale");
     double B = (double)_tireData.GetValue(dataLabel, "stiffness");
     double C = (double)_tireData.GetValue(dataLabel, "shape");
     double E = (double)_tireData.GetValue(dataLabel, "curve");
     double x = input;
 
-    double normalized = A * Math.Sin(C * Math.Atan(B * x - E * (B * x - Math.Atan(B * x))));
-    return normalized * tireLoad * frictionCoefficient;
+    double friction = FrictionCoefficients[dataLabel];
+    if (longitudinal)
+      LongFriction = friction;
+    else
+      LatFriction = friction;
+
+    double normalized = Math.Sin(C * Math.Atan(B * x - E * (B * x - Math.Atan(B * x))));
+    return normalized * tireLoad * friction;
   }
 }

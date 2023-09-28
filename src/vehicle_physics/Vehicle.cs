@@ -23,12 +23,14 @@ public partial class Vehicle : RigidBody3D
   public bool Controlled = true;
   [Export]
   public float SteeringSensitivity = 1f;
-  [Export(PropertyHint.Range, "0, 1")]
+  [Export]
   public float SteeringSpeedSensitivity = 0.3f;
-  [Export(PropertyHint.Range, "0, 1")]
+  [Export]
   public float SteeringSensitivitySlope = 0.3f;
   [Export]
   public float SteeringSensitivityCurve = 2;
+  [Export]
+  public float TargetSlipAngleError = 0.1f;
   [Export]
   public bool ABS = true;
   [Export(PropertyHint.Range, "0, 20, suffix:m")]
@@ -42,7 +44,7 @@ public partial class Vehicle : RigidBody3D
   [Export]
   public int HudUpdateFrequency = 20;
 
-  [ExportGroup("PID Tuning")]
+  [ExportGroup("Tuning")]
   [Export]
   public float CounterSteerGain = 1f;
   [Export]
@@ -51,6 +53,10 @@ public partial class Vehicle : RigidBody3D
   public float CounterSteerMaxAngle = 20;
   [Export]
   public float CounterSteerTarget = 0.2f;
+  [Export]
+  public float MaxAngleScale = 25;
+  [Export]
+  public float MaxAngleDecay = 0.08f;
 
   [ExportGroup("Effects")]
   [Export]
@@ -157,7 +163,7 @@ public partial class Vehicle : RigidBody3D
     foreach (Wheel wheel in Wheels)
     {
       wheel.PhysicsTick(delta);
-      if (wheel.StationaryBraking && LinearVelocity.Length() < Wheel.StationarySpeedThreshold / 20 && wheel.TireLoad > 5)
+      if (wheel.StationaryBraking && LinearVelocity.Length() < Wheel.StationarySpeedThreshold / 20 && wheel.OnGround)
       {
         stopForce += (float)wheel.Tire.LongFriction * (float)wheel.TireLoad;
         wheelsStopped++;
@@ -301,7 +307,7 @@ public partial class Vehicle : RigidBody3D
             roundPlace = 0;
           debugValues[j] = "" + Math.Round(Math.Abs(avg), roundPlace);
         }
-        debugValues[6] = wheel.TireLoad < 1 ? "None" : "" + (TireModel.Surface)wheel.Surface;
+        debugValues[6] = !wheel.OnGround ? "None" : "" + (TireModel.Surface)wheel.Surface;
 
         _hud.SetDebugData(debugValues, i);
       }

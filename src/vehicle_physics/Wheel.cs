@@ -44,7 +44,8 @@ public partial class Wheel : Node3D
   public double LongSlip;
   public double LatSlip;
   public float LongForce;
-  
+  public bool OnGround;
+
   // Public input variables
   public double DriveTorque;
   public float SteeringInput;
@@ -110,6 +111,8 @@ public partial class Wheel : Node3D
     {
       Steer(delta);
     }
+
+    OnGround = TireLoad > Mass * 9.81;
     
     Torque = ComputeTorque(delta);
     SlipRatio = ComputeSlipRatio(delta);
@@ -117,6 +120,7 @@ public partial class Wheel : Node3D
     TireLoad = _spring.GetNormalForce();
     SlipAngle = ComputeSlipAngle(Forward, Right);
 
+    DetermineSurface();
     Vector3 tireForce = Tire.ComputeForce(SlipRatio, SlipAngle, TireLoad, Surface, Forward, Right);
 
     float forceLong = tireForce.Dot(Forward);
@@ -143,7 +147,7 @@ public partial class Wheel : Node3D
 
   private void ShowEffects(double delta)
   { 
-    if (LongSlip >= 0.5 && Surface == 0 && TireLoad > 500)
+    if (LongSlip >= 0.5 && Surface == 0 && OnGround)
     {
       
       if (_smokeDuration < _vehicle.TireSmokeDuration)
@@ -175,11 +179,35 @@ public partial class Wheel : Node3D
     double slip = 0;
      
     // Calculate spin slip
-    if (TireLoad > 10 && !_stationary)
+    if (OnGround && !_stationary)
     {
       slip = Math.Abs(SlipRatio) / _vehicle.MaxSlipRatio;
     }
     return slip;
+  }
+
+  // Bit 9 - Dry
+  // Bit 10 - Wet
+  // Bit 11 - Grass
+  // Bit 12 - Dirt
+  private void DetermineSurface()
+  {
+    Surface = (int)TireModel.Surface.Dry;
+    if (WheelBody.GetCollidingBodies().Count < 1)
+      return;
+    if (WheelBody.GetCollidingBodies()[0] is not PhysicsBody3D collider)
+      return;
+
+    int layer = (int)collider.CollisionLayer;
+    int surfaceIndex = 0;
+    while ((layer & 1) == 0)
+    {
+        // Shift the number to the right and increment the index until the LSB is 1
+        layer >>= 1;
+        surfaceIndex++;
+    }
+
+    Surface = Mathf.Max(surfaceIndex - 8, 0);
   }
 
   // Calculate the angular velocity of the wheel given a torque
@@ -241,7 +269,8 @@ public partial class Wheel : Node3D
   private void Steer(double delta)
   {
     float steeringAngle = RotationDegrees.Y;
-    float desiredAngle = SteeringInput * MaxSteeringAngle +_initialAngle;
+    float maxSteering = _vehicle.MaxAngleScale * Mathf.Pow(1 - _vehicle.MaxAngleDecay, (float)Tire.PeakSlipAngle - 3);
+    float desiredAngle = SteeringInput * maxSteering;
 
     float vehicleSpeed = Math.Abs(_vehicle.LinearVelocity.Dot(_vehicle.Forward));
     float steerSensitivity = _vehicle.SteeringSensitivity;
@@ -270,6 +299,8 @@ public partial class Wheel : Node3D
       if (Math.Abs(desiredAngle) > Math.Abs(steeringAngle) && Math.Sign(desiredAngle) == Math.Sign(steeringAngle))
         steerSensitivity /= 1 + (1 - _vehicle.SteeringSpeedSensitivity) * 0.2f * vehicleSpeed;
     }
+
+    desiredAngle = Math.Clamp(desiredAngle, -MaxSteeringAngle, MaxSteeringAngle);
 
     steeringAngle = Mathf.Lerp(steeringAngle, desiredAngle, steerSensitivity * (float)delta);
     

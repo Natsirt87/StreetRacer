@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=3 uid="uid://ddd0c01382wkb"]
+[gd_scene load_steps=36 format=3 uid="uid://ddd0c01382wkb"]
 
 [ext_resource type="Texture2D" uid="uid://d1g1qbggufp8h" path="res://assets/textures/GridSquare.png" id="1_x2yo0"]
 [ext_resource type="Script" path="res://src/interaction/PlayerController.cs" id="2_g531l"]
@@ -32,10 +32,10 @@ texture_filter = 5
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_wa4ls"]
 material = SubResource("StandardMaterial3D_l3ss8")
-size = Vector2(500, 500)
+size = Vector2(250, 500)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_kgurl"]
-size = Vector3(500, 0.1, 500)
+size = Vector3(250, 0.1, 500)
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_kia1j"]
 height = 1.5
@@ -110,7 +110,6 @@ _data = {
 point_count = 14
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_e6pt1"]
-load_path = "res://.godot/imported/road_suzuka_normal.jpeg-802116db60964067e32ea87d65b22105.s3tc.ctex"
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0r0m7"]
 vertex_color_use_as_albedo = true
@@ -122,6 +121,11 @@ subsurf_scatter_strength = 0.8
 uv1_scale = Vector3(0.1, 10, 1)
 uv1_offset = Vector3(0, -0.72, 0)
 texture_filter = 5
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_is68m"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_cyxtk"]
+size = Vector3(250, 0.01, 500)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_c7og6"]
 albedo_color = Color(0.482353, 0.443137, 0.341176, 1)
@@ -143,27 +147,29 @@ shadow_bias = 0.05
 directional_shadow_max_distance = 500.0
 
 [node name="Ground" type="StaticBody3D" parent="."]
+collision_layer = 256
 collision_mask = 15
 
 [node name="GroundMesh" type="MeshInstance3D" parent="Ground"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 125, 0, 0)
 mesh = SubResource("PlaneMesh_wa4ls")
 skeleton = NodePath("../..")
 
 [node name="GroundCollider" type="CollisionShape3D" parent="Ground"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 125, -0.05, 0)
 shape = SubResource("BoxShape3D_kgurl")
 
 [node name="BumpTrack" type="Node3D" parent="Ground"]
 transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, 162.309, 0, 42.1288)
 
 [node name="PlayerController" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 161.908, 1.27884, 142.684)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 125, 1.279, 142.684)
 script = ExtResource("2_g531l")
 VehiclePath = "res://scenes/vehicles/Skyline.tscn"
 CameraPath = "res://scenes/VehicleCamera.tscn"
 
 [node name="Tracks" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 160, 0, 110)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 125, 0, 110)
 
 [node name="ConeTrack" type="Node3D" parent="Tracks"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40, 0, 0)
@@ -1321,6 +1327,7 @@ shape = SubResource("BoxShape3D_e8ov0")
 mesh = SubResource("BoxMesh_dlhe8")
 
 [node name="Ramps" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -34.4191, 0, 0)
 
 [node name="Ramp" type="StaticBody3D" parent="Ramps"]
 transform = Transform3D(1, 0, 0, 0, 0.960881, -0.276963, 0, 0.276963, 0.960881, 160, -1.001, 43.7)
@@ -1368,11 +1375,12 @@ mesh = SubResource("BoxMesh_agaho")
 [node name="Course" type="Node3D" parent="."]
 
 [node name="RoadPath" type="Path3D" parent="Course"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 59.0348, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 54.2474, 0, 74.5295)
 curve = SubResource("Curve3D_fojkg")
 
 [node name="RoadMesh" type="CSGPolygon3D" parent="Course"]
 use_collision = true
+collision_layer = 256
 polygon = PackedVector2Array(-5.6, 0, -5.5, 0.05, 6.5, 0.05, 6.6, 0)
 mode = 2
 path_node = NodePath("../RoadPath")
@@ -1386,8 +1394,15 @@ path_u_distance = 1.0
 path_joined = true
 material = SubResource("StandardMaterial3D_0r0m7")
 
-[node name="GrassMesh" type="CSGBox3D" parent="Course"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -110.946, 0, -72.3328)
-use_collision = true
-size = Vector3(275, 0.04, 350)
+[node name="Grass" type="StaticBody3D" parent="Course"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -125, 0, 0)
+collision_layer = 1024
+collision_mask = 15
+physics_material_override = SubResource("PhysicsMaterial_is68m")
+
+[node name="GrassCollision" type="CollisionShape3D" parent="Course/Grass"]
+shape = SubResource("BoxShape3D_cyxtk")
+
+[node name="GrassMesh" type="CSGBox3D" parent="Course/Grass"]
+size = Vector3(250, 0.03, 500)
 material = SubResource("StandardMaterial3D_c7og6")

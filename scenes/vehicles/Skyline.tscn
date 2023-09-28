@@ -4,7 +4,7 @@
 [ext_resource type="Script" path="res://src/vehicle_physics/Wheel.cs" id="3_khrj6"]
 [ext_resource type="Script" path="res://src/vehicle_physics/Spring.cs" id="4_5m3ow"]
 [ext_resource type="PackedScene" uid="uid://dfp8kkcdx3ukh" path="res://assets/models/Wheels/5SpokeWheel.blend" id="4_ku4bm"]
-[ext_resource type="PackedScene" uid="uid://dgfek13wrry6b" path="res://scenes/effects/TireSmoke.tscn" id="5_ypbly"]
+[ext_resource type="PackedScene" uid="uid://8rmk2aghqrjv" path="res://scenes/effects/TireSmoke.tscn" id="6_3oyw0"]
 [ext_resource type="Script" path="res://src/vehicle_physics/Drivetrain.cs" id="6_i8g2p"]
 [ext_resource type="Script" path="res://src/vehicle_physics/TireModel.cs" id="7_32bjw"]
 
@@ -426,7 +426,7 @@ point_count = 5
 [node name="Skyline" type="RigidBody3D" node_paths=PackedStringArray("Wheels", "Drivetrain", "Mesh")]
 transform = Transform3D(0.99994, -0.00793544, 0.00761686, 0.0077424, 0.999656, 0.0250478, -0.007813, -0.0249873, 0.999657, 0, 0, 0)
 collision_layer = 2
-collision_mask = 15
+collision_mask = 65295
 mass = 1542.0
 inertia = Vector3(1560, 3200, 700)
 center_of_mass_mode = 1
@@ -439,12 +439,14 @@ Drivetrain = NodePath("Drivetrain")
 Mesh = NodePath("Body")
 SteeringSensitivity = 5.0
 SteeringSpeedSensitivity = 1.0
-SteeringSensitivitySlope = 0.09
+SteeringSensitivitySlope = 0.08
+ABS = false
 MaxSlipRatio = 2.0
-CounterSteerGain = 27.0
+CounterSteerGain = 24.0
 CounterSteerDamping = 3.0
 CounterSteerMaxAngle = 25.0
-CounterSteerTarget = 0.05
+CounterSteerTarget = 0.03
+MaxAngleDecay = 0.03
 TireSmokeDuration = 0.6
 
 [node name="Body" type="MeshInstance3D" parent="."]
@@ -491,7 +493,7 @@ EquilibriumLength = 0.13
 [node name="WheelBody" type="RigidBody3D" parent="Wheels/WheelFL"]
 transform = Transform3D(1, 1.16415e-09, -9.31323e-10, 2.76486e-10, 1, 0, 0, 1.86265e-09, 1, 0, 0, 0)
 collision_layer = 2
-collision_mask = 15
+collision_mask = 65295
 mass = 25.0
 physics_material_override = SubResource("PhysicsMaterial_anh32")
 max_contacts_reported = 1
@@ -504,8 +506,8 @@ transform = Transform3D(-1, 8.8301e-08, -9.31323e-10, -8.93633e-08, -1, -9.31323
 transform = Transform3D(-4.4005e-08, 1, -9.31323e-10, -1, -4.35248e-08, 0, -1.86265e-09, -4.65661e-10, 1, 0, 0, 0)
 shape = SubResource("CylinderShape3D_cpwma")
 
-[node name="TireSmoke" parent="Wheels/WheelFL/WheelBody" instance=ExtResource("5_ypbly")]
-transform = Transform3D(1, 3.07045e-09, -1.39698e-09, -1.16415e-10, 1, 1.86265e-09, 4.65661e-10, 1.30385e-08, 1, 0, -0.36, 0.2)
+[node name="TireSmoke" parent="Wheels/WheelFL/WheelBody" instance=ExtResource("6_3oyw0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.36, 0)
 emitting = false
 
 [node name="WheelJoint" type="JoltGeneric6DOFJoint3D" parent="Wheels/WheelFL"]
@@ -538,7 +540,7 @@ EquilibriumLength = 0.13
 
 [node name="WheelBody" type="RigidBody3D" parent="Wheels/WheelFR"]
 collision_layer = 2
-collision_mask = 15
+collision_mask = 65295
 mass = 25.0
 physics_material_override = SubResource("PhysicsMaterial_anh32")
 max_contacts_reported = 1
@@ -551,8 +553,8 @@ transform = Transform3D(1, -1.74623e-09, 9.75782e-18, 1.74623e-09, 1, -7.45058e-
 transform = Transform3D(-4.4005e-08, 1, -9.31323e-10, -1, -4.35248e-08, 0, -1.86265e-09, -4.65661e-10, 1, 0, 0, 0)
 shape = SubResource("CylinderShape3D_cpwma")
 
-[node name="TireSmoke" parent="Wheels/WheelFR/WheelBody" instance=ExtResource("5_ypbly")]
-transform = Transform3D(1, 3.07045e-09, -1.39698e-09, -1.16415e-10, 1, 1.86265e-09, 4.65661e-10, 1.30385e-08, 1, 0, -0.36, 0.2)
+[node name="TireSmoke" parent="Wheels/WheelFR/WheelBody" instance=ExtResource("6_3oyw0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.36, 0)
 emitting = false
 
 [node name="WheelJoint" type="JoltGeneric6DOFJoint3D" parent="Wheels/WheelFR"]
@@ -584,7 +586,7 @@ EquilibriumLength = 0.16
 
 [node name="WheelBody" type="RigidBody3D" parent="Wheels/WheelRL"]
 collision_layer = 2
-collision_mask = 15
+collision_mask = 65295
 mass = 25.0
 physics_material_override = SubResource("PhysicsMaterial_anh32")
 max_contacts_reported = 1
@@ -597,8 +599,8 @@ transform = Transform3D(-1, 8.8301e-08, -9.31323e-10, -8.93633e-08, -1, -9.31323
 transform = Transform3D(-4.4005e-08, 1, -9.31323e-10, -1, -4.35248e-08, 0, -1.86265e-09, -4.65661e-10, 1, 0, 0, 0)
 shape = SubResource("CylinderShape3D_cpwma")
 
-[node name="TireSmoke" parent="Wheels/WheelRL/WheelBody" instance=ExtResource("5_ypbly")]
-transform = Transform3D(1, 3.07045e-09, -1.39698e-09, -1.16415e-10, 1, 1.86265e-09, 4.65661e-10, 1.30385e-08, 1, 0, -0.36, 0.2)
+[node name="TireSmoke" parent="Wheels/WheelRL/WheelBody" instance=ExtResource("6_3oyw0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.36, 0)
 emitting = false
 
 [node name="WheelJoint" type="JoltGeneric6DOFJoint3D" parent="Wheels/WheelRL"]
@@ -629,7 +631,7 @@ EquilibriumLength = 0.16
 
 [node name="WheelBody" type="RigidBody3D" parent="Wheels/WheelRR"]
 collision_layer = 2
-collision_mask = 15
+collision_mask = 65295
 mass = 25.0
 physics_material_override = SubResource("PhysicsMaterial_anh32")
 max_contacts_reported = 1
@@ -642,8 +644,8 @@ transform = Transform3D(1, -1.74623e-09, 9.75782e-18, 1.74623e-09, 1, -7.45058e-
 transform = Transform3D(-4.4005e-08, 1, -9.31323e-10, -1, -4.35248e-08, 0, -1.86265e-09, -4.65661e-10, 1, 0, 0, 0)
 shape = SubResource("CylinderShape3D_cpwma")
 
-[node name="TireSmoke" parent="Wheels/WheelRR/WheelBody" instance=ExtResource("5_ypbly")]
-transform = Transform3D(1, 6.67933e-09, -3.25963e-09, 1.74623e-09, 1, 0, 0, 2.04891e-08, 1, 0, -0.36, 0.2)
+[node name="TireSmoke" parent="Wheels/WheelRR/WheelBody" instance=ExtResource("6_3oyw0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.36, 0)
 emitting = false
 
 [node name="WheelJoint" type="JoltGeneric6DOFJoint3D" parent="Wheels/WheelRR"]
@@ -663,8 +665,8 @@ AutomaticTrans = true
 FlywheelMass = 6.0
 GearRatios = PackedFloat32Array(-2.8, 0, 3.827, 2.36, 1.685, 1.312, 1, 0.793)
 FinalDriveRatio = 3.545
-ClutchFriction = 1.7
-FlywheelFriction = 0.8
+ClutchFriction = 2.0
+FlywheelFriction = 0.6
 TorqueSplit = -0.4
 FrontDiffLock = 0.6
 RearDiffLock = 0.8
@@ -674,3 +676,13 @@ DiffLockSlip = 0.2
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.02, -0.153, 0.07)
 script = ExtResource("7_32bjw")
 TireConfigPath = "res://data/tires/StandardTire.ini"
+FrictionCoefficients = {
+"Dirt_Lat": 0.6,
+"Dirt_Long": 0.6,
+"Dry_Lat": 1.1,
+"Dry_Long": 1.1,
+"Grass_Lat": 0.5,
+"Grass_Long": 0.5,
+"Wet_Lat": 0.7,
+"Wet_Long": 0.7
+}
