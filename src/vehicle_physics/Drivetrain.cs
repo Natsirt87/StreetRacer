@@ -306,9 +306,6 @@ public partial class Drivetrain : Node
     _throttle = input;
   }
 
-  public void SetClutch(bool input)
-  {}
-
   public void ShiftUp()
   {
     if (Gear == GearRatios.Length - 1 || _shifting) return;

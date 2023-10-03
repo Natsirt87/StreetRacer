@@ -23,7 +23,7 @@ public partial class Wheel : Node3D
   public RigidBody3D WheelBody;
   [Export]
   public GpuParticles3D SmokeParticles;
-  [Export(PropertyHint.Range, "0, 40, degrees")]
+  [Export(PropertyHint.Range, "25, 90, degrees")]
   public float MaxSteeringAngle;
   [Export(PropertyHint.Range, "0, 200, suffix:Kg")]
   public double Mass = 60;
@@ -147,7 +147,7 @@ public partial class Wheel : Node3D
 
   private void ShowEffects(double delta)
   { 
-    if (LongSlip >= 0.5 && Surface == 0 && OnGround)
+    if (LongSlip >= 0.4 && Surface == 0 && OnGround)
     {
       
       if (_smokeDuration < _vehicle.TireSmokeDuration)
@@ -164,6 +164,7 @@ public partial class Wheel : Node3D
       _smokeDuration = 0;
       SmokeParticles.Emitting = false;
     }
+
   }
 
   // Update the visual mesh of this wheel to represent its calculated position and angular speed
@@ -269,7 +270,7 @@ public partial class Wheel : Node3D
   private void Steer(double delta)
   {
     float steeringAngle = RotationDegrees.Y;
-    float maxSteering = _vehicle.MaxAngleScale * Mathf.Pow(1 - _vehicle.MaxAngleDecay, (float)Tire.PeakSlipAngle - 3);
+    float maxSteering = _vehicle.SteerMaxAngleScale * Mathf.Pow(_vehicle.SteerMaxAngleDecay, (float)Tire.PeakSlipAngle - 3);
     float desiredAngle = SteeringInput * maxSteering;
 
     float vehicleSpeed = Math.Abs(_vehicle.LinearVelocity.Dot(_vehicle.Forward));
@@ -279,11 +280,11 @@ public partial class Wheel : Node3D
     // Auto counter steer using PID
     if (_vehicle.Oversteering && Math.Abs(_vehicle.YawRate) > 0.1f)
     {
-      desiredAngle /= 1 + (float)Math.Pow(speedSensitivity * vehicleSpeed, _vehicle.SteeringSensitivityCurve) * 0.3f;
+      desiredAngle /= 1 + (float)Math.Pow(speedSensitivity * vehicleSpeed, _vehicle.SteeringSensitivityCurve) * 0.08f;
 
       if (Math.Abs(desiredAngle) > Math.Abs(steeringAngle) && Math.Sign(desiredAngle) == Math.Sign(steeringAngle))
       {
-        steerSensitivity /= 1 + (1 - _vehicle.SteeringSpeedSensitivity) * 0.1f * vehicleSpeed;
+        steerSensitivity /= 1 + (1 - _vehicle.CounterSteerSensitivity) * 0.4f * 10;
       }
 
       _driftController.ProportionalGain = _vehicle.CounterSteerGain;

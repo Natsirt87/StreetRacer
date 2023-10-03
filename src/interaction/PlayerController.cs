@@ -27,11 +27,6 @@ public partial class PlayerController : VehicleController
     float steerRight = Input.GetActionStrength("steer_right");
     Vehicle.SetSteeringInput(steerLeft - steerRight);
 
-    if (Input.IsActionJustPressed("clutch"))
-      Vehicle.SetClutchInput(true);
-    else if (Input.IsActionJustReleased("clutch"))
-      Vehicle.SetClutchInput(false);
-
     if (Input.IsActionJustPressed("handbrake"))
       Vehicle.SetHandbrakeInput(true);
     else if (Input.IsActionJustReleased("handbrake"))

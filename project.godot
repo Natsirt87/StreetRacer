@@ -25,6 +25,8 @@ DebugMenu="*res://addons/debug_menu/debug_menu.tscn"
 
 window/size/viewport_width=1920
 window/size/viewport_height=1080
+window/vsync/vsync_mode=0
+window/quality/use_taa=true
 
 [dotnet]
 
@@ -135,4 +137,3 @@ lights_and_shadows/directional_shadow/soft_shadow_filter_quality=5
 textures/default_filters/anisotropic_filtering_level=3
 anti_aliasing/screen_space_roughness_limiter/amount=0.32
 anti_aliasing/screen_space_roughness_limiter/limit=0.21
-anti_aliasing/quality/use_taa=true

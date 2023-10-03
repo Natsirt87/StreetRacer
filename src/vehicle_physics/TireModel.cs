@@ -31,6 +31,7 @@ public partial class TireModel : Node3D
   public double PeakSlipAngle;
   public double LongFriction;
   public double LatFriction;
+  public double SlipMagnitude;
 
   private ConfigFile _tireData;
 
@@ -55,26 +56,26 @@ public partial class TireModel : Node3D
 
     double slipLat = slipAngle / PeakSlipAngle;
     double slipLong = slipRatio / PeakSlipRatio;
-    double slipMagnitude = Math.Sqrt(slipLat*slipLat + slipLong*slipLong);
+    SlipMagnitude = Math.Sqrt(slipLat*slipLat + slipLong*slipLong);
 
     double forceLat;
     double forceLong;
 
-    if (slipMagnitude < MagnitudeThreshold)
+    if (SlipMagnitude < MagnitudeThreshold)
     {
       forceLat = MagicFormula(slipAngle, tireLoad, surfaceName + "_Lat", false);
       forceLong = MagicFormula(slipRatio, tireLoad, surfaceName + "_Long", true);
     }
     else
     {
-      double inputLat = slipMagnitude * PeakSlipAngle;
-      double inputLong = slipMagnitude * PeakSlipRatio;
+      double inputLat = SlipMagnitude * PeakSlipAngle;
+      double inputLong = SlipMagnitude * PeakSlipRatio;
 
       double maxLat = MagicFormula(inputLat, tireLoad, surfaceName + "_Lat", false);
       double maxLong = MagicFormula(inputLong, tireLoad, surfaceName + "_Long", true);
 
-      forceLat = slipLat / slipMagnitude * maxLat;
-      forceLong = slipLong / slipMagnitude * maxLong;
+      forceLat = slipLat / SlipMagnitude * maxLat;
+      forceLong = slipLong / SlipMagnitude * maxLong;
     }
 
     Vector3 appliedForce = new();

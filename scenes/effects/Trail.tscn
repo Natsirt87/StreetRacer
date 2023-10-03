@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://wp7b4x4q7teo"]
+
+[ext_resource type="Script" path="res://src/effects/trail_3d.gd" id="1_k6lwc"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_uupnp"]
+albedo_color = Color(0, 1, 0, 1)
+
+[node name="Trail" type="MeshInstance3D"]
+material_override = SubResource("StandardMaterial3D_uupnp")
+script = ExtResource("1_k6lwc")

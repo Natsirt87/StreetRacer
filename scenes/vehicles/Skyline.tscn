@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://dihproqlibro6"]
+[gd_scene load_steps=32 format=3 uid="uid://dihproqlibro6"]
 
 [ext_resource type="Script" path="res://src/vehicle_physics/Vehicle.cs" id="1_1wswf"]
 [ext_resource type="Script" path="res://src/vehicle_physics/Wheel.cs" id="3_khrj6"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://8rmk2aghqrjv" path="res://scenes/effects/TireSmoke.tscn" id="6_3oyw0"]
 [ext_resource type="Script" path="res://src/vehicle_physics/Drivetrain.cs" id="6_i8g2p"]
 [ext_resource type="Script" path="res://src/vehicle_physics/TireModel.cs" id="7_32bjw"]
+[ext_resource type="Script" path="res://src/effects/TireTrail.gd" id="7_qarjb"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_8tubw"]
 friction = 0.7
@@ -419,6 +420,13 @@ absorbent = true
 height = 0.24
 radius = 0.335
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0id3y"]
+transparency = 1
+depth_draw_mode = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_color = Color(0, 0, 0, 1)
+
 [sub_resource type="Curve" id="Curve_3j47a"]
 _data = [Vector2(0, 0.336842), 0.0, 0.0, 0, 0, Vector2(0.25641, 0.568421), 0.0, 0.0, 0, 0, Vector2(0.505882, 0.778947), 0.536015, 0.536015, 0, 0, Vector2(0.748235, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.726316), 0.213035, 0.0, 0, 0]
 point_count = 5
@@ -438,16 +446,15 @@ Wheels = [NodePath("Wheels/WheelFL"), NodePath("Wheels/WheelFR"), NodePath("Whee
 Drivetrain = NodePath("Drivetrain")
 Mesh = NodePath("Body")
 SteeringSensitivity = 5.0
-SteeringSpeedSensitivity = 1.0
+SteeringSpeedSensitivity = 0.8
 SteeringSensitivitySlope = 0.08
 ABS = false
 MaxSlipRatio = 2.0
-CounterSteerGain = 24.0
+CounterSteerGain = 30.0
 CounterSteerDamping = 3.0
-CounterSteerMaxAngle = 25.0
-CounterSteerTarget = 0.03
-MaxAngleDecay = 0.03
-TireSmokeDuration = 0.6
+CounterSteerTarget = 0.1
+SteerMaxAngleDecay = 1.0
+TireSmokeDuration = 0.8
 
 [node name="Body" type="MeshInstance3D" parent="."]
 transform = Transform3D(-0.01, -1.4843e-09, -6.59384e-12, 4.57021e-11, -2.61934e-10, -0.01, 1.50612e-09, -0.01, 3.49246e-10, 0, 0, 0)
@@ -475,7 +482,7 @@ Tire = NodePath("../../TireModel")
 VisualWheel = NodePath("WheelBody/WheelMesh")
 WheelBody = NodePath("WheelBody")
 SmokeParticles = NodePath("WheelBody/TireSmoke")
-MaxSteeringAngle = 25.0
+MaxSteeringAngle = 60.0
 Mass = 50.0
 Radius = 0.335
 Width = 0.12
@@ -523,7 +530,7 @@ Tire = NodePath("../../TireModel")
 VisualWheel = NodePath("WheelBody/WheelMesh")
 WheelBody = NodePath("WheelBody")
 SmokeParticles = NodePath("WheelBody/TireSmoke")
-MaxSteeringAngle = 25.0
+MaxSteeringAngle = 60.0
 Mass = 50.0
 Radius = 0.335
 Width = 0.12
@@ -615,7 +622,7 @@ Index = 3
 Tire = NodePath("../../TireModel")
 VisualWheel = NodePath("WheelBody/WheelMesh")
 WheelBody = NodePath("WheelBody")
-SmokeParticles = NodePath("WheelBody/TireSmoke")
+SmokeParticles = NodePath("WheelBody/EmitterPoint/TireSmoke")
 Mass = 50.0
 Radius = 0.335
 Width = 0.12
@@ -644,9 +651,21 @@ transform = Transform3D(1, -1.74623e-09, 9.75782e-18, 1.74623e-09, 1, -7.45058e-
 transform = Transform3D(-4.4005e-08, 1, -9.31323e-10, -1, -4.35248e-08, 0, -1.86265e-09, -4.65661e-10, 1, 0, 0, 0)
 shape = SubResource("CylinderShape3D_cpwma")
 
-[node name="TireSmoke" parent="Wheels/WheelRR/WheelBody" instance=ExtResource("6_3oyw0")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.36, 0)
+[node name="EmitterPoint" type="Node3D" parent="Wheels/WheelRR/WheelBody"]
+transform = Transform3D(1, 1.23691e-09, -9.31323e-10, 2.91038e-10, 1, 0, 0, 1.86265e-09, 1, 5.96046e-08, -0.36, -1.19209e-07)
+
+[node name="TireSmoke" parent="Wheels/WheelRR/WheelBody/EmitterPoint" instance=ExtResource("6_3oyw0")]
+transform = Transform3D(1, 2.61934e-10, 4.65661e-10, -6.40284e-10, 1, 0, 0, -1.86265e-09, 1, -5.96046e-08, 5.96046e-08, 1.19209e-07)
 emitting = false
+
+[node name="TireTrail" type="Node3D" parent="Wheels/WheelRR/WheelBody"]
+transform = Transform3D(1, 1.14669e-08, -5.58794e-09, 5.19503e-09, 1, -3.72529e-09, 4.65661e-10, 1.11759e-08, 1, 0, -0.3, 0.018)
+script = ExtResource("7_qarjb")
+material = SubResource("StandardMaterial3D_0id3y")
+start_width = 0.16
+end_width = 0.1
+lifespan = 5.0
+start_color = Color(1, 1, 1, 0.627451)
 
 [node name="WheelJoint" type="JoltGeneric6DOFJoint3D" parent="Wheels/WheelRR"]
 linear_limit_y/upper = 0.5
@@ -667,10 +686,9 @@ GearRatios = PackedFloat32Array(-2.8, 0, 3.827, 2.36, 1.685, 1.312, 1, 0.793)
 FinalDriveRatio = 3.545
 ClutchFriction = 2.0
 FlywheelFriction = 0.6
-TorqueSplit = -0.4
-FrontDiffLock = 0.6
+FrontDiffLock = 1.0
 RearDiffLock = 0.8
-DiffLockSlip = 0.2
+DiffLockSlip = 0.01
 
 [node name="TireModel" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.02, -0.153, 0.07)
@@ -679,10 +697,10 @@ TireConfigPath = "res://data/tires/StandardTire.ini"
 FrictionCoefficients = {
 "Dirt_Lat": 0.6,
 "Dirt_Long": 0.6,
-"Dry_Lat": 1.1,
-"Dry_Long": 1.1,
-"Grass_Lat": 0.5,
-"Grass_Long": 0.5,
+"Dry_Lat": 1.2,
+"Dry_Long": 1.2,
+"Grass_Lat": 1.0,
+"Grass_Long": 1.0,
 "Wet_Lat": 0.7,
 "Wet_Long": 0.7
 }

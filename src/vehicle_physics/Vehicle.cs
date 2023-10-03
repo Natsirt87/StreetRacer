@@ -26,6 +26,8 @@ public partial class Vehicle : RigidBody3D
   [Export]
   public float SteeringSpeedSensitivity = 0.3f;
   [Export]
+  public float CounterSteerSensitivity = 0.7f;
+  [Export]
   public float SteeringSensitivitySlope = 0.3f;
   [Export]
   public float SteeringSensitivityCurve = 2;
@@ -54,9 +56,9 @@ public partial class Vehicle : RigidBody3D
   [Export]
   public float CounterSteerTarget = 0.2f;
   [Export]
-  public float MaxAngleScale = 25;
+  public float SteerMaxAngleScale = 25;
   [Export]
-  public float MaxAngleDecay = 0.08f;
+  public float SteerMaxAngleDecay = 0.08f;
 
   [ExportGroup("Effects")]
   [Export]
@@ -351,8 +353,6 @@ public partial class Vehicle : RigidBody3D
   }
 
   public void SetThrottleInput(float input) { Drivetrain.SetThrottle(input); }
-
-  public void SetClutchInput(bool input) { Drivetrain.SetClutch(input); }
 
   public void ShiftUp() { Drivetrain.ShiftUp(); }
 

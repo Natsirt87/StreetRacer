@@ -341,16 +341,16 @@ theme_override_fonts/font = ExtResource("1_5l2mp")
 theme_override_font_sizes/font_size = 14
 text = "0"
 
-[node name="Force" type="HBoxContainer" parent="Canvas/DebugData/WheelPanelFR/WheelData"]
+[node name="Torque" type="HBoxContainer" parent="Canvas/DebugData/WheelPanelFR/WheelData"]
 layout_mode = 2
 
-[node name="TorqueLabel" type="Label" parent="Canvas/DebugData/WheelPanelFR/WheelData/Force"]
+[node name="TorqueLabel" type="Label" parent="Canvas/DebugData/WheelPanelFR/WheelData/Torque"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_5l2mp")
 theme_override_font_sizes/font_size = 14
 text = "Torque:    "
 
-[node name="TorqueValue" type="Label" parent="Canvas/DebugData/WheelPanelFR/WheelData/Force"]
+[node name="TorqueValue" type="Label" parent="Canvas/DebugData/WheelPanelFR/WheelData/Torque"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_fonts/font = ExtResource("1_5l2mp")
@@ -478,16 +478,16 @@ theme_override_fonts/font = ExtResource("1_5l2mp")
 theme_override_font_sizes/font_size = 14
 text = "0"
 
-[node name="Force" type="HBoxContainer" parent="Canvas/DebugData/WheelPanelRL/WheelData"]
+[node name="Torque" type="HBoxContainer" parent="Canvas/DebugData/WheelPanelRL/WheelData"]
 layout_mode = 2
 
-[node name="ForceLabel" type="Label" parent="Canvas/DebugData/WheelPanelRL/WheelData/Force"]
+[node name="TorqueLabel" type="Label" parent="Canvas/DebugData/WheelPanelRL/WheelData/Torque"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_5l2mp")
 theme_override_font_sizes/font_size = 14
-text = "Force:     "
+text = "Torque:    "
 
-[node name="ForceValue" type="Label" parent="Canvas/DebugData/WheelPanelRL/WheelData/Force"]
+[node name="TorqueValue" type="Label" parent="Canvas/DebugData/WheelPanelRL/WheelData/Torque"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_fonts/font = ExtResource("1_5l2mp")
@@ -615,16 +615,16 @@ theme_override_fonts/font = ExtResource("1_5l2mp")
 theme_override_font_sizes/font_size = 14
 text = "0"
 
-[node name="Force" type="HBoxContainer" parent="Canvas/DebugData/WheelPanelRR/WheelData"]
+[node name="Torque" type="HBoxContainer" parent="Canvas/DebugData/WheelPanelRR/WheelData"]
 layout_mode = 2
 
-[node name="ForceLabel" type="Label" parent="Canvas/DebugData/WheelPanelRR/WheelData/Force"]
+[node name="TorqueLabel" type="Label" parent="Canvas/DebugData/WheelPanelRR/WheelData/Torque"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_5l2mp")
 theme_override_font_sizes/font_size = 14
-text = "Force:     "
+text = "Torque:    "
 
-[node name="ForceValue" type="Label" parent="Canvas/DebugData/WheelPanelRR/WheelData/Force"]
+[node name="TorqueValue" type="Label" parent="Canvas/DebugData/WheelPanelRR/WheelData/Torque"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_fonts/font = ExtResource("1_5l2mp")

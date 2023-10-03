@@ -254,7 +254,7 @@ public partial class PlayerCamera : Node3D
 
     // Add controller pitch input
     float pitchInput = CustomSensitivity(_pitchCameraInput);
-    float targetPitch = pitchInput > 0 ? pitchInput * Mathf.DegToRad(15) : pitchInput * Mathf.DegToRad(35);
+    float targetPitch = pitchInput > 0 ? pitchInput * Mathf.DegToRad(30) : pitchInput * Mathf.DegToRad(45);
     _pitch = Mathf.LerpAngle(_pitch, targetPitch, _transitionLevel * ChaseSensitivity * (float)delta);
     Transform3D pitchTransform = new()
     {
