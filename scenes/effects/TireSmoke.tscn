@@ -4,15 +4,15 @@
 
 [sub_resource type="Gradient" id="Gradient_u15tc"]
 interpolation_mode = 2
-offsets = PackedFloat32Array(0.317857, 1)
+offsets = PackedFloat32Array(0.214286, 1)
 colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_5vqq3"]
 gradient = SubResource("Gradient_u15tc")
 
 [sub_resource type="Curve" id="Curve_bhmui"]
-_data = [Vector2(0, 0.484211), 0.0, 0.0, 0, 0, Vector2(0.37037, 1), -0.580021, -0.580021, 0, 0, Vector2(0.675241, 0.936842), -1.49585, -1.49585, 0, 0, Vector2(0.768489, 0.463158), -2.18246, -2.18246, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
-point_count = 5
+_data = [Vector2(0, 0.484211), 0.0, 0.0, 0, 0, Vector2(0.344051, 0.978947), -0.580021, -0.580021, 0, 0, Vector2(0.55627, 0.326316), -2.18246, -2.18246, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 4
 
 [sub_resource type="CurveTexture" id="CurveTexture_nl34f"]
 curve = SubResource("Curve_bhmui")
@@ -30,14 +30,14 @@ linear_accel_min = 1.0
 linear_accel_max = 2.0
 radial_accel_min = 0.2
 radial_accel_max = 0.5
-damping_min = 4.0
-damping_max = 5.0
+damping_min = 3.0
+damping_max = 4.0
 angle_min = -30.0
 angle_max = 30.0
 scale_min = 0.0
-scale_max = 0.7
+scale_max = 0.6
 scale_curve = SubResource("CurveTexture_nl34f")
-color = Color(1, 1, 1, 0.027451)
+color = Color(1, 1, 1, 0.0431373)
 color_ramp = SubResource("GradientTexture1D_5vqq3")
 turbulence_noise_strength = 16.69
 
@@ -45,7 +45,7 @@ turbulence_noise_strength = 16.69
 material = ExtResource("1_jki3q")
 
 [node name="TireSmoke" type="GPUParticles3D"]
-amount = 500
+amount = 1000
 lifetime = 2.5
 collision_base_size = 0.5
 process_material = SubResource("ParticleProcessMaterial_75wvx")

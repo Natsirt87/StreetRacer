@@ -170,7 +170,16 @@ public partial class Wheel : Node3D
   // Update the visual mesh of this wheel to represent its calculated position and angular speed
   private void UpdateVisualWheel(double delta)
   {
-    Vector3 wheelRot = new(VisualWheel.Rotation.X - (float)(AngularVelocity * delta), VisualWheel.Rotation.Y, VisualWheel.Rotation.Z);
+    double angVelocity = AngularVelocity;
+    double vehicleSpeed = _vehicle.LinearVelocity.Dot(Forward);
+    double wheelSpeed = AngularVelocity * Radius;
+
+    if (wheelSpeed < StationaryWheelSpeed && !StationaryBraking)
+    {
+      angVelocity = vehicleSpeed / Radius;
+    }
+
+    Vector3 wheelRot = new(VisualWheel.Rotation.X - (float)(angVelocity * delta), VisualWheel.Rotation.Y, VisualWheel.Rotation.Z);
     VisualWheel.Rotation = wheelRot;
   }
 
