@@ -13,13 +13,21 @@ public partial class PlayerCamera : Node3D
   [Export]
   public bool UseMouse = true;
 
+  [ExportGroup("Camera Rotation")]
+  [Export]
+  public float MinRotation = 12f;
+  [Export]
+  public float MaxRotation = 16f;
+  [Export]
+  public float RotationRate = 5f;
+
   [ExportGroup("Field of View")]
   [Export]
   public float Fov = 65;
   [Export]
   public float MaxFov = 100;
   [Export]
-  public float FovSmooth = 5f;
+  public float FovRate = 5f;
 
   [ExportGroup("Sensitivity")]
   [Export]
@@ -31,23 +39,25 @@ public partial class PlayerCamera : Node3D
   [Export]
   public float ControllerLinearity = 2;
 
-  [ExportGroup("Smoothing")]
+  [ExportGroup("Movement Rates")]
   [Export]
-  public float FollowSpeed = 35f;
+  public float FollowRate = 35f;
   [Export]
-  public float AccelerationSmoothing = 3f;
+  public float AccelerationRate = 3f;
   [Export]
   public float AccelerationMagnitude = 0.1f;
   [Export]
-  public float ChaseSmoothSpeed = 10f;
+  public float ChaseRate = 10f;
   [Export]
-  public float ChaseVelocitySmooth = 3f;
+  public float ChaseVelocityRate = 3f;
   [Export]
-  public float OrbitRotationSmooth = 5f;
+  public float OrbitRotationRate = 5f;
   [Export]
-  public float ChaseMouseSmooth = 100f;
+  public float ChaseMouseRate = 100f;
+
+  [ExportGroup("General")]
   [Export]
-  public float ChaseSpeed = 5f;
+  public float ChaseSpeedThreshold = 5f;
   [Export]
   public float TransitionDuration = 1f;
   [Export]
@@ -121,7 +131,7 @@ public partial class PlayerCamera : Node3D
     }
 
     float speed = Target.LinearVelocity.Length();
-    if (speed > ChaseSpeed)
+    if (speed > ChaseSpeedThreshold)
     {
       ChaseMode(delta);
     }
@@ -130,16 +140,19 @@ public partial class PlayerCamera : Node3D
       OrbitMode(delta);
     }
 
-    GlobalPosition = GlobalPosition.Lerp(Target.GlobalPosition, FollowSpeed * (float)delta);
+    GlobalPosition = GlobalPosition.Lerp(Target.GlobalPosition, FollowRate * (float)delta);
 
     float targetFov = Mathf.Lerp(Fov, MaxFov, Target.LinearVelocity.Length() / 100);
-    _camera.Fov = Mathf.Lerp(_camera.Fov, targetFov, FovSmooth * (float)delta);
+    _camera.Fov = Mathf.Lerp(_camera.Fov, targetFov, FovRate * (float)delta);
+
+    float targetRotation = Mathf.Lerp(MinRotation, MaxRotation, Target.LinearVelocity.Length() / 100);
+    _camera.Rotation = _camera.Rotation.Lerp(new(Mathf.DegToRad(targetRotation), 0, 0), RotationRate * (float)delta);
 
     _targetAccel = (speed - _lastSpeed) / (float)delta;
     _lastSpeed = speed;
     
     float armlength = _initialArmLength + (AccelerationMagnitude * _targetAccel);
-    _arm.SpringLength = Mathf.Lerp(_arm.SpringLength, armlength, AccelerationSmoothing * (float)delta);
+    _arm.SpringLength = Mathf.Lerp(_arm.SpringLength, armlength, AccelerationRate * (float)delta);
 
     _mouseInput = Vector2.Zero;
   }
@@ -178,7 +191,7 @@ public partial class PlayerCamera : Node3D
     };
     
     Transform3D rotateTransform = yawTransform * pitchTransform;
-    Transform3D smoothedTransform = GlobalTransform.InterpolateWith(rotateTransform, _transitionLevel * OrbitRotationSmooth * (float)delta);
+    Transform3D smoothedTransform = GlobalTransform.InterpolateWith(rotateTransform, _transitionLevel * OrbitRotationRate * (float)delta);
     smoothedTransform.Origin = GlobalTransform.Origin;
     GlobalTransform = smoothedTransform;
 
@@ -232,7 +245,7 @@ public partial class PlayerCamera : Node3D
 
     velocityDirection.Y = 0;
 
-    _direction = _direction.Lerp(velocityDirection, _transitionLevel * ChaseVelocitySmooth * (float)delta);
+    _direction = _direction.Lerp(velocityDirection, _transitionLevel * ChaseVelocityRate * (float)delta);
 
     Transform3D velocityTransform = new()
     {
@@ -254,7 +267,7 @@ public partial class PlayerCamera : Node3D
 
     // Add controller pitch input
     float pitchInput = CustomSensitivity(_pitchCameraInput);
-    float targetPitch = pitchInput > 0 ? pitchInput * Mathf.DegToRad(30) : pitchInput * Mathf.DegToRad(45);
+    float targetPitch = pitchInput > 0 ? pitchInput * Mathf.DegToRad(15) : pitchInput * Mathf.DegToRad(45);
     _pitch = Mathf.LerpAngle(_pitch, targetPitch, _transitionLevel * ChaseSensitivity * (float)delta);
     Transform3D pitchTransform = new()
     {
@@ -278,7 +291,7 @@ public partial class PlayerCamera : Node3D
         _mouseChaseDuration += (float)delta;
       }
 
-      _mouseSmoothSpeed = Mathf.Lerp(_mouseSmoothSpeed, ChaseVelocitySmooth * 1.2f, 1f * (float)delta);
+      _mouseSmoothSpeed = Mathf.Lerp(_mouseSmoothSpeed, ChaseVelocityRate * 1.2f, 1f * (float)delta);
     }
     else
     {
@@ -288,7 +301,7 @@ public partial class PlayerCamera : Node3D
         _targetChaseMouseRotation = _chaseMouseRotation;
         _mouseResetting = false;
       }
-      _mouseSmoothSpeed = ChaseMouseSmooth;
+      _mouseSmoothSpeed = ChaseMouseRate;
     }
 
     _targetChaseMouseRotation -= _mouseInput * MouseSensitivity * (float)delta;
@@ -302,7 +315,7 @@ public partial class PlayerCamera : Node3D
     };
 
     Transform3D targetTransform = velocityTransform * mouseInputTransform * yawTransform * pitchTransform;
-    Transform3D smoothedTransform = GlobalTransform.InterpolateWith(targetTransform, ChaseSmoothSpeed * (float)delta);
+    Transform3D smoothedTransform = GlobalTransform.InterpolateWith(targetTransform, ChaseRate * (float)delta);
 
     Vector3 newRot = smoothedTransform.Basis.GetEuler();
     Vector3 lastRot = GlobalTransform.Basis.GetEuler();

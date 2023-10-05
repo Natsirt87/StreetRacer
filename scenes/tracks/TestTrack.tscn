@@ -26,7 +26,7 @@ glow_enabled = true
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_l3ss8"]
 albedo_color = Color(0.388235, 0.388235, 0.388235, 1)
 albedo_texture = ExtResource("1_x2yo0")
-uv1_scale = Vector3(500, 500, 1)
+uv1_scale = Vector3(250, 500, 1)
 uv1_world_triplanar = true
 texture_filter = 5
 
@@ -131,7 +131,7 @@ size = Vector3(250, 0.01, 500)
 albedo_color = Color(0.482353, 0.443137, 0.341176, 1)
 albedo_texture = ExtResource("6_yoji2")
 metallic_specular = 0.35
-uv1_scale = Vector3(350, 275, 1)
+uv1_scale = Vector3(250, 500, 1)
 
 [node name="TestTrack" type="Node3D"]
 
@@ -1406,6 +1406,3 @@ shape = SubResource("BoxShape3D_cyxtk")
 [node name="GrassMesh" type="CSGBox3D" parent="Course/Grass"]
 size = Vector3(250, 0.03, 500)
 material = SubResource("StandardMaterial3D_c7og6")
-
-[node name="Decal" type="Decal" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.04768, 0, 0)

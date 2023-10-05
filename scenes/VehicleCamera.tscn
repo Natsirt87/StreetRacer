@@ -5,27 +5,28 @@
 [node name="VehicleCamera" type="Node3D"]
 script = ExtResource("1_fu16g")
 UseMouse = false
-Fov = 72.0
-MaxFov = 95.0
-FovSmooth = 2.0
+MinRotation = 10.0
+MaxRotation = 22.0
+RotationRate = 3.0
+Fov = 70.0
 OrbitSensitivity = 80.0
 MouseSensitivity = 80.0
 ControllerLinearity = 1.8
-AccelerationSmoothing = 0.1
+AccelerationRate = 0.1
 AccelerationMagnitude = 0.2
-ChaseSmoothSpeed = 50.0
-ChaseVelocitySmooth = 2.0
-OrbitRotationSmooth = 10.0
-ChaseMouseSmooth = 10.0
-ChaseSpeed = 2.0
+ChaseRate = 50.0
+ChaseVelocityRate = 2.0
+OrbitRotationRate = 10.0
+ChaseMouseRate = 10.0
+ChaseSpeedThreshold = 3.0
 TransitionDuration = 1.5
 OversteerTransitionDuration = 1.0
 Damping = 50.0
 
 [node name="SpringArm3D" type="SpringArm3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.819152, 0.573576, 0, -0.573576, 0.819152, 0, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 0.906307, 0.422618, 0, -0.422618, 0.906307, 0, 0, 0)
 collision_mask = 65293
-spring_length = 20.0
+spring_length = 13.0
 margin = 3.0
 
 [node name="Camera3D" type="Camera3D" parent="SpringArm3D"]
