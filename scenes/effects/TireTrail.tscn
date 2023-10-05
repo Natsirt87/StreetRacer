@@ -1,0 +1,35 @@
+[gd_scene load_steps=4 format=3 uid="uid://vm0h5lg02uuy"]
+
+[ext_resource type="Script" path="res://src/effects/TireTrail.cs" id="1_p3miy"]
+[ext_resource type="Shader" path="res://src/effects/TireTrail.gdshader" id="2_2fb3y"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_w3im1"]
+render_priority = 0
+shader = ExtResource("2_2fb3y")
+shader_parameter/albedo = Color(0, 0, 0, 1)
+shader_parameter/roughness = 1.0
+shader_parameter/specular = 0.5
+shader_parameter/metallic = 0.0
+shader_parameter/uv1_scale = Vector3(1, 1, 1)
+shader_parameter/uv1_offset = Vector3(0, 0, 0)
+shader_parameter/vertices = null
+shader_parameter/colors = null
+shader_parameter/visible = null
+shader_parameter/origin = null
+shader_parameter/end_color = null
+shader_parameter/start = null
+shader_parameter/end = null
+shader_parameter/size = null
+shader_parameter/max_size = null
+
+[node name="TireTrail" type="Node3D"]
+transform = Transform3D(1, 1.87865e-08, -1.21072e-08, 7.39237e-09, 1, -9.31323e-09, 0, 2.04891e-08, 1, 0, -0.3, 0)
+script = ExtResource("1_p3miy")
+Enabled = false
+Mat = SubResource("ShaderMaterial_w3im1")
+StartWidth = 0.24
+SegmentDistance = 0.3
+Segments = 100
+Lifespan = 5.0
+StartColor = Color(1, 1, 1, 0.705882)
+EndColor = Color(1, 1, 1, 0)

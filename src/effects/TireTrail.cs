@@ -38,20 +38,20 @@ public partial class TireTrail : Node3D
 	{
     Trail curTrail = null;
 
-    foreach (Trail trail in _trails)
+    for (int i = _trails.Count - 1; i >= 0; i--)
     {
       if (!Enabled)
-        trail.Active = false;
+        _trails[i].Active = false;
       
-      if (trail.Active)
-        curTrail = trail;
+      if (_trails[i].Active)
+        curTrail = _trails[i];
       
-      trail.Update(delta);
+      _trails[i].Update(delta);
 
-      if (trail.NumPoints == 0 && !trail.Active)
+      if (_trails[i].NumPoints == 0 && !_trails[i].Active)
       {
-        trail.QueueFree();
-        _trails.Remove(trail);
+        _trails[i].QueueFree();
+        _trails.Remove(_trails[i]);
       }
     }
 
@@ -151,6 +151,27 @@ public partial class TireTrail : Node3D
       }
 
       // TODO: Age stuff here
+      for (int i = 0; i < _maxPoints; i++)
+      {
+        if (_visible[i] > 0)
+        {
+          _ages[i] -= (float)delta;
+          if (_ages[i] < 0)
+          {
+            Shorten();
+          }
+        }
+      }
+    }
+
+    private void Shorten()
+    {
+      if (NumPoints > 0)
+      {
+        _visible[_endPointer] = 0;
+        _endPointer = (_endPointer + 1) % _maxPoints;
+        NumPoints--;
+      }
     }
 
     // Update the shader that positions the vertices of the trail to render based on calculated data

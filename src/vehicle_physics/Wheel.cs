@@ -3,6 +3,7 @@ using static Godot.GD;
 using System;
 using System.Runtime.InteropServices;
 using Utility;
+using Effects;
 
 namespace VehiclePhysics;
 
@@ -23,6 +24,8 @@ public partial class Wheel : Node3D
   public RigidBody3D WheelBody;
   [Export]
   public GpuParticles3D SmokeParticles;
+  [Export]
+  public TireTrail Trail;
   [Export(PropertyHint.Range, "25, 90, degrees")]
   public float MaxSteeringAngle;
   [Export(PropertyHint.Range, "0, 200, suffix:Kg")]
@@ -147,7 +150,7 @@ public partial class Wheel : Node3D
 
   private void ShowEffects(double delta)
   { 
-    if (LongSlip >= 0.4 && Surface == 0 && OnGround)
+    if (LongSlip > 0.4 && Surface == 0 && OnGround)
     {
       
       if (_smokeDuration < _vehicle.TireSmokeDuration)
@@ -165,6 +168,14 @@ public partial class Wheel : Node3D
       SmokeParticles.Emitting = false;
     }
 
+    if (Tire.SlipMagnitude >= 8 && Surface == 0 && OnGround)
+    {
+      Trail.Enabled = true;
+    }
+    else
+    {
+      Trail.Enabled = false;
+    }
   }
 
   // Update the visual mesh of this wheel to represent its calculated position and angular speed
