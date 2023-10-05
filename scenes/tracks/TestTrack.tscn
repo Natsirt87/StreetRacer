@@ -6,22 +6,31 @@
 [ext_resource type="Texture2D" uid="uid://cds7fhphcuqd1" path="res://assets/textures/dirty_tarmac_suzuka.png" id="4_dp2f0"]
 [ext_resource type="Texture2D" uid="uid://1si6cpd336rh" path="res://assets/textures/GridGreen.png" id="6_yoji2"]
 
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_2x634"]
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_n6lbo"]
 sky_top_color = Color(0.223529, 0.384314, 0.501961, 1)
 sky_horizon_color = Color(0.605882, 0.638328, 0.65874, 1)
 sky_energy_multiplier = 0.8
 ground_horizon_color = Color(0.605882, 0.638328, 0.65874, 1)
 
-[sub_resource type="Sky" id="Sky_au30n"]
-sky_material = SubResource("ProceduralSkyMaterial_2x634")
+[sub_resource type="Sky" id="Sky_dnbpg"]
+sky_material = SubResource("ProceduralSkyMaterial_n6lbo")
 
-[sub_resource type="Environment" id="Environment_eskpe"]
+[sub_resource type="Environment" id="Environment_gswoh"]
 background_mode = 2
-sky = SubResource("Sky_au30n")
-tonemap_mode = 2
+sky = SubResource("Sky_dnbpg")
+ambient_light_color = Color(1, 1, 1, 1)
+ambient_light_energy = 0.26
+tonemap_mode = 3
+tonemap_exposure = 2.5
+tonemap_white = 16.0
 ssao_enabled = true
-sdfgi_enabled = true
 glow_enabled = true
+fog_light_color = Color(0.517647, 0.552941, 0.607843, 1)
+fog_density = 0.001
+fog_sky_affect = 0.1
+fog_height = 565.8
+volumetric_fog_density = 0.0192
+volumetric_fog_albedo = Color(0.8, 0.819608, 0.85098, 1)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_l3ss8"]
 albedo_color = Color(0.388235, 0.388235, 0.388235, 1)
@@ -135,16 +144,15 @@ uv1_scale = Vector3(250, 500, 1)
 
 [node name="TestTrack" type="Node3D"]
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_eskpe")
-
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(-0.92197, 0.276815, -0.270825, 0.00630365, 0.709965, 0.704208, 0.387211, 0.647551, -0.656311, 0, 0, 0)
-light_color = Color(0.988235, 0.952941, 0.909804, 1)
-light_indirect_energy = 2.78
+transform = Transform3D(-0.866025, -0.259446, 0.42742, 0, 0.854839, 0.518893, -0.5, 0.449374, -0.740313, 0, 0, 0)
+light_color = Color(0.988235, 0.937255, 0.870588, 1)
+light_energy = 0.8
 shadow_enabled = true
-shadow_bias = 0.05
 directional_shadow_max_distance = 500.0
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_gswoh")
 
 [node name="Ground" type="StaticBody3D" parent="."]
 collision_layer = 256

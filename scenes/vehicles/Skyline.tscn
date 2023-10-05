@@ -14,14 +14,14 @@ friction = 0.7
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_eg0o0"]
 resource_name = "Paint"
-cull_mode = 2
 vertex_color_use_as_albedo = true
-albedo_color = Color(0, 0.176471, 0.427451, 1)
-metallic = 0.74
-metallic_specular = 0.51
-roughness = 0.5
+albedo_color = Color(0, 0.168627, 0.407843, 1)
+metallic = 0.43
+metallic_specular = 0.34
+roughness = 0.54
+rim_tint = 0.86
 clearcoat_enabled = true
-clearcoat_roughness = 0.57
+clearcoat_roughness = 0.44
 backlight = Color(1, 1, 1, 1)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0n0ax"]
@@ -49,12 +49,14 @@ roughness = 0.5
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_s35t4"]
 resource_name = "Windows"
-albedo_color = Color(0, 0, 0, 0.992157)
-metallic_specular = 0.24
-roughness = 0.63
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.0784314, 0.0784314, 0.0784314, 0.992157)
+metallic_specular = 0.08
+roughness = 0.46
 emission = Color(1, 1, 1, 1)
 emission_energy_multiplier = 5.0
 rim_enabled = true
+rim_tint = 0.33
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hkqdq"]
 resource_name = "Exhaust"
@@ -441,7 +443,6 @@ Mesh = NodePath("Body")
 SteeringSensitivity = 5.0
 SteeringSpeedSensitivity = 0.8
 SteeringSensitivitySlope = 0.08
-ABS = false
 MaxSlipRatio = 2.0
 CounterSteerGain = 20.0
 CounterSteerDamping = 3.0
@@ -674,7 +675,7 @@ node_b = NodePath("../../..")
 transform = Transform3D(1, 2.32831e-10, -1.86265e-09, -2.03727e-09, 1, 0, 0, 3.72529e-09, 1, -0.02, -0.153, 0.07)
 script = ExtResource("6_i8g2p")
 Vehicle = NodePath("..")
-PeakTorque = 390.0
+PeakTorque = 600.0
 TorqueCurve = SubResource("Curve_3j47a")
 Redline = 8000.0
 Idle = 800.0
@@ -684,6 +685,7 @@ GearRatios = PackedFloat32Array(-2.8, 0, 3.827, 2.36, 1.685, 1.312, 1, 0.793)
 FinalDriveRatio = 3.545
 ClutchFriction = 3.0
 FlywheelFriction = 0.6
+TorqueSplit = -0.5
 FrontDiffLock = 1.0
 RearDiffLock = 1.0
 DiffLockSlip = 0.2
