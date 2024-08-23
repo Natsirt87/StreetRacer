@@ -7,7 +7,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleExecutable</key>
-	<string>godot-jolt_macos_editor</string>
+	<string>godot-jolt_ios</string>
 	<key>CFBundleName</key>
 	<string>Godot Jolt</string>
 	<key>CFBundleDisplayName</key>
@@ -24,13 +24,28 @@
 	<string>FMWK</string>
 	<key>CFBundleSupportedPlatforms</key>
 	<array>
-		<string>MacOSX</string>
+		<string>iPhoneOS</string>
 	</array>
 	<key>CSResourcesFileMapped</key>
 	<true/>
 	<key>DTPlatformName</key>
-	<string>macosx</string>
-	<key>LSMinimumSystemVersion</key>
-	<string>10.12</string>
+	<string>iphoneos</string>
+	<key>MinimumOSVersion</key>
+	<string>12.0</string>
+
+	<!--
+	    HACK(mihe): This is to work around a bug in Godot 4.3-beta1, where it treats Framework
+	    bundles the same as XCFramework bundles, and expects there to be an `AvailableLibraries`
+	    entry, which is really only a thing in XCFramework bundles. Note that we also lie about the
+	    binary path having a `.dylib` extension in order for Godot to correctly identify this as a
+	    dynamically linked bundle.
+	-->
+	<key>AvailableLibraries</key>
+	<array>
+		<dict>
+			<key>BinaryPath</key>
+			<string>godot-jolt_ios.dylib</string>
+		</dict>
+	</array>
 </dict>
 </plist>
