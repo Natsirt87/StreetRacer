@@ -133,12 +133,16 @@ public partial class TireTrail : Node3D
     private void UpdatePoints(double delta)
     {
       // Update the base point to draw the trail from
-      if (Active && _startPointer > -1)
+      if (_startPointer > -1)
       {
-        if (_body == null || _body.LinearVelocity.LengthSquared() > 1f)
+        if (Active && (_body == null || _body.LinearVelocity.LengthSquared() > 1f))
         {
           Vector3 pointPosition = Vector3.Up * _rand.RandfRange(-0.002f, 0.002f) + GlobalPosition;
           SetPoint(pointPosition, _startPointer);
+        }
+        if (!Active)
+        {
+          _colors[_startPointer] = _master.EndColor;
         }
       }
 
@@ -184,7 +188,6 @@ public partial class TireTrail : Node3D
       _shader.SetShaderParameter("vertices", vertices);
       _shader.SetShaderParameter("colors", colors);
       _shader.SetShaderParameter("visible", visible);
-      _shader.SetShaderParameter("origin", GlobalPosition);
       _shader.SetShaderParameter("end_color", endColor);
       _shader.SetShaderParameter("start", start);
       _shader.SetShaderParameter("end", end);
@@ -219,6 +222,12 @@ public partial class TireTrail : Node3D
       }
     }
 
+    private void ClearPoint(int i)
+    {
+      _colors[i] = new Color(1, 1, 1, 0);
+
+    }
+
     private void SetPoint(Vector3 origin, int index)
     {
       _colors[index] = _master.StartColor;
@@ -237,6 +246,7 @@ public partial class TireTrail : Node3D
         if (_body.LinearVelocity.LengthSquared() > 1f)
         {
           axis = _body.LinearVelocity.Normalized().Cross(Vector3.Up);
+          //origin += -_body.LinearVelocity * 0.05f;
         }
       }
 
@@ -244,6 +254,4 @@ public partial class TireTrail : Node3D
       return new [] {origin + axis, origin - axis};
     }
   }
-
-  
 }

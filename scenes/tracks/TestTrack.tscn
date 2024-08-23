@@ -1383,7 +1383,7 @@ mesh = SubResource("BoxMesh_agaho")
 [node name="Course" type="Node3D" parent="."]
 
 [node name="RoadPath" type="Path3D" parent="Course"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 54.2474, 0, 74.5295)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 54.247, 0, 74.53)
 curve = SubResource("Curve3D_fojkg")
 
 [node name="RoadMesh" type="CSGPolygon3D" parent="Course"]

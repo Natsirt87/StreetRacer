@@ -18,7 +18,6 @@ const int vertex_count = 2000;
 uniform vec3[vertex_count] vertices;
 uniform vec4[point_count] colors;
 uniform int[point_count] visible;
-uniform vec3 origin;
 uniform vec4 end_color;
 uniform int start;
 uniform int end;
@@ -33,6 +32,7 @@ void vertex() {
 	int point_idx = (end + point_offset) % max_size;
 	int vertex_idx = point_idx * 2 + (VERTEX_ID % 2);
 	int start_idx = start * 2 + (VERTEX_ID % 2);
+	int end_idx = end * 2 + (VERTEX_ID % 2);
 	
 	if (visible[point_idx] > 0) {
 		float t = clamp(float(point_offset) / (float(size) - 1.0), 0, 1);
@@ -40,6 +40,7 @@ void vertex() {
 		VERTEX = vertices[vertex_idx];
 	} 
 	else {
+		//COLOR = end_color;
 		VERTEX = vertices[start_idx];
 	}
 }

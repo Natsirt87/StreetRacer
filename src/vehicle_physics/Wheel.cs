@@ -115,7 +115,6 @@ public partial class Wheel : Node3D
       Steer(delta);
     }
 
-    OnGround = TireLoad > Mass * 9.81;
     
     Torque = ComputeTorque(delta);
     SlipRatio = ComputeSlipRatio(delta);
@@ -215,11 +214,23 @@ public partial class Wheel : Node3D
   {
     Surface = (int)TireModel.Surface.Dry;
     if (WheelBody.GetCollidingBodies().Count < 1)
+    {
+      OnGround = false;
       return;
+    }
+
+    OnGround = TireLoad > Mass * 9.81;
+
     if (WheelBody.GetCollidingBodies()[0] is not PhysicsBody3D collider)
       return;
 
     int layer = (int)collider.CollisionLayer;
+
+    Surface = GetSurfaceNumber(layer);
+  }
+
+  private static int GetSurfaceNumber(int layer)
+  {
     int surfaceIndex = 0;
     while ((layer & 1) == 0)
     {
@@ -227,8 +238,7 @@ public partial class Wheel : Node3D
         layer >>= 1;
         surfaceIndex++;
     }
-
-    Surface = Mathf.Max(surfaceIndex - 8, 0);
+    return Mathf.Max(surfaceIndex - 8, 0);
   }
 
   // Calculate the angular velocity of the wheel given a torque
