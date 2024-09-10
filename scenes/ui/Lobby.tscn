@@ -1,0 +1,48 @@
+[gd_scene load_steps=2 format=3 uid="uid://dd6qnkjgg1g0h"]
+
+[ext_resource type="Script" path="res://src/ui/Lobby.cs" id="1_la6ww"]
+
+[node name="Control" type="Control" node_paths=PackedStringArray("CreateButton", "JoinButton", "DisconnectButton")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_la6ww")
+CreateButton = NodePath("CreateGame")
+JoinButton = NodePath("JoinGame")
+DisconnectButton = NodePath("Disconnect")
+
+[node name="CreateGame" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 860.0
+offset_top = 400.0
+offset_right = -860.0
+offset_bottom = -630.0
+text = "Create Game"
+
+[node name="JoinGame" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 860.0
+offset_top = 500.0
+offset_right = -860.0
+offset_bottom = -530.0
+text = "Join Game"
+
+[node name="Disconnect" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 860.0
+offset_top = 600.0
+offset_right = -860.0
+offset_bottom = -430.0
+text = "Disconnect"

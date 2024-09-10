@@ -1,5 +1,6 @@
-[gd_scene load_steps=36 format=3 uid="uid://ddd0c01382wkb"]
+[gd_scene load_steps=37 format=3 uid="uid://ddd0c01382wkb"]
 
+[ext_resource type="Script" path="res://src/networking/NetworkManager.cs" id="1_6j44x"]
 [ext_resource type="Texture2D" uid="uid://d1g1qbggufp8h" path="res://assets/textures/GridSquare.png" id="1_x2yo0"]
 [ext_resource type="Script" path="res://src/interaction/PlayerController.cs" id="2_g531l"]
 [ext_resource type="Texture2D" uid="uid://7oiglj6vx2na" path="res://assets/textures/GridOrange.png" id="4_56qwj"]
@@ -143,6 +144,9 @@ metallic_specular = 0.35
 uv1_scale = Vector3(250, 500, 1)
 
 [node name="TestTrack" type="Node3D"]
+
+[node name="NetworkManager" type="Node3D" parent="."]
+script = ExtResource("1_6j44x")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.866025, -0.259446, 0.42742, 0, 0.854839, 0.518893, -0.5, 0.449374, -0.740313, 0, 0, 0)

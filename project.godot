@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="StreetRacer"
-run/main_scene="res://scenes/tracks/TestTrack.tscn"
+run/main_scene="res://scenes/ui/Lobby.tscn"
 config/features=PackedStringArray("4.3", "C#", "Forward Plus")
 config/icon="res://icon.svg"
 
@@ -20,6 +20,7 @@ config/icon="res://icon.svg"
 HUD="*res://scenes/ui/HUD.tscn"
 Console="*res://addons/console/Console.gd"
 DebugMenu="*res://addons/debug_menu/debug_menu.tscn"
+NetworkSession="*res://src/networking/NetworkSession.cs"
 
 [display]
 

@@ -7,49 +7,51 @@ namespace Interaction;
 
 public partial class PlayerController : VehicleController
 {
-  [Export(PropertyHint.File)]
-  public string VehiclePath;
-  [Export(PropertyHint.File)]
-  public string CameraPath;
+    [Export(PropertyHint.File)]
+    public string VehiclePath;
+    [Export(PropertyHint.File)]
+    public string CameraPath;
+    [Export]
+    public bool Networked;
 
-	// Called when the node enters the scene tree for the first time.
-	public override void _Ready()
-	{
-    CreateVehicle();
-	}
+    // Called when the node enters the scene tree for the first time.
+    public override void _Ready()
+    {
+        CreateVehicle();
+    }
 
-  public override void SendInputs()
-  {
-    Vehicle.SetThrottleInput(Input.GetActionStrength("throttle"));
-    Vehicle.SetBrakeInput(Input.GetActionStrength("brake"));
+    public override void SendInputs()
+    {
+        Vehicle.SetThrottleInput(Input.GetActionStrength("throttle"));
+        Vehicle.SetBrakeInput(Input.GetActionStrength("brake"));
 
-    float steerLeft = Input.GetActionStrength("steer_left");
-    float steerRight = Input.GetActionStrength("steer_right");
-    Vehicle.SetSteeringInput(steerLeft - steerRight);
+        float steerLeft = Input.GetActionStrength("steer_left");
+        float steerRight = Input.GetActionStrength("steer_right");
+        Vehicle.SetSteeringInput(steerLeft - steerRight);
 
-    if (Input.IsActionJustPressed("handbrake"))
-      Vehicle.SetHandbrakeInput(true);
-    else if (Input.IsActionJustReleased("handbrake"))
-      Vehicle.SetHandbrakeInput(false);
-    
-    if (Input.IsActionJustPressed("shift_up"))
-      Vehicle.ShiftUp();
-    
-    if (Input.IsActionJustPressed("shift_down"))
-      Vehicle.ShiftDown();
-  }
+        if (Input.IsActionJustPressed("handbrake"))
+            Vehicle.SetHandbrakeInput(true);
+        else if (Input.IsActionJustReleased("handbrake"))
+            Vehicle.SetHandbrakeInput(false);
 
-  private void CreateVehicle()
-  {
-    PackedScene scene = (PackedScene)Load(VehiclePath);
-    Vehicle = scene.Instantiate<Vehicle>();
+        if (Input.IsActionJustPressed("shift_up"))
+            Vehicle.ShiftUp();
 
-    scene = (PackedScene)Load(CameraPath);
-    PlayerCamera camera = scene.Instantiate<PlayerCamera>();
+        if (Input.IsActionJustPressed("shift_down"))
+            Vehicle.ShiftDown();
+    }
 
-    AddChild(Vehicle);
-    camera.Target = Vehicle;
-    AddChild(camera);
-    camera.MakeCurrent(); 
-  }
+    private void CreateVehicle()
+    {
+        PackedScene scene = (PackedScene)Load(VehiclePath);
+        Vehicle = scene.Instantiate<Vehicle>();
+
+        scene = (PackedScene)Load(CameraPath);
+        PlayerCamera camera = scene.Instantiate<PlayerCamera>();
+
+        AddChild(Vehicle);
+        camera.Target = Vehicle;
+        AddChild(camera);
+        camera.MakeCurrent();
+    }
 }

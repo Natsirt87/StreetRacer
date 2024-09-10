@@ -6,17 +6,17 @@ namespace Interaction;
 
 public partial class VehicleController : Node
 {
-  public Vehicle Vehicle;
+    public Vehicle Vehicle;
 
-  // Override with input processing/connect to AI logic, this is the point when the controller should give input values to the vehicle
-	public virtual void SendInputs() {}
+    // Override with input processing/connect to AI logic, this is the point when the controller should give input values to the vehicle
+    public virtual void SendInputs() { }
 
-	public override void _PhysicsProcess(double delta)
-	{
-    if (Vehicle == null) return;
+    public override void _PhysicsProcess(double delta)
+    {
+        if (Vehicle == null) return;
 
-    SendInputs();
+        SendInputs();
 
-    Vehicle.PhysicsTick(delta);
-	}
+        Vehicle.PhysicsTick(delta);
+    }
 }
