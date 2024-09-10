@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://src/ui/Lobby.cs" id="1_la6ww"]
 
-[node name="Control" type="Control" node_paths=PackedStringArray("CreateButton", "JoinButton", "DisconnectButton")]
+[node name="Lobby" type="Control" node_paths=PackedStringArray("DisconnectButton", "PlayerList")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -10,39 +10,30 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_la6ww")
-CreateButton = NodePath("CreateGame")
-JoinButton = NodePath("JoinGame")
 DisconnectButton = NodePath("Disconnect")
-
-[node name="CreateGame" type="Button" parent="."]
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 860.0
-offset_top = 400.0
-offset_right = -860.0
-offset_bottom = -630.0
-text = "Create Game"
-
-[node name="JoinGame" type="Button" parent="."]
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 860.0
-offset_top = 500.0
-offset_right = -860.0
-offset_bottom = -530.0
-text = "Join Game"
+PlayerList = NodePath("ItemList")
 
 [node name="Disconnect" type="Button" parent="."]
 layout_mode = 1
 anchors_preset = -1
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 860.0
-offset_top = 600.0
-offset_right = -860.0
-offset_bottom = -430.0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -100.0
+offset_top = 260.0
+offset_right = 100.0
+offset_bottom = 310.0
 text = "Disconnect"
+
+[node name="ItemList" type="ItemList" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -150.0
+offset_top = -340.0
+offset_right = 150.0
+offset_bottom = 160.0

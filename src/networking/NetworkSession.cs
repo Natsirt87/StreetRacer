@@ -19,13 +19,15 @@ public partial class NetworkSession : Node {
     public static NetworkSession Instance { get; private set; }
 
     public Dictionary<int, InfoPacket> Players;
+    public InfoPacket _playerInfo;
 
-    private InfoPacket _playerInfo;
+    public const int MaxConnections = 20;
+
     private int _playersLoaded;
 
-    private const int Port = 6969;
+    private const int Port = 7000;
     private const string DefaultServerIp = "127.0.0.1";
-    private const int MaxConnections = 20;
+    
 
 
     public override void _Ready()
@@ -79,7 +81,9 @@ public partial class NetworkSession : Node {
 
     public void Disconnect()
     {
-        Multiplayer.MultiplayerPeer.Close();
+        if (Multiplayer.MultiplayerPeer != null) {
+            Multiplayer.MultiplayerPeer.Close();
+        }
         Multiplayer.MultiplayerPeer = null;
         Players.Clear();
 
@@ -129,8 +133,12 @@ public partial class NetworkSession : Node {
 
     private void OnServerDisconnected()
     {
+        if (Multiplayer.MultiplayerPeer != null)
+            Multiplayer.MultiplayerPeer.Close();
         Multiplayer.MultiplayerPeer = null;
         Players.Clear();
         EmitSignal(SignalName.ServerDisconnected);
+
+        GD.Print("Server disconnected");
     }
 }
