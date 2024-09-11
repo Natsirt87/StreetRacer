@@ -8,7 +8,6 @@ using System.Net.Sockets;
 namespace Networking;
 
 public partial class NetworkSession : Node {
-     
     [Signal]
     public delegate void PlayerConnectedEventHandler(int peerId, string playerName);
     [Signal]
@@ -19,24 +18,27 @@ public partial class NetworkSession : Node {
     public static NetworkSession Instance { get; private set; }
 
     public Dictionary<int, InfoPacket> Players;
-    public InfoPacket _playerInfo;
-
-    public const int MaxConnections = 20;
+    public InfoPacket PlayerInfo;
+    public int[] StartPositions;
 
     private int _playersLoaded;
-
+    
+    private const int MaxConnections = 12;
     private const int Port = 7000;
     private const string DefaultServerIp = "127.0.0.1";
-    
-
 
     public override void _Ready()
     {
         Instance = this;
 
+        StartPositions = new int[MaxConnections];
+
         Players = new Dictionary<int, InfoPacket>();
-        _playerInfo = new InfoPacket();
-        _playerInfo.Name = "Test Name";
+        PlayerInfo = new InfoPacket
+        {
+            Name = "Test Name",
+            Car = "Skyline"
+        };
 
         Multiplayer.PeerConnected += OnPlayerConnected;
         Multiplayer.PeerDisconnected += OnPlayerDisconnected;
@@ -50,7 +52,7 @@ public partial class NetworkSession : Node {
         if (address.Equals(""))
             address = DefaultServerIp;
         
-        ENetMultiplayerPeer peer = new ENetMultiplayerPeer();
+        ENetMultiplayerPeer peer = new();
         Error err = peer.CreateClient(address, Port);
         if (err != 0)
             return err;
@@ -64,30 +66,36 @@ public partial class NetworkSession : Node {
 
     public Error CreateGame()
     {
-        ENetMultiplayerPeer peer = new ENetMultiplayerPeer();
+        ENetMultiplayerPeer peer = new();
         Error err = peer.CreateServer(Port, MaxConnections);
         if (err != 0)
             return err;
         
         Multiplayer.MultiplayerPeer = peer;
 
-        Players[1] = _playerInfo;
-        EmitSignal(SignalName.PlayerConnected, 1, _playerInfo.Name);
+        Players[1] = PlayerInfo;
+        EmitSignal(SignalName.PlayerConnected, 1, PlayerInfo.Name);
+
+        StartPositions[0] = 1;
 
         GD.Print("Creating game");
 
         return 0;
     }
 
-    public void Disconnect()
+    public void TerminateConnection()
     {
-        if (Multiplayer.MultiplayerPeer != null) {
-            Multiplayer.MultiplayerPeer.Close();
-        }
+        Multiplayer.MultiplayerPeer?.Close();
         Multiplayer.MultiplayerPeer = null;
         Players.Clear();
+        StartPositions = new int[MaxConnections];
+    }
 
-        GD.Print("Disconnected");
+    public void StartGame()
+    {
+        GD.Print("FROM SERVER -- Starting game");
+
+        Rpc("SetStartPositions", StartPositions);
     }
 
     [Rpc(MultiplayerApi.RpcMode.AnyPeer, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable, TransferChannel = 1)]
@@ -97,16 +105,35 @@ public partial class NetworkSession : Node {
         int newPlayerId = Multiplayer.GetRemoteSenderId();
         Players.Add(newPlayerId, newPlayerInfo);
 
-        GD.Print("Player registered: " + newPlayerInfo.Name);
+        if (Multiplayer.IsServer())
+        {
+            StartPositions[Players.Count - 1] = newPlayerId;
+            GD.Print("FROM SERVER -- Start Positions Updated: " + newPlayerId + " is in position " + Players.Count);
+        }
+
+        GD.Print("FROM [" + Multiplayer.GetUniqueId() + "] -- Player Registered: " + newPlayerInfo.Name);
 
         EmitSignal(SignalName.PlayerConnected, newPlayerId, newPlayerInfo.Name);
     }
 
+    [Rpc(MultiplayerApi.RpcMode.Authority, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable, TransferChannel = 1)]
+    private void SetStartPositions(int[] startPositions)
+    {
+        StartPositions = startPositions;
+
+        GD.Print("New start positions:");
+
+        for (int i = 0; i < MaxConnections; i++)
+        {
+            GD.Print(StartPositions[i] + " is at position " + (i + 1));
+        }
+    }
+
     private void OnPlayerConnected(long id)
     {
-        Rpc("RegisterPlayer", PacketSerializer.WriteInfo(_playerInfo));
+        RpcId(id, "RegisterPlayer", PacketSerializer.WriteInfo(PlayerInfo));
 
-        GD.Print("Player Connected");
+        GD.Print("FROM [" + Multiplayer.GetUniqueId() + "] -- Player Connected: " + id);
     }
 
     private void OnPlayerDisconnected(long id)
@@ -114,29 +141,26 @@ public partial class NetworkSession : Node {
         Players.Remove((int)id);
         EmitSignal(SignalName.PlayerDisconnected, id);
 
-        GD.Print("Player disconnected");
+        GD.Print("FROM [" + Multiplayer.GetUniqueId() + "] -- Player Disconnected: " + id);
     }
 
     private void OnConnectedOk()
     {
         int peerId = Multiplayer.GetUniqueId();
-        Players[peerId] = _playerInfo;
-        EmitSignal(SignalName.PlayerConnected, peerId, _playerInfo.Name);
+        Players[peerId] = PlayerInfo;
+        EmitSignal(SignalName.PlayerConnected, peerId, PlayerInfo.Name);
 
         GD.Print("Connected OK");
     }
 
     private void OnConnectedFail()
     {
-        Multiplayer.MultiplayerPeer = null;
+        TerminateConnection();
     }
 
     private void OnServerDisconnected()
     {
-        if (Multiplayer.MultiplayerPeer != null)
-            Multiplayer.MultiplayerPeer.Close();
-        Multiplayer.MultiplayerPeer = null;
-        Players.Clear();
+        TerminateConnection();
         EmitSignal(SignalName.ServerDisconnected);
 
         GD.Print("Server disconnected");

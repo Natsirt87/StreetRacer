@@ -145,8 +145,9 @@ uv1_scale = Vector3(250, 500, 1)
 
 [node name="TestTrack" type="Node3D"]
 
-[node name="NetworkManager" type="Node3D" parent="."]
+[node name="NetworkManager" type="Node3D" parent="." node_paths=PackedStringArray("StartPositions")]
 script = ExtResource("1_6j44x")
+StartPositions = []
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.866025, -0.259446, 0.42742, 0, 0.854839, 0.518893, -0.5, 0.449374, -0.740313, 0, 0, 0)
@@ -1418,3 +1419,17 @@ shape = SubResource("BoxShape3D_cyxtk")
 [node name="GrassMesh" type="CSGBox3D" parent="Course/Grass"]
 size = Vector3(250, 0.03, 500)
 material = SubResource("StandardMaterial3D_c7og6")
+
+[node name="SpawnPositions" type="Node3D" parent="."]
+
+[node name="1" type="Node3D" parent="SpawnPositions"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32.1474, 1.94581, 0)
+
+[node name="2" type="Node3D" parent="SpawnPositions"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.9548, 1.43355, 0)
+
+[node name="3" type="Node3D" parent="SpawnPositions"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.94638, 0)
+
+[node name="4" type="Node3D" parent="SpawnPositions"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 28.4907, 3.01862, -16.3322)

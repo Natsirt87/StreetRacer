@@ -5,6 +5,8 @@ using System;
 public partial class MultiplayerMenu : Control
 {
     [Export]
+    public TextEdit NameEdit;
+    [Export]
     public Button CreateButton;
     [Export]
     public Button JoinButton;
@@ -13,6 +15,11 @@ public partial class MultiplayerMenu : Control
 	public override void _Ready()
 	{
         NetworkSession session = NetworkSession.Instance;
+
+        NameEdit.Text = session.PlayerInfo.Name;
+        NameEdit.TextChanged += UpdateName;
+
+        
         CreateButton.Pressed += () => {
             if (session.CreateGame() == 0) {
                 GetTree().ChangeSceneToFile("res://scenes/ui/Lobby.tscn");
@@ -25,4 +32,9 @@ public partial class MultiplayerMenu : Control
             }
         };
 	}
+
+    private void UpdateName()
+    {
+        NetworkSession.Instance.PlayerInfo.Name = NameEdit.Text;
+    }
 }

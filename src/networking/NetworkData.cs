@@ -29,14 +29,15 @@ public struct InputPacket
 public struct InfoPacket
 {
     public String Name;
+    public String Car;
 }
 
 public static partial class PacketSerializer
 {
     public static byte[] WritePhysics(PhysicsPacket packet)
     {
-        MemoryStream stream = new MemoryStream();
-        BinaryWriter writer = new BinaryWriter(stream);
+        MemoryStream stream = new();
+        BinaryWriter writer = new(stream);
 
         writer.Write(packet.Position.X);
         writer.Write(packet.Position.Y);
@@ -64,8 +65,8 @@ public static partial class PacketSerializer
 
     public static PhysicsPacket ReadPhysics(byte[] bytes)
     {
-        BinaryReader reader = new BinaryReader(new MemoryStream(bytes));
-        PhysicsPacket packet = new PhysicsPacket();
+        BinaryReader reader = new(new MemoryStream(bytes));
+        PhysicsPacket packet = new();
         
         packet.Position.X = reader.ReadSingle();
         packet.Position.Y = reader.ReadSingle();
@@ -93,10 +94,11 @@ public static partial class PacketSerializer
 
     public static byte[] WriteInfo(InfoPacket packet)
     {
-        MemoryStream stream = new MemoryStream();
-        BinaryWriter writer = new BinaryWriter(stream);
+        MemoryStream stream = new();
+        BinaryWriter writer = new(stream);
 
         writer.Write(packet.Name);
+        writer.Write(packet.Car);
 
         byte[] bytes = stream.ToArray();
         writer.Close();
@@ -105,10 +107,11 @@ public static partial class PacketSerializer
 
     public static InfoPacket ReadInfo(byte[] bytes)
     {
-        BinaryReader reader = new BinaryReader(new MemoryStream(bytes));
-        InfoPacket packet = new InfoPacket();
+        BinaryReader reader = new(new MemoryStream(bytes));
+        InfoPacket packet = new();
         
         packet.Name = reader.ReadString();
+        packet.Car = reader.ReadString();
 
         reader.Close();
 

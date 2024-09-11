@@ -10,6 +10,8 @@ namespace UI;
 public partial class Lobby : Control
 {
     [Export]
+    public Button StartButton;
+    [Export]
     public Button DisconnectButton;
     [Export]
     public ItemList PlayerList;
@@ -21,6 +23,9 @@ public partial class Lobby : Control
 	{
         _idToIdx = new Dictionary<int, int>();
 
+        StartButton.Disabled = !Multiplayer.IsServer();
+
+        StartButton.Pressed += NetworkSession.Instance.StartGame;
         DisconnectButton.Pressed += Disconnect;
         NetworkSession.Instance.ServerDisconnected += OnServerDisconnect;
         NetworkSession.Instance.PlayerConnected += AddToPlayerList;
@@ -41,14 +46,13 @@ public partial class Lobby : Control
 
     private void Disconnect()
     {
-        NetworkSession.Instance.Disconnect();
+        NetworkSession.Instance.TerminateConnection();
         GetTree().ChangeSceneToFile("res://scenes/ui/MultiplayerMenu.tscn");
     }
 
     private void AddToPlayerList(int peerId, string playerName)
     {
         int idx = PlayerList.AddItem(playerName);
-        GD.Print("Peer id: " + peerId);
         _idToIdx[peerId] = idx;
     }
 
@@ -56,6 +60,7 @@ public partial class Lobby : Control
     {
         int idx = _idToIdx[peerId];
         PlayerList.RemoveItem(idx);
+        _idToIdx.Remove(peerId);
     }
 
     public override void _ExitTree()

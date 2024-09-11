@@ -1,5 +1,6 @@
 using Godot;
 using Interaction;
+using Management;
 using System;
 using System.Collections.Generic;
 
@@ -7,15 +8,17 @@ namespace Networking;
 
 public partial class NetworkManager : Node 
 {
+    private Dictionary<int, NetworkedController> _controllerList;
 
-    private Dictionary<int, NetworkedController> _playerList;
+    [Export]
+    public Node3D[] StartPositions;
 
     public override void _Ready()
     {
-        foreach (Node playerNode in GetChildren())
+        //
+        foreach (KeyValuePair<int, InfoPacket> entry in NetworkSession.Instance.Players)
         {
-            NetworkedController playerController = (NetworkedController) playerNode;
-            _playerList.Add(playerController.PeerId, playerController);
+
         }
     }
 
@@ -32,12 +35,12 @@ public partial class NetworkManager : Node
     [Rpc(MultiplayerApi.RpcMode.AnyPeer, TransferMode = MultiplayerPeer.TransferModeEnum.UnreliableOrdered, TransferChannel = 2)]
     public void ReceivePhysicsPacket()
     {
-        _playerList[Multiplayer.GetRemoteSenderId()].ApplyPhysicsState();
+        _controllerList[Multiplayer.GetRemoteSenderId()].ApplyPhysicsState();
     }
 
     [Rpc(MultiplayerApi.RpcMode.AnyPeer, TransferMode = MultiplayerPeer.TransferModeEnum.UnreliableOrdered, TransferChannel = 4)]
     public void ReceiveInputPacket()
     {
-        _playerList[Multiplayer.GetRemoteSenderId()].ApplyInputState();
+        _controllerList[Multiplayer.GetRemoteSenderId()].ApplyInputState();
     }
 }
