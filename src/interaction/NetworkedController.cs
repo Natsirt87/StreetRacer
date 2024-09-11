@@ -1,16 +1,19 @@
 using Godot;
-using static Godot.GD;
 using System;
 using VehiclePhysics;
+using Networking;
+using Management;
 
 namespace Interaction;
 
 public partial class NetworkedController : VehicleController
 {
-    [Export(PropertyHint.File)]
-    public string VehiclePath;
-
     public int PeerId;
+
+    public NetworkedController(int peerId)
+    {
+        PeerId = peerId;
+    }
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
@@ -33,7 +36,8 @@ public partial class NetworkedController : VehicleController
 
     private void CreateVehicle()
     {
-        PackedScene scene = (PackedScene)Load(VehiclePath);
+        InfoPacket playerInfo = NetworkSession.Instance.Players[PeerId];
+        PackedScene scene = (PackedScene)GD.Load("res://scenes/vehicles/" + playerInfo.Car + ".tscn");
         Vehicle = scene.Instantiate<Vehicle>();
 
         AddChild(Vehicle);

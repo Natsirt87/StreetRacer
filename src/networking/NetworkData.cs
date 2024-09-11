@@ -28,8 +28,8 @@ public struct InputPacket
 
 public struct InfoPacket
 {
-    public String Name;
-    public String Car;
+    public string Name;
+    public string Car;
 }
 
 public static partial class PacketSerializer

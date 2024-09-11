@@ -96,6 +96,7 @@ public partial class NetworkSession : Node {
         GD.Print("FROM SERVER -- Starting game");
 
         Rpc("SetStartPositions", StartPositions);
+        Rpc("LoadGame", "res://scenes/tracks/TestTrack.tscn");
     }
 
     [Rpc(MultiplayerApi.RpcMode.AnyPeer, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable, TransferChannel = 1)]
@@ -127,6 +128,12 @@ public partial class NetworkSession : Node {
         {
             GD.Print(StartPositions[i] + " is at position " + (i + 1));
         }
+    }
+
+    [Rpc(MultiplayerApi.RpcMode.Authority, TransferMode = MultiplayerPeer.TransferModeEnum.Reliable, TransferChannel = 1, CallLocal = true)]
+    private void LoadGame(String scenePath)
+    {
+        GetTree().ChangeSceneToFile(scenePath);
     }
 
     private void OnPlayerConnected(long id)

@@ -7,12 +7,16 @@ namespace Interaction;
 
 public partial class PlayerController : VehicleController
 {
-    [Export(PropertyHint.File)]
-    public string VehiclePath;
-    [Export(PropertyHint.File)]
-    public string CameraPath;
-    [Export]
-    public bool Networked;
+    private string _vehiclePath;
+    private string _cameraPath;
+    private bool _networked;
+
+    public PlayerController(string vehiclePath, string cameraPath, bool networked)
+    {
+        _vehiclePath = vehiclePath;
+        _cameraPath = cameraPath;
+        _networked = networked;
+    }
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
@@ -43,10 +47,10 @@ public partial class PlayerController : VehicleController
 
     private void CreateVehicle()
     {
-        PackedScene scene = (PackedScene)Load(VehiclePath);
+        PackedScene scene = (PackedScene)Load(_vehiclePath);
         Vehicle = scene.Instantiate<Vehicle>();
 
-        scene = (PackedScene)Load(CameraPath);
+        scene = (PackedScene)Load(_cameraPath);
         PlayerCamera camera = scene.Instantiate<PlayerCamera>();
 
         AddChild(Vehicle);

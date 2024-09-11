@@ -1,8 +1,8 @@
 [gd_scene load_steps=37 format=3 uid="uid://ddd0c01382wkb"]
 
 [ext_resource type="Script" path="res://src/networking/NetworkManager.cs" id="1_6j44x"]
+[ext_resource type="Script" path="res://src/interaction/GameManager.cs" id="1_60joe"]
 [ext_resource type="Texture2D" uid="uid://d1g1qbggufp8h" path="res://assets/textures/GridSquare.png" id="1_x2yo0"]
-[ext_resource type="Script" path="res://src/interaction/PlayerController.cs" id="2_g531l"]
 [ext_resource type="Texture2D" uid="uid://7oiglj6vx2na" path="res://assets/textures/GridOrange.png" id="4_56qwj"]
 [ext_resource type="Texture2D" uid="uid://cds7fhphcuqd1" path="res://assets/textures/dirty_tarmac_suzuka.png" id="4_dp2f0"]
 [ext_resource type="Texture2D" uid="uid://1si6cpd336rh" path="res://assets/textures/GridGreen.png" id="6_yoji2"]
@@ -145,9 +145,14 @@ uv1_scale = Vector3(250, 500, 1)
 
 [node name="TestTrack" type="Node3D"]
 
-[node name="NetworkManager" type="Node3D" parent="." node_paths=PackedStringArray("StartPositions")]
+[node name="GameManager" type="Node3D" parent="." node_paths=PackedStringArray("StartNodes")]
+script = ExtResource("1_60joe")
+PlayerVehiclePath = "res://scenes/vehicles/Skyline.tscn"
+PlayerCameraPath = "res://scenes/VehicleCamera.tscn"
+StartNodes = [NodePath("../SpawnPositions/1"), NodePath("../SpawnPositions/2"), NodePath("../SpawnPositions/3"), NodePath("../SpawnPositions/4")]
+
+[node name="NetworkManager" type="Node3D" parent="."]
 script = ExtResource("1_6j44x")
-StartPositions = []
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.866025, -0.259446, 0.42742, 0, 0.854839, 0.518893, -0.5, 0.449374, -0.740313, 0, 0, 0)
@@ -174,12 +179,6 @@ shape = SubResource("BoxShape3D_kgurl")
 
 [node name="BumpTrack" type="Node3D" parent="Ground"]
 transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, 162.309, 0, 42.1288)
-
-[node name="PlayerController" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 125, 1.279, 142.684)
-script = ExtResource("2_g531l")
-VehiclePath = "res://scenes/vehicles/Skyline.tscn"
-CameraPath = "res://scenes/VehicleCamera.tscn"
 
 [node name="Tracks" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 125, 0, 110)
@@ -1421,15 +1420,15 @@ size = Vector3(250, 0.03, 500)
 material = SubResource("StandardMaterial3D_c7og6")
 
 [node name="SpawnPositions" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 105.757, 1, 143.152)
 
 [node name="1" type="Node3D" parent="SpawnPositions"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32.1474, 1.94581, 0)
 
 [node name="2" type="Node3D" parent="SpawnPositions"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.9548, 1.43355, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, 0)
 
 [node name="3" type="Node3D" parent="SpawnPositions"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.94638, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0, 0)
 
 [node name="4" type="Node3D" parent="SpawnPositions"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 28.4907, 3.01862, -16.3322)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30, 0, 0)

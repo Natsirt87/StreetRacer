@@ -3,23 +3,18 @@ using Interaction;
 using Management;
 using System;
 using System.Collections.Generic;
+using VehiclePhysics;
 
 namespace Networking;
 
 public partial class NetworkManager : Node 
 {
-    private Dictionary<int, NetworkedController> _controllerList;
-
     [Export]
-    public Node3D[] StartPositions;
+    public GameManager Game;
 
     public override void _Ready()
     {
-        //
-        foreach (KeyValuePair<int, InfoPacket> entry in NetworkSession.Instance.Players)
-        {
-
-        }
+        
     }
 
     public void SendPhysicsPacket()
@@ -35,12 +30,12 @@ public partial class NetworkManager : Node
     [Rpc(MultiplayerApi.RpcMode.AnyPeer, TransferMode = MultiplayerPeer.TransferModeEnum.UnreliableOrdered, TransferChannel = 2)]
     public void ReceivePhysicsPacket()
     {
-        _controllerList[Multiplayer.GetRemoteSenderId()].ApplyPhysicsState();
+        Game.NetworkedControllers[Multiplayer.GetRemoteSenderId()].ApplyPhysicsState();
     }
 
     [Rpc(MultiplayerApi.RpcMode.AnyPeer, TransferMode = MultiplayerPeer.TransferModeEnum.UnreliableOrdered, TransferChannel = 4)]
     public void ReceiveInputPacket()
     {
-        _controllerList[Multiplayer.GetRemoteSenderId()].ApplyInputState();
+        Game.NetworkedControllers[Multiplayer.GetRemoteSenderId()].ApplyInputState();
     }
 }

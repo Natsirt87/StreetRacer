@@ -4,7 +4,7 @@ using VehiclePhysics;
 
 namespace Interaction;
 
-public partial class VehicleController : Node
+public partial class VehicleController : Node3D
 {
     public Vehicle Vehicle;
 
