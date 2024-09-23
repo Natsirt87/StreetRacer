@@ -30,6 +30,7 @@ public partial class NetworkSession : Node {
     public override void _Ready()
     {
         Instance = this;
+        Multiplayer.MultiplayerPeer = null;
 
         StartPositions = new int[MaxConnections];
 

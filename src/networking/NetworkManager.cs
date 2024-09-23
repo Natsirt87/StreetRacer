@@ -12,30 +12,34 @@ public partial class NetworkManager : Node
     [Export]
     public GameManager Game;
 
+    public static NetworkManager Instance { get; private set; }
+
     public override void _Ready()
     {
-        
+        Instance = this;
     }
 
-    public void SendPhysicsPacket()
+    public void SendPhysicsPacket(PhysicsPacket physicsData)
     {
         
     }
 
-    public void SendInputPacket()
+    public void SendInputPacket(InputPacket inputData)
     {
 
     }
 
     [Rpc(MultiplayerApi.RpcMode.AnyPeer, TransferMode = MultiplayerPeer.TransferModeEnum.UnreliableOrdered, TransferChannel = 2)]
-    public void ReceivePhysicsPacket()
+    public void ReceivePhysicsPacket(byte[] physicsDataBytes)
     {
-        Game.NetworkedControllers[Multiplayer.GetRemoteSenderId()].ApplyPhysicsState();
+        PhysicsPacket physicsData = PacketSerializer.ReadPhysics(physicsDataBytes);
+        Game.NetworkedControllers[Multiplayer.GetRemoteSenderId()].ApplyPhysicsState(physicsData);
     }
 
     [Rpc(MultiplayerApi.RpcMode.AnyPeer, TransferMode = MultiplayerPeer.TransferModeEnum.UnreliableOrdered, TransferChannel = 4)]
-    public void ReceiveInputPacket()
+    public void ReceiveInputPacket(byte[] inputDataBytes)
     {
-        Game.NetworkedControllers[Multiplayer.GetRemoteSenderId()].ApplyInputState();
+        InputPacket inputData = PacketSerializer.ReadInput(inputDataBytes);
+        Game.NetworkedControllers[Multiplayer.GetRemoteSenderId()].ApplyInputState(inputData);
     }
 }

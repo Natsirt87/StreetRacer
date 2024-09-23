@@ -10,6 +10,9 @@ namespace VehiclePhysics;
 
 public partial class Vehicle : RigidBody3D
 {
+    [Export]
+    public bool Controlled = true;
+
     [ExportGroup("Node References")]
     [Export]
     public Wheel[] Wheels;
@@ -19,8 +22,6 @@ public partial class Vehicle : RigidBody3D
     public MeshInstance3D Mesh;
 
     [ExportGroup("Dynamics")]
-    [Export]
-    public bool Controlled = true;
     [Export]
     public float SteeringSensitivity = 1f;
     [Export]

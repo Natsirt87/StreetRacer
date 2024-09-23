@@ -26,12 +26,14 @@ public partial class NetworkedController : VehicleController
 
     }
 
-    public void ApplyPhysicsState() {
-        Console.WriteLine("PHYSICS STATE APPLYING");
+    public void ApplyPhysicsState(PhysicsPacket physicsData) {
+        GD.Print("PHYSICS STATE APPLYING");
+        GD.Print(physicsData);
     }
 
-    public void ApplyInputState() {
-        Console.WriteLine("INPUT STATE APPLYING");
+    public void ApplyInputState(InputPacket inputData) {
+        GD.Print("INPUT STATE APPLYING");
+        GD.Print(inputData);
     }
 
     private void CreateVehicle()
@@ -39,6 +41,7 @@ public partial class NetworkedController : VehicleController
         InfoPacket playerInfo = NetworkSession.Instance.Players[PeerId];
         PackedScene scene = (PackedScene)GD.Load("res://scenes/vehicles/" + playerInfo.Car + ".tscn");
         Vehicle = scene.Instantiate<Vehicle>();
+        Vehicle.Controlled = false;
 
         AddChild(Vehicle);
     }

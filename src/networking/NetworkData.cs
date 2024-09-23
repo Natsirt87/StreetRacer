@@ -32,7 +32,7 @@ public struct InfoPacket
     public string Car;
 }
 
-public static partial class PacketSerializer
+public static class PacketSerializer
 {
     public static byte[] WritePhysics(PhysicsPacket packet)
     {
@@ -87,6 +87,38 @@ public static partial class PacketSerializer
         packet.Ang_jerk.Y = reader.ReadSingle();
         packet.Ang_jerk.Z = reader.ReadSingle();
 
+        reader.Close();
+
+        return packet;
+    }
+
+    public static byte[] WriteInput(InputPacket packet)
+    {
+        MemoryStream stream = new();
+        BinaryWriter writer = new(stream);
+
+        writer.Write(packet.Throttle);
+        writer.Write(packet.Brake);
+        writer.Write(packet.Steering);
+        writer.Write(packet.Rpm);
+        writer.Write(packet.Gear);
+
+        byte[] bytes = stream.ToArray();
+        writer.Close();
+        return bytes;
+    }
+
+    public static InputPacket ReadInput(byte[] bytes)
+    {
+        BinaryReader reader = new(new MemoryStream(bytes));
+        InputPacket packet = new();
+        
+        packet.Throttle = reader.ReadSingle();
+        packet.Brake = reader.ReadSingle();
+        packet.Steering = reader.ReadSingle();
+        packet.Rpm = reader.ReadSingle();
+        packet.Gear = reader.ReadInt32();
+        
         reader.Close();
 
         return packet;
