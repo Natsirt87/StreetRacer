@@ -28,7 +28,7 @@ public partial class NetworkedController : VehicleController
 
     public void ApplyPhysicsState(PhysicsPacket physicsData) {
         GD.Print("PHYSICS STATE APPLYING");
-        GD.Print(physicsData);
+        GD.Print(physicsData.Velocity.X);
     }
 
     public void ApplyInputState(InputPacket inputData) {

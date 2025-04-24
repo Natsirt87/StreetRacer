@@ -21,6 +21,7 @@ HUD="*res://scenes/ui/HUD.tscn"
 Console="*res://addons/console/Console.gd"
 DebugMenu="*res://addons/debug_menu/debug_menu.tscn"
 NetworkSession="*res://src/networking/NetworkSession.cs"
+NetworkManager="*res://src/networking/NetworkManager.cs"
 
 [display]
 

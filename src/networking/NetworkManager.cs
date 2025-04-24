@@ -21,7 +21,8 @@ public partial class NetworkManager : Node
 
     public void SendPhysicsPacket(PhysicsPacket physicsData)
     {
-        
+        byte[] physicsDataBytes = PacketSerializer.WritePhysics(physicsData);
+        Rpc("ReceivePhysicsPacket", physicsDataBytes);
     }
 
     public void SendInputPacket(InputPacket inputData)

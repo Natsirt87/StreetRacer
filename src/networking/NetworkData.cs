@@ -9,6 +9,9 @@ public struct PhysicsPacket
     public Vector3 Position;
     public Vector3 Rotation;
 
+    public Vector3 Velocity;
+    public Vector3 Ang_velocity;
+
     public Vector3 Accel;
     public Vector3 Ang_accel;
 
@@ -45,12 +48,21 @@ public static class PacketSerializer
         writer.Write(packet.Rotation.X);
         writer.Write(packet.Rotation.Y);
         writer.Write(packet.Rotation.Z);
+
+        writer.Write(packet.Velocity.X);
+        writer.Write(packet.Velocity.Y);
+        writer.Write(packet.Velocity.Z);
+        writer.Write(packet.Ang_velocity.X);
+        writer.Write(packet.Ang_velocity.Y);
+        writer.Write(packet.Ang_velocity.Z);
+
         writer.Write(packet.Accel.X);
         writer.Write(packet.Accel.Y);
         writer.Write(packet.Accel.Z);
         writer.Write(packet.Ang_accel.X);
         writer.Write(packet.Ang_accel.Y);
         writer.Write(packet.Ang_accel.Z);
+
         writer.Write(packet.Jerk.X);
         writer.Write(packet.Jerk.Y);
         writer.Write(packet.Jerk.Z);
@@ -74,12 +86,21 @@ public static class PacketSerializer
         packet.Rotation.X = reader.ReadSingle();
         packet.Rotation.Y = reader.ReadSingle();
         packet.Rotation.Z = reader.ReadSingle();
+
+        packet.Velocity.X = reader.ReadSingle();
+        packet.Velocity.Y = reader.ReadSingle();
+        packet.Velocity.Z = reader.ReadSingle();
+        packet.Ang_velocity.X = reader.ReadSingle();
+        packet.Ang_velocity.Y = reader.ReadSingle();
+        packet.Ang_velocity.Z = reader.ReadSingle();
+
         packet.Accel.X = reader.ReadSingle();
         packet.Accel.Y = reader.ReadSingle();
         packet.Accel.Z = reader.ReadSingle();
         packet.Ang_accel.X = reader.ReadSingle();
         packet.Ang_accel.Y = reader.ReadSingle();
         packet.Ang_accel.Z = reader.ReadSingle();
+        
         packet.Jerk.X = reader.ReadSingle();
         packet.Jerk.Y = reader.ReadSingle();
         packet.Jerk.Z = reader.ReadSingle();

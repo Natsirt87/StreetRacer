@@ -20,6 +20,7 @@ public partial class NetworkSession : Node {
     public Dictionary<int, InfoPacket> Players;
     public InfoPacket PlayerInfo;
     public int[] StartPositions;
+    public int NetworkTickInterval = 60;
 
     private int _playersLoaded;
     
