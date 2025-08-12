@@ -32,7 +32,7 @@ public partial class Vehicle : RigidBody3D
     
     [ExportGroup("Stability Control")]
     [Export]
-    public bool StabilityControl = true;
+    public bool StabilityControl = false;
     [Export(PropertyHint.Range, "0, 2")]
     public float CounterSteerStrength = 1f;
     [Export(PropertyHint.Range, "0, 1")]
@@ -172,6 +172,8 @@ public partial class Vehicle : RigidBody3D
         // Update acceleration
         LinearAccel = (LinearVelocity - _lastVelocity) / (float)delta;
         _lastVelocity = LinearVelocity;
+
+        Print("Vehicle linear velocity: " + LinearVelocity);
 
         // Update yaw rate and slip angle
         float yaw = GlobalRotation.Y;

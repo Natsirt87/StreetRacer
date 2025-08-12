@@ -177,24 +177,24 @@ public partial class Wheel : Node3D
         // Calculate slip values
         SlipAngle = ComputeSlipAngle();
         SlipRatio = ComputeSlipRatio();
-        
+
         // Get tire forces from tire model
         Vector3 tireForce = Tire.ComputeForce(SlipRatio, SlipAngle, TireLoad, Surface, Forward, Right);
-        
+
         // Apply rolling resistance
         double rollingResistance = RollingResistanceCoeff * TireLoad * Math.Sign(AngularVelocity);
-        
+
         // Calculate total torque on wheel
         float forceLong = tireForce.Dot(Forward);
         LongForce = forceLong;
         double tractionTorque = forceLong * Radius;
-        
+
         // Compute brake torque
         double brakeTorque = ComputeBrakeTorque(delta);
-        
+
         // Total torque acting on wheel
         double totalTorque = DriveTorque + brakeTorque - tractionTorque - rollingResistance;
-        
+
         // Update angular velocity if not locked
         if (!StationaryBraking)
         {
@@ -205,16 +205,17 @@ public partial class Wheel : Node3D
         {
             AngularVelocity = 0;
         }
-        
+
         // Apply forces to vehicle at contact patch
         Vector3 contactPoint = _spring.GlobalPosition - Up * (float)_spring.Length;
         Vector3 forceOffset = contactPoint - _vehicle.GlobalPosition;
+
         _vehicle.ApplyForce(tireForce, forceOffset);
-        
+
         // Update slip metrics for effects
         LongSlip = Math.Abs(SlipRatio) / Math.Max(Tire.PeakSlipRatio, 1.0);
         LatSlip = Math.Abs(SlipAngle) / Math.Max(Tire.PeakSlipAngle, 1.0);
-        
+
         // Store torque for debugging/telemetry
         Torque = totalTorque;
     }
@@ -408,7 +409,7 @@ public partial class Wheel : Node3D
         }
 
         // Skid marks
-        Trail.Enabled = (Tire.SlipMagnitude >= 8 && Surface == 0 && OnGround);
+        Trail.Enabled = Tire.SlipMagnitude >= 8 && Surface == 0 && OnGround;
     }
 
     private void UpdateVisualWheel(double delta)

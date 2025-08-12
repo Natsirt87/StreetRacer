@@ -49,6 +49,13 @@ public partial class TireModel : Node3D
 
     public Vector3 ComputeForce(double slipRatio, double slipAngle, double tireLoad, int surfaceType, Vector3 forward, Vector3 right)
     {
+        // In TireModel.ComputeForce, before calculating forces:
+        if (Math.Abs(slipRatio) < 0.01 && Math.Abs(slipAngle) < 0.5)
+        {
+            // Below static friction threshold - no forces
+            return Vector3.Zero;
+        }
+
         var surfaceName = (Surface)surfaceType;
 
         PeakSlipRatio = (double)_tireData.GetValue(surfaceName + "_Long", "peak");

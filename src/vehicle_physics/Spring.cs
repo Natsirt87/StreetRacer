@@ -31,31 +31,31 @@ public partial class Spring : Node3D
     _lastLength = 0;
 	}
 
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _PhysicsProcess(double delta)
-	{
-    Vector3 wheelPos = Wheel.GlobalPosition;
-    
-    Vector3 forceOffset = GlobalPosition - Vehicle.GlobalPosition;
-    Length = GlobalPosition.DistanceTo(wheelPos);
+    // Called every frame. 'delta' is the elapsed time since the previous frame.
+    public override void _PhysicsProcess(double delta)
+    {
+        Vector3 wheelPos = Wheel.GlobalPosition;
 
-    double compressionDistance = EquilibriumLength - Length;
-    double trueSpringRate = SpringRate * Mass * 10;
-    double springForce = SpringRate * compressionDistance * Mass * 10;
+        Vector3 forceOffset = GlobalPosition - Vehicle.GlobalPosition;
+        Length = GlobalPosition.DistanceTo(wheelPos);
 
-    double velocity = (Length - _lastLength) / delta;
-    _lastLength = Length;
-    
-    double dampingCoefficient = velocity < 0 ? CompressionDamping : ReboundDamping;
-    double criticalDampForce = 2 * Math.Sqrt(trueSpringRate * Mass);
-    double dampingForce = -velocity * dampingCoefficient * criticalDampForce;
-    Vector3 suspensionForce = (float)(springForce + dampingForce) * Vehicle.Up;
+        double compressionDistance = EquilibriumLength - Length;
+        double trueSpringRate = SpringRate * Mass * 10;
+        double springForce = SpringRate * compressionDistance * Mass * 10;
 
-    Vehicle.ApplyForce(suspensionForce, forceOffset);
-    Wheel?.ApplyForce(-suspensionForce, GlobalPosition - Wheel.GlobalPosition);
-    
-    _normalForce = suspensionForce.Length();
-  }
+        double velocity = (Length - _lastLength) / delta;
+        _lastLength = Length;
+
+        double dampingCoefficient = velocity < 0 ? CompressionDamping : ReboundDamping;
+        double criticalDampForce = 2 * Math.Sqrt(trueSpringRate * Mass);
+        double dampingForce = -velocity * dampingCoefficient * criticalDampForce;
+        Vector3 suspensionForce = (float)(springForce + dampingForce) * Vehicle.Up;
+
+        Vehicle.ApplyForce(suspensionForce, forceOffset);
+        Wheel?.ApplyForce(-suspensionForce, GlobalPosition - Wheel.GlobalPosition);
+
+        _normalForce = suspensionForce.Length();
+    }
 
   public double GetNormalForce() { return _normalForce; }
 }
