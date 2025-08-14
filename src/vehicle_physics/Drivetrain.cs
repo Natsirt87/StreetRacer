@@ -7,8 +7,6 @@ namespace VehiclePhysics;
 
 public partial class Drivetrain : Node
 {
-    const double FlywheelRadius = 0.3;
-
     [Export]
     public Vehicle Vehicle;
     
@@ -21,78 +19,65 @@ public partial class Drivetrain : Node
     public float Redline = 7000;
     [Export(PropertyHint.Range, "0, 20000, suffix:RPM")]
     public float Idle = 1000;
-    [Export]
-    public bool AutomaticTrans = false;
-    [Export(PropertyHint.Range, "0, 20, suffix:Kg")]
-    public float FlywheelMass = 9;
-    [Export]
-    public float EngineFriction = 1;
     [Export(PropertyHint.Range, "0, 100, suffix:Nm")]
-    public float EngineBraking = 50; // New: engine braking torque
+    public float EngineBraking = 50;
+    [Export(PropertyHint.Range, "0, 20, suffix:Kg")]
+    public float EngineInertia = 5; // Simplified: just engine inertia, not flywheel
 
     [ExportGroup("Transmission")]
     [Export]
-    public float[] GearRatios;
+    public float[] GearRatios; // Include reverse as index 0, neutral as 1, then forward gears
     [Export]
     public float FinalDriveRatio = 3f;
-    [Export(PropertyHint.Range, "0, 1000, suffix:Nm")]
-    public float ClutchTorqueCapacity = 500; // New: max torque clutch can transmit
-    [Export(PropertyHint.Range, "0, 1")]
-    public float ClutchEngagementRate = 0.7f; // New: how fast clutch engages
     [Export]
-    public float FullClutchSpeed = 8;
-    [Export]
-    public float StartingClutch = 0.3f;
+    public bool AutomaticTrans = false;
     [Export(PropertyHint.Range, "0, 1, suffix:s")]
-    public float ShiftTime = 0.2f; // New: time to complete a shift
+    public float ShiftTime = 0.2f;
+    [Export(PropertyHint.Range, "0, 1")]
+    public float LaunchRPM = 0.5f; // What % of redline to target for launches (0.5 = 50%)
+    [Export(PropertyHint.Range, "0, 1")]
+    public float ClutchDropRate = 0.3f; // How aggressively to engage clutch (higher = more aggressive)
 
     [ExportGroup("Differentials")]
     [Export(PropertyHint.Enum, "RWD,FWD,AWD")]
-    public int DriveType = 2; // 0=RWD, 1=FWD, 2=AWD
-    
+    public int DriveType = 2;
     [Export(PropertyHint.Range, "0, 1")]
-    public float CenterDiffBias = 0.5f; // For AWD: 0=full rear, 1=full front
-    
-    // LSD Settings - Clutch-based differential
+    public float CenterDiffBias = 0.5f;
     [Export(PropertyHint.Range, "0, 1")]
-    public float FrontDiffLockFactor = 0.3f; // 0 = open, 1 = locked
+    public float FrontDiffLockFactor = 0.3f;
     [Export(PropertyHint.Range, "0, 1")]
     public float RearDiffLockFactor = 0.3f;
     [Export(PropertyHint.Range, "0, 1")]
-    public float CenterDiffLockFactor = 0.2f; // For AWD
-    
-    // Preload torque (minimum locking force)
+    public float CenterDiffLockFactor = 0.2f;
     [Export(PropertyHint.Range, "0, 200, suffix:Nm")]
     public float FrontDiffPreload = 20;
     [Export(PropertyHint.Range, "0, 200, suffix:Nm")]
     public float RearDiffPreload = 20;
     [Export(PropertyHint.Range, "0, 200, suffix:Nm")]
     public float CenterDiffPreload = 10;
-
     [Export(PropertyHint.Range, "0, 1")]
     public float DrivetrainLoss = 0.15f;
 
-    // Public state variables
-    public float Rpm;
-    public int Gear = 2;
-    public float WheelSpeed;
-    public float ClutchSlip; // New: clutch slip percentage for UI
+    // Public state
+    public float Rpm { get; private set; }
+    public int Gear { get; private set; } = 2; // Start in neutral
+    public float ClutchEngagement { get; private set; } // 0 = disengaged, 1 = fully engaged
+    public float WheelSpeed { get; private set; }
 
+    // Private state
     private float _throttle;
-    private float _clutch = 1; // 0 = fully engaged, 1 = fully disengaged
-    private float _targetClutch;
+    private float _engineSpeed; // rad/s
     private bool _shifting;
     private float _shiftTimer;
-    private float _shiftFromRpm;
+    private int _targetGear;
     private float _peakTorqueRpm;
     private Wheel[] _wheels;
-    private double _flywheelSpeed; // Track flywheel speed separately
 
     public override void _Ready()
     {
         _wheels = Vehicle.Wheels;
         Rpm = Idle;
-        _flywheelSpeed = 2 * Math.PI * Idle / 60;
+        _engineSpeed = Idle * Mathf.Pi / 30; // Convert to rad/s
 
         // Find peak torque RPM
         float maxTorque = 0;
@@ -112,115 +97,60 @@ public partial class Drivetrain : Node
 
     public void PhysicsTick(double delta)
     {
-        // Update clutch state
-        UpdateClutch(delta);
+        // Get current wheel speeds
+        float transmissionSpeed = GetTransmissionSpeed();
+        
+        // Handle shifting
+        UpdateShifting(delta, transmissionSpeed);
         
         // Calculate engine torque
-        double engineTorque = CalculateEngineTorque();
+        float engineTorque = CalculateEngineTorque();
         
-        // Get transmission input speed from wheels
-        float transmissionInputSpeed = CalculateTransmissionInputSpeed();
+        // Calculate clutch engagement
+        float clutchEngagement = CalculateClutchEngagement(transmissionSpeed);
+        ClutchEngagement = clutchEngagement;
         
-        // Handle clutch dynamics
-        double transmittedTorque = ProcessClutchDynamics(transmissionInputSpeed, engineTorque, delta);
+        // Update engine speed based on clutch state
+        UpdateEngineSpeed(engineTorque, transmissionSpeed, clutchEngagement, delta);
+        
+        // Calculate output torque
+        float outputTorque = 0;
+        if (Gear != 1 && clutchEngagement > 0) // Not in neutral
+        {
+            // Torque transmitted through clutch
+            float clutchTorque = engineTorque * clutchEngagement;
+            outputTorque = clutchTorque * GearRatios[Gear] * FinalDriveRatio * (1 - DrivetrainLoss);
+        }
         
         // Apply torque through differentials
-        if (Math.Abs(transmittedTorque) > 0.1 && Gear != 1) // Not in neutral
+        if (Math.Abs(outputTorque) > 0.1)
         {
-            ApplyTorqueThroughDifferentials(transmittedTorque);
-        }
-        
-        // Handle automatic transmission
-        if (AutomaticTrans && !_shifting)
-        {
-            AutomaticShifting();
-        }
-        
-        // Update RPM from flywheel speed
-        Rpm = (float)(_flywheelSpeed * 60 / (2 * Math.PI));
-        Rpm = Mathf.Clamp(Rpm, Idle, Redline);
-        
-        // Update wheel speed for UI
-        WheelSpeed = (float)_wheels.Select(w => Math.Abs(w.AngularVelocity * w.Radius)).Max() * 2.237f;
-    }
-
-    private void UpdateClutch(double delta)
-    {
-        if (_shifting)
-        {
-            _shiftTimer += (float)delta;
-            float shiftProgress = _shiftTimer / ShiftTime;
-            
-            if (shiftProgress >= 1.0f)
-            {
-                _shifting = false;
-                _shiftTimer = 0;
-                _targetClutch = 0; // Fully engage
-            }
-            else if (shiftProgress < 0.5f)
-            {
-                _targetClutch = 1; // Disengage phase
-            }
-            else
-            {
-                // Rev-matching phase
-                float targetRpm = CalculateTransmissionInputSpeed() * GearRatios[Gear] * FinalDriveRatio * 60f / (2f * Mathf.Pi);
-                if (Math.Abs(Rpm - targetRpm) < 200)
-                {
-                    _targetClutch = 0; // Start engaging
-                }
-            }
-        }
-        else if (Gear == 1)
-        {
-            _targetClutch = 1; // Neutral
+            ApplyTorqueThroughDifferentials(outputTorque);
         }
         else
         {
-            // Automatic clutch control
-            float wheelSpeed = Math.Abs(Vehicle.LinearVelocity.Length()) * 2.237f;
-            if (wheelSpeed < FullClutchSpeed)
-            {
-                if (_wheels.All(w => w.StationaryBraking) && Vehicle.LinearVelocity.Length() < 1)
-                {
-                    _targetClutch = 1;
-                }
-                else
-                {
-                    _targetClutch = Mathf.Lerp(StartingClutch, 0f, wheelSpeed / FullClutchSpeed);
-                }
-            }
-            else
-            {
-                _targetClutch = 0;
-            }
+            // No drive torque
+            for (int i = 0; i < 4; i++)
+                _wheels[i].DriveTorque = 0;
         }
         
-        // Smooth clutch engagement
-        _clutch = Mathf.Lerp(_clutch, _targetClutch, ClutchEngagementRate * (float)delta * 10);
-        ClutchSlip = _clutch;
-    }
-
-    private double CalculateEngineTorque()
-    {
-        double normalizedRpm = Rpm / Redline;
-        double torque = TorqueCurve.Sample((float)normalizedRpm) * PeakTorque;
-        
-        // Apply throttle
-        torque *= _throttle;
-        
-        // Add engine braking when throttle is off
-        if (_throttle < 0.1 && Rpm > Idle)
+        // Handle automatic shifting
+        if (AutomaticTrans && !_shifting && Gear > 1)
         {
-            torque -= EngineBraking * (Rpm - Idle) / (Redline - Idle);
+            CheckAutoShift(transmissionSpeed);
         }
         
-        return torque;
+        // Update RPM for display
+        Rpm = _engineSpeed * 30 / Mathf.Pi;
+        Rpm = Mathf.Clamp(Rpm, Idle, Redline);
+        
+        // Update wheel speed for UI (in mph)
+        WheelSpeed = (float)_wheels.Select(w => Math.Abs(w.AngularVelocity * w.Radius)).Max() * 2.237f;
     }
 
-    private float CalculateTransmissionInputSpeed()
+    private float GetTransmissionSpeed()
     {
-        // Calculate based on drive type
+        // Get average wheel speed based on drive type
         switch (DriveType)
         {
             case 0: // RWD
@@ -234,43 +164,167 @@ public partial class Drivetrain : Node
         }
     }
 
-    private double ProcessClutchDynamics(float transmissionInputSpeed, double engineTorque, double delta)
+    private float CalculateEngineTorque()
     {
-        double flywheelInertia = 0.5 * FlywheelMass * FlywheelRadius * FlywheelRadius;
+        float normalizedRpm = Rpm / Redline;
+        float torque = TorqueCurve.Sample(normalizedRpm) * PeakTorque;
         
-        if (_clutch >= 0.99f) // Fully disengaged
+        // Apply throttle
+        torque *= _throttle;
+        
+        // Engine braking when off throttle
+        if (_throttle < 0.1f && Rpm > Idle)
         {
-            // Engine spins freely
-            double engineFriction = -EngineFriction * _flywheelSpeed * PeakTorque * 0.001;
-            double netTorque = engineTorque + engineFriction;
-            double acceleration = netTorque / flywheelInertia;
-            _flywheelSpeed += acceleration * delta;
-            return 0; // No torque transmitted
+            torque -= EngineBraking * (Rpm - Idle) / (Redline - Idle);
         }
-        else if (_clutch <= 0.01f) // Fully engaged
+        
+        return torque;
+    }
+
+    private float CalculateClutchEngagement(float transmissionSpeed)
+    {
+        // During shifts, clutch is disengaged
+        if (_shifting)
+            return 0;
+            
+        // Neutral - no engagement
+        if (Gear == 1)
+            return 0;
+        
+        // Calculate what RPM the engine would be at if fully engaged
+        float targetRpm = Math.Abs(transmissionSpeed * GearRatios[Gear] * FinalDriveRatio * 30 / Mathf.Pi);
+        
+        // For launches (low speed, high throttle)
+        float vehicleSpeed = Math.Abs(Vehicle.LinearVelocity.Length());
+        if (vehicleSpeed < 5 && _throttle > 0.5f)
         {
-            // Direct connection
-            double targetSpeed = transmissionInputSpeed * GearRatios[Gear] * FinalDriveRatio;
-            _flywheelSpeed = targetSpeed;
-            return engineTorque * GearRatios[Gear] * FinalDriveRatio * (1 - DrivetrainLoss);
+            // Allow engine to rev up for launch
+            float launchTargetRpm = Redline * LaunchRPM;
+            
+            if (Rpm < launchTargetRpm)
+            {
+                // Let engine build revs
+                return 0.1f * _throttle; // Slight engagement to load engine
+            }
+            else
+            {
+                // Drop the clutch progressively
+                float rpmDiff = Math.Abs(Rpm - targetRpm);
+                float maxDiff = Redline * 0.3f; // 30% of redline as max difference
+                float engagement = 1f - Mathf.Clamp(rpmDiff / maxDiff, 0, 1);
+                return Mathf.Lerp(ClutchDropRate, 1f, engagement);
+            }
         }
-        else // Slipping
+        
+        // Normal driving - engage based on RPM matching
+        float rpmDifference = Math.Abs(Rpm - targetRpm);
+        if (rpmDifference < 200)
         {
-            double targetSpeed = transmissionInputSpeed * GearRatios[Gear] * FinalDriveRatio;
-            double speedDiff = targetSpeed - _flywheelSpeed;
+            return 1f; // Fully engaged when RPMs match
+        }
+        else if (rpmDifference < 1000)
+        {
+            // Progressive engagement
+            return 1f - (rpmDifference - 200) / 800f;
+        }
+        else
+        {
+            // Too much difference - slip the clutch
+            return 0.3f;
+        }
+    }
+
+    private void UpdateEngineSpeed(float engineTorque, float transmissionSpeed, float clutchEngagement, double delta)
+    {
+        if (clutchEngagement >= 0.99f && Gear != 1)
+        {
+            // Fully engaged - engine locked to transmission
+            _engineSpeed = transmissionSpeed * GearRatios[Gear] * FinalDriveRatio;
+        }
+        else
+        {
+            // Engine can spin freely or partially engaged
+            // Simple inertia model: τ = I * α
+            float engineInertia = EngineInertia * 0.1f; // Scale down for reasonable response
+            float engineAccel = engineTorque / engineInertia;
             
-            // Calculate clutch torque based on slip and capacity
-            double maxClutchTorque = ClutchTorqueCapacity * (1 - _clutch);
-            double clutchTorque = Mathf.Sign((float)speedDiff) * Math.Min(Math.Abs(speedDiff * 50), maxClutchTorque);
+            // Add drag
+            engineAccel -= _engineSpeed * 0.5f; // Simple linear drag
             
-            // Apply to flywheel
-            double engineFriction = -EngineFriction * _flywheelSpeed * PeakTorque * 0.001;
-            double netFlywheelTorque = engineTorque + clutchTorque + engineFriction;
-            double acceleration = netFlywheelTorque / flywheelInertia;
-            _flywheelSpeed += acceleration * delta;
+            // If partially engaged, add coupling force
+            if (clutchEngagement > 0 && Gear != 1)
+            {
+                float targetSpeed = transmissionSpeed * GearRatios[Gear] * FinalDriveRatio;
+                float speedDiff = targetSpeed - _engineSpeed;
+                engineAccel += speedDiff * clutchEngagement * 10; // Coupling strength
+            }
             
-            // Transmitted torque (reduced by clutch slip)
-            return -clutchTorque * GearRatios[Gear] * FinalDriveRatio * (1 - DrivetrainLoss);
+            _engineSpeed += (float)(engineAccel * delta);
+        }
+        
+        // Enforce limits
+        float minSpeed = Idle * Mathf.Pi / 30;
+        float maxSpeed = Redline * Mathf.Pi / 30;
+        _engineSpeed = Mathf.Clamp(_engineSpeed, minSpeed, maxSpeed);
+    }
+
+    private void UpdateShifting(double delta, float transmissionSpeed)
+    {
+        if (!_shifting)
+            return;
+            
+        _shiftTimer += (float)delta;
+        
+        if (_shiftTimer >= ShiftTime)
+        {
+            // Shift complete
+            Gear = _targetGear;
+            _shifting = false;
+            _shiftTimer = 0;
+            
+            // Rev match on completion
+            if (Gear != 1)
+            {
+                float targetRpm = Math.Abs(transmissionSpeed * GearRatios[Gear] * FinalDriveRatio * 30 / Mathf.Pi);
+                Rpm = Mathf.Lerp(Rpm, targetRpm, 0.5f);
+                _engineSpeed = Rpm * Mathf.Pi / 30;
+            }
+        }
+        else if (_shiftTimer > ShiftTime * 0.3f)
+        {
+            // During shift, rev match
+            if (_targetGear != 1)
+            {
+                float targetRpm = Math.Abs(transmissionSpeed * GearRatios[_targetGear] * FinalDriveRatio * 30 / Mathf.Pi);
+                Rpm = Mathf.Lerp(Rpm, targetRpm, (float)delta * 5);
+                _engineSpeed = Rpm * Mathf.Pi / 30;
+            }
+        }
+    }
+
+    private void CheckAutoShift(float transmissionSpeed)
+    {
+        float currentRpm = Math.Abs(transmissionSpeed * GearRatios[Gear] * FinalDriveRatio * 30 / Mathf.Pi);
+        
+        // Upshift check
+        if (Gear < GearRatios.Length - 1)
+        {
+            if (currentRpm > Redline * 0.9f || // Near redline
+                (currentRpm > _peakTorqueRpm * 1.3f && _throttle > 0.3f)) // Past peak torque
+            {
+                ShiftUp();
+            }
+        }
+        
+        // Downshift check
+        if (Gear > 2)
+        {
+            float downshiftRpm = Math.Abs(transmissionSpeed * GearRatios[Gear - 1] * FinalDriveRatio * 30 / Mathf.Pi);
+            if (currentRpm < _peakTorqueRpm * 0.6f && // Below peak torque
+                downshiftRpm < Redline * 0.85f) // Won't over-rev
+            {
+                ShiftDown();
+            }
         }
     }
 
@@ -300,7 +354,6 @@ public partial class Drivetrain : Node
                 break;
                 
             case 2: // AWD
-                // First split through center diff
                 double frontAxleSpeed = (wheelSpeeds[0] + wheelSpeeds[1]) / 2;
                 double rearAxleSpeed = (wheelSpeeds[2] + wheelSpeeds[3]) / 2;
                 
@@ -313,7 +366,6 @@ public partial class Drivetrain : Node
                     CenterDiffBias
                 );
                 
-                // Then through front and rear diffs
                 ApplyDifferential(
                     frontTorque,
                     wheelSpeeds[0], wheelSpeeds[1],
@@ -330,7 +382,6 @@ public partial class Drivetrain : Node
                 break;
         }
         
-        // Apply torques to wheels
         for (int i = 0; i < 4; i++)
         {
             _wheels[i].DriveTorque = outputTorques[i];
@@ -344,73 +395,28 @@ public partial class Drivetrain : Node
         out double torque1, out double torque2,
         float bias = 0.5f)
     {
-        // Calculate speed difference
         double speedDiff = speed1 - speed2;
-        
-        // Base torque split (can be biased for center diff)
         double baseTorque1 = inputTorque * (1 - bias);
         double baseTorque2 = inputTorque * bias;
         
-        // Calculate locking torque based on clutch-based LSD behavior
         double lockingTorque = 0;
-        
-        if (Math.Abs(speedDiff) > 0.01) // Threshold to avoid numerical issues
+        if (Math.Abs(speedDiff) > 0.01)
         {
-            // Preload: minimum locking force (always active when slipping)
             lockingTorque = Math.Sign(speedDiff) * preload;
-            
-            // Proportional locking: transfers torque proportional to input torque and lock factor
-            // This simulates clutch plates engaging harder under more load
             double maxTransfer = Math.Abs(inputTorque) * lockFactor * 0.5;
             lockingTorque += Math.Sign(speedDiff) * Math.Min(Math.Abs(speedDiff) * maxTransfer, maxTransfer);
         }
         
-        // Apply locking torque (transfers from faster to slower wheel)
         torque1 = baseTorque1 - lockingTorque;
         torque2 = baseTorque2 + lockingTorque;
         
-        // Clamp to ensure we don't exceed input torque or reverse direction
         double totalOut = Math.Abs(torque1) + Math.Abs(torque2);
         double totalIn = Math.Abs(inputTorque);
-        if (totalOut > totalIn * 1.01) // Allow 1% tolerance for numerical errors
+        if (totalOut > totalIn * 1.01)
         {
             double scale = totalIn / totalOut;
             torque1 *= scale;
             torque2 *= scale;
-        }
-    }
-
-    private void AutomaticShifting()
-    {
-        if (Gear < 2 || Gear >= GearRatios.Length) return;
-        
-        float grippedWheelVelocity = Math.Abs(Vehicle.LinearVelocity.Dot(Vehicle.Forward)) / (float)_wheels[0].Radius;
-        float currentGearRpm = grippedWheelVelocity * GearRatios[Gear] * FinalDriveRatio * 60f / (2f * Mathf.Pi);
-        
-        // Upshift logic
-        if (Gear < GearRatios.Length - 1)
-        {
-            float upShiftRpm = grippedWheelVelocity * GearRatios[Gear + 1] * FinalDriveRatio * 60f / (2f * Mathf.Pi);
-            
-            // Shift up near redline or if next gear would provide more torque
-            if (currentGearRpm > Redline * 0.95f || 
-                (currentGearRpm > _peakTorqueRpm * 1.2f && upShiftRpm > _peakTorqueRpm * 0.8f))
-            {
-                ShiftUp();
-                return;
-            }
-        }
-        
-        // Downshift logic
-        if (Gear > 2)
-        {
-            float downShiftRpm = grippedWheelVelocity * GearRatios[Gear - 1] * FinalDriveRatio * 60f / (2f * Mathf.Pi);
-            
-            // Shift down if we're below peak torque and it won't over-rev
-            if (currentGearRpm < _peakTorqueRpm * 0.7f && downShiftRpm < Redline * 0.9f)
-            {
-                ShiftDown();
-            }
         }
     }
 
@@ -421,47 +427,34 @@ public partial class Drivetrain : Node
         // Rev limiter
         if (Rpm >= Redline - 100)
         {
-            _throttle *= (Redline - Rpm) / 100f;
-            _throttle = Mathf.Max(_throttle, 0);
+            _throttle *= Math.Max((Redline - Rpm) / 100f, 0);
         }
     }
 
     public void ShiftUp()
     {
-        if (Gear >= GearRatios.Length - 1 || _shifting) return;
-        
-        Gear++;
-        if (Gear > 2)
-        {
-            _shifting = true;
-            _shiftTimer = 0;
-            _shiftFromRpm = Rpm;
-        }
+        if (_shifting || Gear >= GearRatios.Length - 1)
+            return;
+            
+        _targetGear = Gear + 1;
+        _shifting = true;
+        _shiftTimer = 0;
     }
 
     public void ShiftDown()
     {
-        if (Gear <= 0 || _shifting) return;
+        if (_shifting || Gear <= 0)
+            return;
+            
+        // Check if downshift would over-rev
+        float transmissionSpeed = GetTransmissionSpeed();
+        float downshiftRpm = Math.Abs(transmissionSpeed * GearRatios[Gear - 1] * FinalDriveRatio * 30 / Mathf.Pi);
         
-        float downShiftRpm = Rpm * (GearRatios[Gear - 1] / GearRatios[Gear]);
-        if (downShiftRpm < Redline)
+        if (downshiftRpm < Redline)
         {
-            Gear--;
-            if (Gear > 1)
-            {
-                _shifting = true;
-                _shiftTimer = 0;
-                _shiftFromRpm = Rpm;
-            }
-        }
-    }
-    
-    public void SetManualClutch(float clutchInput)
-    {
-        // For manual clutch control (0 = engaged, 1 = disengaged)
-        if (!AutomaticTrans)
-        {
-            _targetClutch = clutchInput;
+            _targetGear = Gear - 1;
+            _shifting = true;
+            _shiftTimer = 0;
         }
     }
 }

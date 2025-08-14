@@ -277,48 +277,58 @@ public partial class Wheel : Node3D
     }
 
     private double ComputeBrakeTorque(double delta)
-    {
-        double vehicleSpeed = LinearVelocity.Dot(Forward);
-        
-        // Check for stationary braking condition
-        if (BrakeInput > 0.8 && Math.Abs(AngularVelocity * Radius) < StationarySpeedThreshold)
+   {
+        // If wheel is already nearly stopped, apply holding torque
+        if (Math.Abs(AngularVelocity * Radius) < StationarySpeedThreshold && BrakeInput > 0.5)
         {
             StationaryBraking = true;
-            return -AngularVelocity * _wheelInertia / delta; // Lock the wheel
+            // Lock the wheel completely
+            return -AngularVelocity * _wheelInertia / delta;
         }
         else
         {
             StationaryBraking = false;
         }
         
-        double brakeTorque;
+        double brakeTorque = 0;
         
-        if (Handbrake && !_isFront) // Handbrake only affects rear wheels
+        if (BrakeInput > 0)
         {
-            // Handbrake - immediate strong braking
-            brakeTorque = -Math.Sign(AngularVelocity) * MaxBrakeTorque;
-        }
-        else if (!_vehicle.ABS || Math.Abs(vehicleSpeed) < StationarySpeedThreshold)
-        {
-            // No ABS or very low speed - direct brake torque
+            // Brake torque always opposes wheel rotation
             brakeTorque = -Math.Sign(AngularVelocity) * BrakeInput * MaxBrakeTorque;
-        }
-        else
-        {
-            // ABS - maintain optimal slip ratio for maximum braking
-            double optimalSlipRatio = -Math.Sign(vehicleSpeed) * Tire.PeakSlipRatio * 1.1; // Slightly past peak for ABS
-            double slipError = optimalSlipRatio - SlipRatio;
             
-            // PID-style correction (simplified to just P for now)
-            double correction = slipError * 10000; // Gain factor
-            brakeTorque = Mathf.Clamp(correction, -MaxBrakeTorque, 0) * BrakeInput;
+            // ABS modulation if enabled and moving
+            if (_vehicle.ABS && !_stationary)
+            {
+                // Simple ABS: reduce brake force if wheel is locking up
+                double slipMagnitude = Math.Abs(SlipRatio);
+                if (slipMagnitude > Tire.PeakSlipRatio * 1.5)
+                {
+                    // Wheel is locking, reduce brake force
+                    brakeTorque *= 0.3;
+                }
+                else if (slipMagnitude > Tire.PeakSlipRatio)
+                {
+                    // Near optimal slip, modulate brake
+                    brakeTorque *= 0.7;
+                }
+            }
+            
+            // Handbrake overrides ABS for rear wheels
+            if (Handbrake && !_isFront)
+            {
+                brakeTorque = -Math.Sign(AngularVelocity) * MaxBrakeTorque;
+            }
         }
         
-        // Prevent brake from reversing wheel direction
-        double maxBrake = Math.Abs(AngularVelocity * _wheelInertia / delta);
-        if (Math.Abs(brakeTorque) > maxBrake)
+        // Prevent brake from reversing wheel rotation
+        if (Math.Abs(brakeTorque) > 0)
         {
-            brakeTorque = -Math.Sign(AngularVelocity) * maxBrake;
+            double maxStoppingTorque = Math.Abs(AngularVelocity * _wheelInertia / delta);
+            if (Math.Abs(brakeTorque) > maxStoppingTorque)
+            {
+                brakeTorque = -Math.Sign(AngularVelocity) * maxStoppingTorque;
+            }
         }
         
         return brakeTorque;
