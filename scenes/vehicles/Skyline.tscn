@@ -700,15 +700,13 @@ PeakTorque = 400.0
 TorqueCurve = SubResource("Curve_3j47a")
 Redline = 8000.0
 Idle = 800.0
-FlywheelMass = 8.0
-EngineFriction = 0.5
+EngineInertia = 2.5
+RevLimiterCutTime = 0.05
 GearRatios = PackedFloat32Array(-2.8, 0, 3.827, 2.36, 1.685, 1.312, 1, 0.793)
 FinalDriveRatio = 3.545
-ClutchEngagementRate = 0.8
-FullClutchSpeed = 7.0
-StartingClutch = 0.8
-CenterDiffBias = 0.6
-RearDiffLockFactor = 0.396
+EngagementSpeed = 15.0
+LaunchRevSpeed = 2.0
+CenterDiffBias = 0.7
 DrivetrainLoss = 0.0
 
 [node name="TireModel" type="Node3D" parent="."]

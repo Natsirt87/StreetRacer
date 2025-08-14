@@ -173,8 +173,6 @@ public partial class Vehicle : RigidBody3D
         LinearAccel = (LinearVelocity - _lastVelocity) / (float)delta;
         _lastVelocity = LinearVelocity;
 
-        Print("Vehicle linear velocity: " + LinearVelocity);
-
         // Update yaw rate and slip angle
         float yaw = GlobalRotation.Y;
         YawRate = (yaw - _lastYaw) / (float)delta;
